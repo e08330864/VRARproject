@@ -1,21 +1,18 @@
 # ignore everything
-*
+/*
 
 # but not this
 !.gitignore
 !readme.md
 
-!group01_project/
-!group01_project/*/
-!group01_project/Assets/
-!group01_project/Assets/*/
-!group01_project/Assets/Resources/
-!group01_project/Assets/Resources/*
-!group01_project/Assets/SteamVR_Input/
-!group01_project/Assets/SteamVR_Input/*
-!group01_project/Assets/Scenes/
-!group01_project/Assets/Scenes/*
+!/group01_project
+/group01_project/*
+!/group01_project/Assets/
+/group01_project/Assets/*
+!/group01_project/Assets/Resources/
+!/group01_project/Assets/SteamVR_Input/
+!/group01_project/Assets/Scenes/
 
-!group01_project/Assets/Resources.meta
-!group01_project/Assets/SteamVR_Input.meta
-!group01_project/Assets/Scenes.meta
+!/group01_project/Assets/Resources.meta
+!/group01_project/Assets/SteamVR_Input.meta
+!/group01_project/Assets/Scenes.meta
