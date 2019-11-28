@@ -6,14 +6,14 @@ using System.Collections.Generic;
 
 public class LeapGrab : MonoBehaviour 
 {
+    public List<GameObject> objectPrefab = null;
+
     [HideInInspector]
     public Collider leftTouch, rightTouch;
     [HideInInspector]
     public bool leftPinch, rightPinch;
 
-    [SerializeField]
-    private List<GameObject> objectPrefab = null;
-
+    
     private Collider colliderLeap = null;
     private bool isInCreation = false;
     private bool objectSwitchingEnabled = true;
@@ -113,7 +113,7 @@ public class LeapGrab : MonoBehaviour
         rightPinch = false;
     }
 
-    [Command]
+    //[Command]
     void CreateObject()
     {
         if (createNewObject)
