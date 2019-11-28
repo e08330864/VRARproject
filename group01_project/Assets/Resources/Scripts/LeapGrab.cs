@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
+using System.Collections.Generic;
 
 // This script defines conditions that are necessary for the Leap player to grab a shared object
-// TODO: values of these four boolean variables can be changed either directly here or through other components
-// AuthorityManager of a shared object should be notifyed from this script
 
 public class LeapGrab : MonoBehaviour 
 {
@@ -11,23 +11,86 @@ public class LeapGrab : MonoBehaviour
     [HideInInspector]
     public bool leftPinch, rightPinch;
 
-    private Collider collider;
+    [SerializeField]
+    private List<GameObject> objectPrefab = null;
+
+    private Collider colliderLeap = null;
+    private bool isInCreation = false;
+    private bool objectSwitchingEnabled = true;
+    private bool createNewObject = false;
+    private int objectIndex = 0;
+    private GameObject createdObject = null;
 
     // Update is called once per frame
     void Update()
+    { 
+        //if (leftTouch != null && leftTouch == rightTouch && rightPinch && leftPinch)
+        //{
+        //    if (colliderLeap == null)
+        //    {
+        //        colliderLeap = leftTouch;
+        //        leftTouch.gameObject.GetComponent<AuthorityManager>().grabbedByPlayer = true;
+        //    }
+        //}
+        //else if (colliderLeap != null && (!rightPinch || !leftPinch))
+        //{
+        //    colliderLeap.gameObject.GetComponent<AuthorityManager>().grabbedByPlayer = false;
+        //    colliderLeap = null;
+        //}
+        
+        CheckHoldingObject();
+    }
+
+    private void CheckCreateObject()
     {
-        if (leftTouch != null && leftTouch == rightTouch && rightPinch && leftPinch)
+        if (!isInCreation && colliderLeap == null)   // only when no object is currently be holded and no creation process is currently running
         {
-            if (collider == null)
+            if (leftPinch)
             {
-                collider = leftTouch;
+                isInCreation = true;
+                objectIndex = 0;
+                createNewObject = true;
+            }
+        }
+        else
+        {
+            if (isInCreation)   // creation process was running in last frame
+            {
+                if (!leftPinch)  // end of creation process
+                {
+                    isInCreation = false;
+                }
+                else    // creation process is further on running
+                {
+                    if (rightPinch && objectSwitchingEnabled)    // switch to next object
+                    {
+                        objectSwitchingEnabled = false;
+                        createNewObject = true;
+                        objectIndex = (++objectIndex) % objectPrefab.Count;
+                    } else if (!rightPinch)     // new switching enabled
+                    {
+                        objectSwitchingEnabled = true;
+                    }
+                }
+            }
+        }
+        CreateObject();
+    }
+
+    private void CheckHoldingObject()
+    {
+        if (leftTouch != null && leftTouch == rightTouch)
+        {
+            if (colliderLeap == null)
+            {
+                colliderLeap = leftTouch;
                 leftTouch.gameObject.GetComponent<AuthorityManager>().grabbedByPlayer = true;
             }
         }
-        else if (collider != null && (!rightPinch || !leftPinch))
+        else if (colliderLeap != null)
         {
-            collider.gameObject.GetComponent<AuthorityManager>().grabbedByPlayer = false;
-            collider = null;
+            colliderLeap.gameObject.GetComponent<AuthorityManager>().grabbedByPlayer = false;
+            colliderLeap = null;
         }
     }
 
@@ -48,5 +111,23 @@ public class LeapGrab : MonoBehaviour
     public void offPinchRight()
     {
         rightPinch = false;
+    }
+
+    [Command]
+    void CreateObject()
+    {
+        if (createNewObject)
+        {
+            // destroy current object if exists
+            if (createdObject != null)
+            {
+                Destroy(createdObject);
+            }
+            // create new object
+            createdObject = (GameObject)Instantiate(objectPrefab[objectIndex]);
+            // spawn the object on the clients
+            NetworkServer.Spawn(createdObject);
+        }
+        createNewObject = false;
     }
 }
