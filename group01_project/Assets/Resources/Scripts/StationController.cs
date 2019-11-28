@@ -24,7 +24,7 @@ public class StationController : MonoBehaviour
         if(station_head != null)
         {
             Vector3 scale = station_head.localScale;
-            float delta =  0.25f * Mathf.Sin(Time.time) + 2;
+            float delta =  (0.05f * Mathf.Sin(Time.time)) + 1;
             scale.x = delta;
             scale.z = delta;
             station_head.localScale = scale;
