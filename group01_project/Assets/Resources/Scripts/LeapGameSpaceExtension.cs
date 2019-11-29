@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 
-public class LeapGameSpaceExtension : Net
+public class LeapGameSpaceExtension : NetworkBehaviour
 {
     public SharedParameters sharedParameters;
     private bool allowGameSpaceExtension = false;

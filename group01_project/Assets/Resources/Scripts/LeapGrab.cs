@@ -8,7 +8,8 @@ using Leap.Unity;
 public class LeapGrab : MonoBehaviour 
 {
     private Actor actor = null;
-    private PinchDetector pinchDetectorLeft;
+    private PinchDetector pinchDetectorLeft = null;
+    private Vector3 pinchPosition;
     //private PinchDetector pinchDetectorRight;
 
     [HideInInspector]
@@ -28,14 +29,9 @@ public class LeapGrab : MonoBehaviour
 
     private void Start()
     {
-        //if ((pinchDetectorLeft = GameObject.FindGameObjectWithTag("LeftHandInteraction").GetComponent<PinchDetector>()) == null)
-        //{
-        //    Debug.LogError("pinchDetectorLeft is NULL in MagicCube");
-        //}
-        //if ((pinchDetectorRight = GameObject.FindGameObjectWithTag("RightHandInteraction").GetComponent<PinchDetector>()) == null)
-        //{
-        //    Debug.LogError("pinchDetectorRight is NULL in MagicCube");
-        //}
+        if (GameObject.FindGameObjectWithTag("LeftHandInteraction") != null) {
+            pinchDetectorLeft = GameObject.FindGameObjectWithTag("LeftHandInteraction").GetComponent<PinchDetector>();
+        }
         if ((actor = GetComponent<LocalPlayerController>().actor) == null)
         {
             Debug.LogError("actor is NULL in LeapGrab");
@@ -114,7 +110,7 @@ public class LeapGrab : MonoBehaviour
         }
         if (isInCreation && createdObject != null)
         {
-            Vector3 leftPos = pinchDetectorLeft.Position;
+            Vector3 leftPos = pinchPosition;
             createdObject.transform.position = leftPos;
         }
     }
@@ -138,6 +134,11 @@ public class LeapGrab : MonoBehaviour
 
     public void onPinchLeft()
     {
+        if (pinchDetectorLeft == null && GameObject.FindGameObjectWithTag("LeftHandInteraction") != null)
+        {
+            pinchDetectorLeft = GameObject.FindGameObjectWithTag("LeftHandInteraction").GetComponent<PinchDetector>();
+        }
+        pinchPosition = pinchDetectorLeft.Position;
         Debug.Log("Left Pinch");
         leftPinch = true;
     }
