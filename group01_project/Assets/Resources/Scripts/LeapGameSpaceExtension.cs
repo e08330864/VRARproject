@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 
-public class LeapGameSpaceExtension: NetworkBehaviour
+public class LeapGameSpaceExtension: MonoBehaviour
 {
     public SharedParameters sharedParameters;
     private bool allowGameSpaceExtension = false;
@@ -14,21 +14,21 @@ public class LeapGameSpaceExtension: NetworkBehaviour
     {
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            Debug.Log("Allow Gamespace extension from leap side");
+            //Debug.Log("Allow Gamespace extension from leap side");
             allowGameSpaceExtension = true;
 
-            sharedParameters.GetComponent<NetworkIdentity>().AssignClientAuthority(this.connectionToClient);
-            sharedParameters.CmdSetGameSpaceExtension(allowGameSpaceExtension);
-            sharedParameters.GetComponent<NetworkIdentity>().AssignClientAuthority(this.connectionToClient);
+            //sharedParameters.GetComponent<NetworkIdentity>().AssignClientAuthority(this.connectionToClient);
+            //sharedParameters.CmdSetGameSpaceExtension(allowGameSpaceExtension);
+            //sharedParameters.GetComponent<NetworkIdentity>().RemoveClientAuthority(this.connectionToClient);
         }
         else
         {
-            Debug.Log("Deny Gamespace extension from leap side");
+            //Debug.Log("Deny Gamespace extension from leap side");
             allowGameSpaceExtension = false;
 
-            sharedParameters.GetComponent<NetworkIdentity>().AssignClientAuthority(this.connectionToClient);
-            sharedParameters.CmdSetGameSpaceExtension(allowGameSpaceExtension);
-            sharedParameters.GetComponent<NetworkIdentity>().AssignClientAuthority(this.connectionToClient);
+            //sharedParameters.GetComponent<NetworkIdentity>().AssignClientAuthority(this.connectionToClient);
+            //sharedParameters.CmdSetGameSpaceExtension(allowGameSpaceExtension);
+            //sharedParameters.GetComponent<NetworkIdentity>().RemoveClientAuthority(this.connectionToClient);
         }
     }
 }
