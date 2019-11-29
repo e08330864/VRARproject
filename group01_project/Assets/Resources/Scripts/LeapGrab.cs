@@ -56,7 +56,7 @@ public class LeapGrab : MonoBehaviour
     {
         if (createdObject != null && !isInCreation)
         {
-            actor.CreateObject(createdObject);
+            actor.CmdCreateObject(createdObject);
             createdObject = null;
         }
         createNewObject = false;

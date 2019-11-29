@@ -137,7 +137,7 @@ public class Actor : NetworkBehaviour {
 
     //----------------------------------------------------------------------------------------
     [Command]
-    public void CreateObject(GameObject objectToSpawn)
+    public void CmdCreateObject(GameObject objectToSpawn)
     {
         // spawn the object on the clients
         NetworkServer.Spawn(objectToSpawn);
