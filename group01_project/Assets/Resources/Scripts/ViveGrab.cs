@@ -20,14 +20,13 @@ public class ViveGrab : MonoBehaviour
 
     private Collider grabbedCollider;
 
-    Transform leftViveHand = null;
-    Transform rightViveHand = null;
+    Transform leftViveController = null;
+    Transform rightViveController = null;
 
     private void Start()
     {
-        GameObject ViveHands = GameObject.Find("ViveHands");
-        leftViveHand = ViveHands.transform.Find("Left");
-        rightViveHand = ViveHands.transform.Find("Right");
+        leftViveController = GameObject.Find("Controller (left)").transform;
+        rightViveController = GameObject.Find("Controller (right)").transform;
     }
 
 
@@ -39,6 +38,7 @@ public class ViveGrab : MonoBehaviour
         leftGrabPinch = SteamVR_Actions._default.GrabPinch.GetState(SteamVR_Input_Sources.LeftHand);
         rightGrabPinch = SteamVR_Actions._default.GrabPinch.GetState(SteamVR_Input_Sources.RightHand);
 
+        //game space extension
         Vector3 shift = calculateGameSpaceShift();
         transform.position += shift;
 
@@ -60,20 +60,20 @@ public class ViveGrab : MonoBehaviour
     Vector3 calculateGameSpaceShift()
     {
         Vector3 shift = new Vector3(0.0f, 0.0f, 0.0f);
-        Vector3? rightHandPositionStart = null;
+        Vector3? rightControllerPositionStart = null;
 
         //right Hand Controller started Grab Pinch
         if (!lastRightGrabPinch && rightGrabPinch)
         {
-            rightHandPositionStart = rightViveHand.position;
+            rightControllerPositionStart = rightViveController.position;
         }
 
         //right hands continus grab Pinch
         if (lastRightGrabPinch && rightGrabPinch)
         {
-            if (rightHandPositionStart.HasValue)
+            if (rightControllerPositionStart.HasValue)
             {
-                shift = rightViveHand.position - rightHandPositionStart.Value;
+                shift = rightViveController.position - rightControllerPositionStart.Value;
             }
             else
             {
@@ -86,7 +86,7 @@ public class ViveGrab : MonoBehaviour
         if(lastRightGrabPinch && !rightGrabPinch)
         {
             shift = new Vector3(0.0f, 0.0f, 0.0f);
-            rightHandPositionStart = null;
+            rightControllerPositionStart = null;
         }
 
         return shift;
