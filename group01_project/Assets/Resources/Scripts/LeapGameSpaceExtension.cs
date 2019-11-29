@@ -12,13 +12,14 @@ public class LeapGameSpaceExtension : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
+            Debug.Log("Allow Gamespace extension from leap side");
             allowGameSpaceExtension = true;
-            sharedParameters.AllowGameSpaceExtension();
+            sharedParameters.CmdSetGameSpaceExtension(allowGameSpaceExtension);
         }
         else
         {
             allowGameSpaceExtension = false;
-            sharedParameters.DenyGameSpaceExtension();
+            sharedParameters.CmdSetGameSpaceExtension(allowGameSpaceExtension);
         }
     }
 }

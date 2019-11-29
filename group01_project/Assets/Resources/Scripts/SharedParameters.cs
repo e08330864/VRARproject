@@ -6,21 +6,23 @@ using UnityEngine.Networking;
 public class SharedParameters : NetworkBehaviour
 {
     // Start is called before the first frame update
+
+    [SyncVar]
     bool allowGameSpaceExtension = false;
 
-    [Server]
-    public void AllowGameSpaceExtension()
+    [Command]
+    public void CmdSetGameSpaceExtension(bool extensionAllowed)
     {
-        allowGameSpaceExtension = true;
+        if (!isServer)
+        {
+            Debug.Log("ERROR: Allow Gamespace called on client");
+            return;
+        }
+           
+
+        allowGameSpaceExtension = extensionAllowed;
     }
 
-    [Server]
-    public void DenyGameSpaceExtension()
-    {
-        allowGameSpaceExtension = false;
-    }
-
-    [Server]
     public bool GameSpaceExtensionPossible()
     {
         return allowGameSpaceExtension;
