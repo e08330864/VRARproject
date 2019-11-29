@@ -11,9 +11,7 @@ public class Actor : NetworkBehaviour {
     private string prefabName = "";
 
     //this part is for object sharing
-    //*******************************
     List<NetworkIdentity> sharedObjects = new List<NetworkIdentity>(); // shared objects on the server or localActor
-    //*******************************
 
     protected virtual void Awake()
     {
@@ -136,6 +134,15 @@ public class Actor : NetworkBehaviour {
             CreateCharacter(prefab);
         }
     }
+
+    //----------------------------------------------------------------------------------------
+    [Command]
+    public void CreateObject(GameObject objectToSpawn)
+    {
+        // spawn the object on the clients
+        NetworkServer.Spawn(objectToSpawn);
+    }
+    //----------------------------------------------------------------------------------------
 
     /// <summary>
     /// Creates the character and initializes on server.

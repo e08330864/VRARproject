@@ -6,20 +6,30 @@ using System.Collections.Generic;
 
 public class LeapGrab : MonoBehaviour 
 {
-    public List<GameObject> objectPrefab = null;
+    private Actor actor = null;
 
     [HideInInspector]
     public Collider leftTouch, rightTouch;
     [HideInInspector]
     public bool leftPinch, rightPinch;
 
-    
+    [SerializeField]
+    private List<GameObject> objectPrefab = null;
+
     private Collider colliderLeap = null;
     private bool isInCreation = false;
-    private bool objectSwitchingEnabled = true;
+    private bool doObjectSwitching = false;
     private bool createNewObject = false;
     private int objectIndex = 0;
     private GameObject createdObject = null;
+
+    private void Start()
+    {
+        if ((actor = transform.parent.GetComponent<Actor>()) == null)
+        {
+            Debug.LogError("actor is NULL in LeapGrab");
+        }
+    }
 
     // Update is called once per frame
     void Update()
@@ -39,11 +49,18 @@ public class LeapGrab : MonoBehaviour
         //}
         
         CheckHoldingObject();
+        CheckCreateObject();
     }
 
     private void CheckCreateObject()
     {
-        if (!isInCreation && colliderLeap == null)   // only when no object is currently be holded and no creation process is currently running
+        if (createdObject != null && !isInCreation)
+        {
+            actor.CreateObject(createdObject);
+            createdObject = null;
+        }
+        createNewObject = false;
+        if (!isInCreation && colliderLeap == null)   // only when no object is currently held and no creation process is currently running
         {
             if (leftPinch)
             {
@@ -62,19 +79,28 @@ public class LeapGrab : MonoBehaviour
                 }
                 else    // creation process is further on running
                 {
-                    if (rightPinch && objectSwitchingEnabled)    // switch to next object
+                    if (rightPinch && !doObjectSwitching)    // switch to next object
                     {
-                        objectSwitchingEnabled = false;
+                        doObjectSwitching = true;
                         createNewObject = true;
                         objectIndex = (++objectIndex) % objectPrefab.Count;
                     } else if (!rightPinch)     // new switching enabled
                     {
-                        objectSwitchingEnabled = true;
+                        doObjectSwitching = false;
                     }
                 }
             }
         }
-        CreateObject();
+        if (createNewObject)
+        {
+            // destroy current object if exists
+            if (createdObject != null)
+            {
+                Destroy(createdObject);
+            }
+            // create new object
+            createdObject = (GameObject)Instantiate(objectPrefab[objectIndex]);   
+        }
     }
 
     private void CheckHoldingObject()
@@ -111,23 +137,5 @@ public class LeapGrab : MonoBehaviour
     public void offPinchRight()
     {
         rightPinch = false;
-    }
-
-    //[Command]
-    void CreateObject()
-    {
-        if (createNewObject)
-        {
-            // destroy current object if exists
-            if (createdObject != null)
-            {
-                Destroy(createdObject);
-            }
-            // create new object
-            createdObject = (GameObject)Instantiate(objectPrefab[objectIndex]);
-            // spawn the object on the clients
-            NetworkServer.Spawn(createdObject);
-        }
-        createNewObject = false;
     }
 }
