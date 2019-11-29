@@ -23,6 +23,7 @@ public class ViveGrab : MonoBehaviour
     Transform leftViveController = null;
     Transform rightViveController = null;
     Vector3? rightControllerPositionStart = null;
+    float gameSpaceExtensionSpeed = 0.0001f;
 
     private void Start()
     {
@@ -41,7 +42,7 @@ public class ViveGrab : MonoBehaviour
 
         //game space extension
         Vector3 shift = calculateGameSpaceShift();
-        transform.position += shift;
+        transform.position += new Vector3(shift.x, 0.0f, shift.z);
 
         if (leftTouch != null && leftTouch == rightTouch && rightGrabPinch && leftGrabPinch)
         {
@@ -61,6 +62,7 @@ public class ViveGrab : MonoBehaviour
     Vector3 calculateGameSpaceShift()
     {
         Vector3 shift = new Vector3(0.0f, 0.0f, 0.0f);
+        
 
         //right Hand Controller started Grab Pinch
         if (!lastRightGrabPinch && rightGrabPinch)
@@ -89,6 +91,6 @@ public class ViveGrab : MonoBehaviour
             rightControllerPositionStart = null;
         }
 
-        return shift;
+        return gameSpaceExtensionSpeed * shift;
     }
 }
