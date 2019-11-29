@@ -28,10 +28,10 @@ public class LeapGrab : MonoBehaviour
 
     private void Start()
     {
-        if ((pinchDetectorLeft = GameObject.FindGameObjectWithTag("LeftHandInteraction").GetComponent<PinchDetector>()) == null)
-        {
-            Debug.LogError("pinchDetectorLeft is NULL in MagicCube");
-        }
+        //if ((pinchDetectorLeft = GameObject.FindGameObjectWithTag("LeftHandInteraction").GetComponent<PinchDetector>()) == null)
+        //{
+        //    Debug.LogError("pinchDetectorLeft is NULL in MagicCube");
+        //}
         //if ((pinchDetectorRight = GameObject.FindGameObjectWithTag("RightHandInteraction").GetComponent<PinchDetector>()) == null)
         //{
         //    Debug.LogError("pinchDetectorRight is NULL in MagicCube");

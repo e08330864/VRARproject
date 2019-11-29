@@ -10,7 +10,7 @@ public class LeapGameSpaceExtension : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.RightArrow))
         {
             Debug.Log("Allow Gamespace extension from leap side");
             allowGameSpaceExtension = true;
@@ -18,6 +18,7 @@ public class LeapGameSpaceExtension : MonoBehaviour
         }
         else
         {
+            Debug.Log("Deny Gamespace extension from leap side");
             allowGameSpaceExtension = false;
             sharedParameters.CmdSetGameSpaceExtension(allowGameSpaceExtension);
         }
