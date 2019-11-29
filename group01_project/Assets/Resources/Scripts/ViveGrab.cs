@@ -22,6 +22,7 @@ public class ViveGrab : MonoBehaviour
 
     Transform leftViveController = null;
     Transform rightViveController = null;
+    Vector3? rightControllerPositionStart = null;
 
     private void Start()
     {
@@ -60,7 +61,6 @@ public class ViveGrab : MonoBehaviour
     Vector3 calculateGameSpaceShift()
     {
         Vector3 shift = new Vector3(0.0f, 0.0f, 0.0f);
-        Vector3? rightControllerPositionStart = null;
 
         //right Hand Controller started Grab Pinch
         if (!lastRightGrabPinch && rightGrabPinch)
