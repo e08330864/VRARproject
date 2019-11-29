@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class LeapGameSpaceExtension : MonoBehaviour
+
+public class LeapGameSpaceExtension : Net
 {
     public SharedParameters sharedParameters;
     private bool allowGameSpaceExtension = false;
