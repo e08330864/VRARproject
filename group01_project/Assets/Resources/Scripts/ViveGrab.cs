@@ -25,9 +25,9 @@ public class ViveGrab : MonoBehaviour
 
     private void Start()
     {
-        GameObject ViveHands = GameObject.Find("ViveHands");
-        leftViveHand = ViveHands.transform.Find("Left");
-        rightViveHand = ViveHands.transform.Find("Right");
+        //GameObject viveHands = GameObject.Find("ViveHands");
+        //leftViveHand = viveHands.transform.Find("Left");
+        //rightViveHand = viveHands.transform.Find("Right");
     }
 
 
@@ -39,8 +39,8 @@ public class ViveGrab : MonoBehaviour
         leftGrabPinch = SteamVR_Actions._default.GrabPinch.GetState(SteamVR_Input_Sources.LeftHand);
         rightGrabPinch = SteamVR_Actions._default.GrabPinch.GetState(SteamVR_Input_Sources.RightHand);
 
-        Vector3 shift = calculateGameSpaceShift();
-        transform.position += shift;
+        //Vector3 shift = calculateGameSpaceShift();
+        //transform.position += shift;
 
         if (leftTouch != null && leftTouch == rightTouch && rightGrabPinch && leftGrabPinch)
         {
