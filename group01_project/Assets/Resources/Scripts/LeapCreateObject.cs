@@ -1,15 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections.Generic;
-using Leap.Unity;
 
 // This script defines conditions that are necessary for the Leap player to grab a shared object
 
-public class LeapGrab : MonoBehaviour 
+public class LeapCreateObject : MonoBehaviour 
 {
     private Actor actor = null;
-    private PinchDetector pinchDetectorLeft;
-    //private PinchDetector pinchDetectorRight;
 
     [HideInInspector]
     public Collider leftTouch, rightTouch;
@@ -28,14 +25,6 @@ public class LeapGrab : MonoBehaviour
 
     private void Start()
     {
-        if ((pinchDetectorLeft = GameObject.FindGameObjectWithTag("LeftHandInteraction").GetComponent<PinchDetector>()) == null)
-        {
-            Debug.LogError("pinchDetectorLeft is NULL in MagicCube");
-        }
-        //if ((pinchDetectorRight = GameObject.FindGameObjectWithTag("RightHandInteraction").GetComponent<PinchDetector>()) == null)
-        //{
-        //    Debug.LogError("pinchDetectorRight is NULL in MagicCube");
-        //}
         if ((actor = GetComponent<LocalPlayerController>().actor) == null)
         {
             Debug.LogError("actor is NULL in LeapGrab");
@@ -110,12 +99,7 @@ public class LeapGrab : MonoBehaviour
                 Destroy(createdObject);
             }
             // create new object
-            createdObject = (GameObject)Instantiate(objectPrefab[objectIndex]);
-        }
-        if (isInCreation && createdObject != null)
-        {
-            Vector3 leftPos = pinchDetectorLeft.Position;
-            createdObject.transform.position = leftPos;
+            createdObject = (GameObject)Instantiate(objectPrefab[objectIndex]);   
         }
     }
 
