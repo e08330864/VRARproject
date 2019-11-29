@@ -25,7 +25,7 @@ public class LeapGrab : MonoBehaviour
 
     private void Start()
     {
-        if ((actor = transform.parent.GetComponent<Actor>()) == null)
+        if ((actor = GetComponent<LocalPlayerController>().actor) == null)
         {
             Debug.LogError("actor is NULL in LeapGrab");
         }
