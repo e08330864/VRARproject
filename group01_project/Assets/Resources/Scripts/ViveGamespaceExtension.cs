@@ -5,6 +5,8 @@ using Valve.VR;
 
 public class ViveGamespaceExtension : MonoBehaviour
 {
+    public SharedParameters sharedParameters;
+
     [HideInInspector]
     public bool rightGrabPinch;
     private bool lastRightGrabPinch;
@@ -27,7 +29,12 @@ public class ViveGamespaceExtension : MonoBehaviour
 
         //game space extension
         Vector3 shift = calculateGameSpaceShift();
-        transform.position += new Vector3(shift.x, 0.0f, shift.z);
+
+        //ask if Leap Player also allows game space extension
+        if (sharedParameters.GameSpaceExtensionPossible())
+        {
+            transform.position += new Vector3(shift.x, 0.0f, shift.z);
+        }
     }
 
     Vector3 calculateGameSpaceShift()
