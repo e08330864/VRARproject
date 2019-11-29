@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 
-public class LeapGameSpaceExtension : NetworkBehaviour
+public class LeapGameSpaceExtension: NetworkBehaviour
 {
     public SharedParameters sharedParameters;
     private bool allowGameSpaceExtension = false;
@@ -16,13 +16,19 @@ public class LeapGameSpaceExtension : NetworkBehaviour
         {
             Debug.Log("Allow Gamespace extension from leap side");
             allowGameSpaceExtension = true;
+
+            sharedParameters.GetComponent<NetworkIdentity>().AssignClientAuthority(this.connectionToClient);
             sharedParameters.CmdSetGameSpaceExtension(allowGameSpaceExtension);
+            sharedParameters.GetComponent<NetworkIdentity>().AssignClientAuthority(this.connectionToClient);
         }
         else
         {
             Debug.Log("Deny Gamespace extension from leap side");
             allowGameSpaceExtension = false;
+
+            sharedParameters.GetComponent<NetworkIdentity>().AssignClientAuthority(this.connectionToClient);
             sharedParameters.CmdSetGameSpaceExtension(allowGameSpaceExtension);
+            sharedParameters.GetComponent<NetworkIdentity>().AssignClientAuthority(this.connectionToClient);
         }
     }
 }
