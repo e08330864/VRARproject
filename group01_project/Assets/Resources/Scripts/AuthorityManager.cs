@@ -10,6 +10,7 @@ public class AuthorityManager : NetworkBehaviour {
 
     // these variables should be set up on a client
     //**************************************************************************************************
+    //[SyncVar]
     Actor localActor; // Actor that is steering this player 
 
 
@@ -20,6 +21,8 @@ public class AuthorityManager : NetworkBehaviour {
         get { return grabbed; }
         set { grabbed = value; }
     }
+    private bool leftGrabbedNew = false;    // if isGrapping=true --> true=left hand grabbed; false=right hand grabbed
+    private bool leftGrabbed = false; 
 
     OnGrabbedBehaviour onb; // component defining the behaviour of this GO when it is grabbed by a player
                             // this component can implement different functionality for different GO´s
@@ -37,8 +40,25 @@ public class AuthorityManager : NetworkBehaviour {
     // TODO: avoid sending two or more consecutive RemoveClientAuthority or AssignClientAUthority commands for the same client and shared object
     // a mechanism preventing such situations can be implemented either on the client or on the server
 
+
+    public void SetLeftGrabbedNew(bool leftGrabbedNew)
+    {
+        this.leftGrabbedNew = leftGrabbedNew;
+    }
+
+    public bool GetLeftGrabbed()
+    {
+        return leftGrabbed;
+    }
+
+
     // Use this for initialization
     void Start () {
+        if ((localActor = GameObject.Find("Player").GetComponent<Actor>()) == null)
+        {
+            Debug.LogError("localActor is NULL in AuthorityManager");
+        }
+
         if ((netID = GetComponent<NetworkIdentity>()) == null)
         {
             Debug.LogError("netID is NULL in AuthorityManager");
@@ -51,32 +71,41 @@ public class AuthorityManager : NetworkBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (grabbedByPlayer)
-        {
-            if (!isGrapping)
+        if (localActor != null) { 
+            if (grabbedByPlayer)
             {
-                Debug.Log("grabbed && !isGrapped");
-                grabbedByPlayer = true;
-                localActor.RequestObjectAuthority(netID);
-                isGrapping = true;
+                if (!isGrapping)
+                {
+                    Debug.Log("grabbed && !isGrapped");
+                    grabbedByPlayer = true;
+                    leftGrabbed = leftGrabbedNew;
+                    Debug.Log("localActor=" + localActor.gameObject.tag);
+                    localActor.RequestObjectAuthority(netID);
+                    isGrapping = true;
+                }
             }
-        }
-        else
-        {
-            if (isGrapping)
+            else
             {
-                Debug.Log("!grabbed && isGrapping");
-                grabbedByPlayer = false;
-                localActor.ReturnObjectAuthority(netID);
-                isGrapping = false;
+                if (isGrapping)
+                {
+                    Debug.Log("!grabbed && isGrapping");
+                    grabbedByPlayer = false;
+                    localActor.ReturnObjectAuthority(netID);
+                    isGrapping = false;
+                }
             }
         }
     }
 
-    // assign localActor here
-    public void AssignActor(Actor actor)
+    //// assign localActor here
+    //public void AssignActor(Actor actor)
+    //{
+    //    localActor = actor;
+    //}
+
+    public Actor GetActor()
     {
-        localActor = actor;
+        return localActor;
     }
 
     // should only be called on server (by an Actor)
@@ -119,7 +148,7 @@ public class AuthorityManager : NetworkBehaviour {
     {
         if (grabbed)
         {
-            onb.OnGrabbed(localActor);
+            onb.OnGrabbed();
         }
     }
 

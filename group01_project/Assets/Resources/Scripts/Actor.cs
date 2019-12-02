@@ -6,17 +6,19 @@ public class Actor : NetworkBehaviour {
 
     public Character character;
     public new Transform transform;
+    private GameObject createdObject = null;
 
     [SyncVar]
     private string prefabName = "";
 
     //this part is for object sharing
-    List<NetworkIdentity> sharedObjects = new List<NetworkIdentity>(); // shared objects on the server or localActor
+    //List<NetworkIdentity> sharedObjects = new List<NetworkIdentity>(); // shared objects on the server or localActor
 
     protected virtual void Awake()
     {
         transform = base.transform;
     }
+
 
     // Use this for initialization
     void Start () {
@@ -31,27 +33,27 @@ public class Actor : NetworkBehaviour {
             }
          
 
-            //this part is for object sharing
-            //*******************************
-            if (isServer)
-            {
-                // find objects that can be manipulated 
-                // TIPP : you can use a specific tag for all GO's that can be manipulated by players
-                foreach (GameObject go in GameObject.FindGameObjectsWithTag("shared"))
-                {
-                    sharedObjects.Add(go.GetComponent<NetworkIdentity>());
-                }
-            }
-            if (isLocalPlayer) 
-            {
-                // find objects that can be manipulated 
-                // assign this Actor to the localActor field of the AuthorityManager component of each shared object
-                foreach (GameObject go in GameObject.FindGameObjectsWithTag("shared"))
-                {
-                    sharedObjects.Add(go.GetComponent<NetworkIdentity>());
-                    go.GetComponent<AuthorityManager>().AssignActor(this);
-                }
-            }
+            ////this part is for object sharing
+            ////*******************************
+            //if (isServer)
+            //{
+            //    // find objects that can be manipulated 
+            //    // TIPP : you can use a specific tag for all GO's that can be manipulated by players
+            //    foreach (GameObject go in GameObject.FindGameObjectsWithTag("shared"))
+            //    {
+            //        sharedObjects.Add(go.GetComponent<NetworkIdentity>());
+            //    }
+            //}
+            //if (isLocalPlayer) 
+            //{
+            //    // find objects that can be manipulated 
+            //    // assign this Actor to the localActor field of the AuthorityManager component of each shared object
+            //    foreach (GameObject go in GameObject.FindGameObjectsWithTag("shared"))
+            //    {
+            //        sharedObjects.Add(go.GetComponent<NetworkIdentity>());
+            //        go.GetComponent<AuthorityManager>().AssignActor(this);
+            //    }
+            //}
             //*******************************
         }
         else
@@ -103,7 +105,6 @@ public class Actor : NetworkBehaviour {
     {
         prefabName = prefab;
         name = name.Replace("(Clone)", "");
-
     }
 
     /// <summary>
@@ -135,14 +136,7 @@ public class Actor : NetworkBehaviour {
         }
     }
 
-    //----------------------------------------------------------------------------------------
-    [Command]
-    public void CmdCreateObject(GameObject objectToSpawn)
-    {
-        // spawn the object on the clients
-        NetworkServer.Spawn(objectToSpawn);
-    }
-    //----------------------------------------------------------------------------------------
+    
 
     /// <summary>
     /// Creates the character and initializes on server.
@@ -205,4 +199,64 @@ public class Actor : NetworkBehaviour {
         netID.GetComponent<AuthorityManager>().RemoveClientAuthority(this.connectionToClient);
     }
     //*******************************
+
+    //#######################################################################################################################################
+ 
+    //void Update()
+    //{
+    //    if (!isLocalPlayer)
+    //    {
+    //        return;
+    //    }
+    //    if (Input.GetKeyDown(KeyCode.H))
+    //    {
+    //        //Spawn
+    //        CmdCreateObject();
+    //    }
+    //}
+
+    public void CreateObject(string objPrefab, Vector3 pos, float objectScale)
+    {
+        Debug.Log("in CreateObject");
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+        Debug.Log("CmdCreateObject calling");
+        CmdCreateObject(objPrefab, pos, objectScale);
+    }
+
+    [Command]
+    public void CmdCreateObject(string objPrefab, Vector3 pos, float objectScale)
+    {
+        GameObject obj = Resources.Load("Prefabs/Objects/" + objPrefab) as GameObject;
+        createdObject = Instantiate(obj);
+        //createdObject.transform.localScale = createdObject.transform.localScale * objectScale;
+        Debug.Log("create object in CmdCreateObject on position = " + pos);
+        createdObject.transform.position = pos;
+        //createdObject.GetComponent<AuthorityManager>().AssignActor(this);
+        //sharedObjects.Add(createdObject.GetComponent<NetworkIdentity>());
+        SpawnObject(createdObject);
+    }
+
+    public void SpawnObject(GameObject obj)
+    {
+        Debug.Log("In SpawnObject");
+        NetworkServer.Spawn(obj);
+    }
+
+    /// <summary>
+    /// destroys the object
+    /// </summary>
+    /// <param name="obj"></param>
+    [Command]
+    public void CmdDestroyObject()
+    {
+        if (!createdObject) return;
+        //sharedObjects.Remove(createdObject.GetComponent<NetworkIdentity>());
+        NetworkServer.Destroy(createdObject);
+    }
+
+    //#######################################################################################################################################
+
 }

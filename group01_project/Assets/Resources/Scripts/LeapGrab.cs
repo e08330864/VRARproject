@@ -8,9 +8,11 @@ using Leap.Unity;
 public class LeapGrab : MonoBehaviour 
 {
     private Actor actor = null;
+    private GameObject player = null;
     private PinchDetector pinchDetectorLeft = null;
-    private Vector3 pinchPosition;
-    //private PinchDetector pinchDetectorRight;
+    private PinchDetector pinchDetectorRight = null;
+    private Vector3 pinchPositionLeft;
+    private Vector3 pinchPositionRight;
 
     [HideInInspector]
     public Collider leftTouch, rightTouch;
@@ -19,28 +21,29 @@ public class LeapGrab : MonoBehaviour
 
     [SerializeField]
     private List<GameObject> objectPrefab = null;
+    [SerializeField]
+    private float objectScale = 0.2f;
 
     private Collider colliderLeap = null;
     private bool isInCreation = false;
-    private bool doObjectSwitching = false;
-    private bool createNewObject = false;
+    private bool objectSwitchingEnabled = false;
     private int objectIndex = 0;
-    private GameObject createdObject = null;
-
+    
     private void Start()
     {
         if (GameObject.FindGameObjectWithTag("LeftHandInteraction") != null) {
             pinchDetectorLeft = GameObject.FindGameObjectWithTag("LeftHandInteraction").GetComponent<PinchDetector>();
         }
-        if ((actor = GetComponent<LocalPlayerController>().actor) == null)
-        {
-            Debug.LogError("actor is NULL in LeapGrab");
-        }
     }
 
     // Update is called once per frame
     void Update()
-    { 
+    {
+        if (actor == null && (player = GameObject.Find("Player")) != null)
+        {
+            actor = player.GetComponent<Actor>();
+            Debug.Log("Actor Initialized");
+        }
         //if (leftTouch != null && leftTouch == rightTouch && rightPinch && leftPinch)
         //{
         //    if (colliderLeap == null)
@@ -54,105 +57,137 @@ public class LeapGrab : MonoBehaviour
         //    colliderLeap.gameObject.GetComponent<AuthorityManager>().grabbedByPlayer = false;
         //    colliderLeap = null;
         //}
-        
-        CheckHoldingObject();
+
+        //if (pinchDetectorLeft == null)
+        //{
+        //    leftPinch = false;
+        //}
+        //if (pinchDetectorRight == null)
+        //{
+        //    rightPinch = false;
+        //}
+
         CheckCreateObject();
+        CheckHoldingObject();
     }
 
+    //---------------------------------------------------------------------------------------------------------------------------
+    // CREATING
     private void CheckCreateObject()
     {
-        if (createdObject != null && !isInCreation)
+        if (!isInCreation) // currently not in creation mode
         {
-            actor.CmdCreateObject(createdObject);
-            createdObject = null;
-        }
-        createNewObject = false;
-        if (!isInCreation && colliderLeap == null)   // only when no object is currently held and no creation process is currently running
-        {
-            if (leftPinch)
+            if (colliderLeap == null && rightPinch && leftPinch)    // start creating new object when l+r-pinch and no object is touched
             {
                 isInCreation = true;
                 objectIndex = 0;
-                createNewObject = true;
+                objectSwitchingEnabled = false;
+                // new object is created on left hand pinch-position --> grapped by left hand afterwards
+                string prefabName = objectPrefab[objectIndex].name;
+                Debug.Log("CreateObject calling for..." + prefabName);
+                actor.CreateObject(prefabName, pinchPositionLeft, objectScale);
+            }
+        }
+        else    // currently in creation mode
+        {
+            if (colliderLeap == null && !leftPinch)   // stop creation mode
+            {
+                Debug.Log("STOP creation mode");
+                isInCreation = false;
+            }
+            else    // creation process is further on running
+            {
+                if (rightPinch && objectSwitchingEnabled)    // switch to next object: old object is destroyed
+                {
+                    objectSwitchingEnabled = false;
+                    actor.CmdDestroyObject();
+                    objectIndex = (++objectIndex) % objectPrefab.Count;
+                    string prefabName = objectPrefab[objectIndex].name;
+                    Debug.Log("SWITCHING: CreateObject calling for..." + prefabName);
+                    actor.CreateObject(prefabName, pinchPositionLeft, objectScale);
+                }
+                else if (!rightPinch)     // new switching enabled
+                {
+                    Debug.Log("left pinch = false");
+                    objectSwitchingEnabled = true;
+                }
+            }
+        }
+    }
+
+    //---------------------------------------------------------------------------------------------------------------------------
+    // HOLDING
+    private void CheckHoldingObject()
+    {
+        if ((leftTouch != null && leftPinch))   // grab with left hand (1.priority)
+        {
+            if (colliderLeap == null)
+            {
+                Debug.Log("Holding with LEFT hand");
+                colliderLeap = leftTouch;
+                leftTouch.gameObject.GetComponent<AuthorityManager>().SetLeftGrabbedNew(true);
+                leftTouch.gameObject.GetComponent<AuthorityManager>().grabbedByPlayer = true;
             }
         }
         else
         {
-            if (isInCreation)   // creation process was running in last frame
-            {
-                if (!leftPinch)  // end of creation process
+            if ((rightTouch != null && rightPinch))    // grab with right hand (2.priority)
+            { 
+                if (colliderLeap == null)
                 {
-                    isInCreation = false;
-                }
-                else    // creation process is further on running
-                {
-                    if (rightPinch && !doObjectSwitching)    // switch to next object
-                    {
-                        doObjectSwitching = true;
-                        createNewObject = true;
-                        objectIndex = (++objectIndex) % objectPrefab.Count;
-                    } else if (!rightPinch)     // new switching enabled
-                    {
-                        doObjectSwitching = false;
-                    }
+                    Debug.Log("Holding with RIGHT hand");
+                    colliderLeap = rightTouch;
+                    rightTouch.gameObject.GetComponent<AuthorityManager>().SetLeftGrabbedNew(false);
+                    rightTouch.gameObject.GetComponent<AuthorityManager>().grabbedByPlayer = true;
                 }
             }
-        }
-        if (createNewObject)
-        {
-            // destroy current object if exists
-            if (createdObject != null)
+            else
             {
-                Destroy(createdObject);
+                if (colliderLeap != null)  // release if no grab
+                {
+                    Debug.Log("Holding RELEASED");
+                    colliderLeap.gameObject.GetComponent<AuthorityManager>().grabbedByPlayer = false;
+                    colliderLeap = null;
+                }
             }
-            // create new object
-            createdObject = (GameObject)Instantiate(objectPrefab[objectIndex]);
-        }
-        if (isInCreation && createdObject != null)
-        {
-            Vector3 leftPos = pinchPosition;
-            createdObject.transform.position = leftPos;
         }
     }
 
-    private void CheckHoldingObject()
-    {
-        if (leftTouch != null && leftTouch == rightTouch)
-        {
-            if (colliderLeap == null)
-            {
-                colliderLeap = leftTouch;
-                leftTouch.gameObject.GetComponent<AuthorityManager>().grabbedByPlayer = true;
-            }
-        }
-        else if (colliderLeap != null)
-        {
-            colliderLeap.gameObject.GetComponent<AuthorityManager>().grabbedByPlayer = false;
-            colliderLeap = null;
-        }
-    }
-
+    //---------------------------------------------------------------------------------------------------------------------------
+    // PINCHING
     public void onPinchLeft()
     {
-        if (pinchDetectorLeft == null && GameObject.FindGameObjectWithTag("LeftHandInteraction") != null)
+        GameObject hand = null;
+        if (pinchDetectorLeft == null && (hand = GameObject.FindGameObjectWithTag("LeftHandInteraction")) != null)
         {
-            pinchDetectorLeft = GameObject.FindGameObjectWithTag("LeftHandInteraction").GetComponent<PinchDetector>();
+            pinchDetectorLeft = hand.GetComponent<PinchDetector>();
         }
-        pinchPosition = pinchDetectorLeft.Position;
-        Debug.Log("Left Pinch");
+        pinchPositionLeft = pinchDetectorLeft.Position;
+        Debug.Log("Left Pinch with position = " + pinchPositionLeft);
         leftPinch = true;
     }
+
     public void offPinchLeft()
     {
+        Debug.Log("left pinch = false");
         leftPinch = false;
     }
+
     public void onPinchRight()
     {
-        Debug.Log("Right Pinch");
+        GameObject hand = null;
+        if (pinchDetectorRight == null && (hand = GameObject.FindGameObjectWithTag("RightHandInteraction")) != null)
+        {
+            pinchDetectorRight = hand.GetComponent<PinchDetector>();
+        }
+        pinchPositionRight = pinchDetectorRight.Position;
+        Debug.Log("Right Pinch with position = " + pinchPositionRight);
         rightPinch = true;
     }
+
     public void offPinchRight()
     {
+        Debug.Log("right pinch = false");
         rightPinch = false;
     }
 }

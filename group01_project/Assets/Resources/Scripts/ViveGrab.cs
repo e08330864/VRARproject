@@ -26,18 +26,39 @@ public class ViveGrab : MonoBehaviour
         leftGrabPinch = SteamVR_Actions._default.GrabPinch.GetState(SteamVR_Input_Sources.LeftHand);
         rightGrabPinch = SteamVR_Actions._default.GrabPinch.GetState(SteamVR_Input_Sources.RightHand);
 
-        if (leftTouch != null && leftTouch == rightTouch && rightGrabPinch && leftGrabPinch)
+        CheckHoldingObject();
+    }
+
+    private void CheckHoldingObject()
+    {
+        if ((leftTouch != null && leftGrabPinch))   // grab with left hand (1.priority)
         {
             if (grabbedCollider == null)
             {
                 grabbedCollider = leftTouch;
+                leftTouch.gameObject.GetComponent<AuthorityManager>().SetLeftGrabbedNew(true);
                 leftTouch.gameObject.GetComponent<AuthorityManager>().grabbedByPlayer = true;
             }
         }
-        else if (grabbedCollider != null && (!rightGrabPinch || !leftGrabPinch))
+        else
         {
-            grabbedCollider.gameObject.GetComponent<AuthorityManager>().grabbedByPlayer = false;
-            grabbedCollider = null;
+            if ((rightTouch != null && rightGrabPinch))    // grab with right hand (2.priority)
+            {
+                if (grabbedCollider == null)
+                {
+                    grabbedCollider = rightTouch;
+                    rightTouch.gameObject.GetComponent<AuthorityManager>().SetLeftGrabbedNew(false);
+                    rightTouch.gameObject.GetComponent<AuthorityManager>().grabbedByPlayer = true;
+                }
+            }
+            else
+            {
+                if (grabbedCollider != null)  // release if no grab
+                {
+                    grabbedCollider.gameObject.GetComponent<AuthorityManager>().grabbedByPlayer = false;
+                    grabbedCollider = null;
+                }
+            }
         }
     }
 }

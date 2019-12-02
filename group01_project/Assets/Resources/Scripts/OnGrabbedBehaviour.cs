@@ -6,51 +6,81 @@ using UnityEngine.Networking;
 public class OnGrabbedBehaviour : MonoBehaviour
 {
     bool grabbed;
-    Actor currentActor;
+    //Actor currentActor;
 
-    Rigidbody rigidbody;
-    NetworkIdentity netId;
+    Rigidbody rigidbody = null;
+    NetworkIdentity netId = null;
+    AuthorityManager authorityManager = null;
+
 
     // Use this for initialization
-    void Start () {
-
+    void Start ()
+    {
+        if ((authorityManager = GetComponent<AuthorityManager>()) == null) { Debug.LogError("authorityManager is NULL in OnGrabbedBehaviour"); }
         if ((rigidbody = GetComponent<Rigidbody>()) == null) { Debug.LogError("rigidbody is NULL in OnGrabbedBehaviour"); }
         if ((netId = GetComponent<NetworkIdentity>()) == null) { Debug.LogError("netId is NULL in OnGrabbedBehaviour"); }
     }
-	
-	// Update is called once per frame
-	void Update () {
-        if (currentActor == null || !netId.hasAuthority) return;
-        GameObject leftHandGO = currentActor.transform.Find("ViveHands/Left").gameObject;
-        GameObject rightHandGO = currentActor.transform.Find("ViveHands/Right").gameObject;
 
-        if (leftHandGO && rightHandGO)
+    // Update is called once per frame
+    void Update()
+    {
+        if (grabbed)
         {
-            Transform leftHand = leftHandGO.transform;
-            Transform rightHand = rightHandGO.transform;
-            
-            // GO´s behaviour when it is in a grabbed state (owned by a client) should be defined here
-            if (grabbed)
+            if (authorityManager.GetActor() == null || !netId.hasAuthority) return;
+            if (authorityManager.GetActor().gameObject.tag == "vive")   // VIVE grabbed
             {
-                this.transform.position = (leftHand.position + rightHand.position) / 2.0f;
+                if (authorityManager.GetLeftGrabbed())  // Left hand
+                {
+                    GameObject hand = authorityManager.GetActor().transform.Find("ViveHands/Left").gameObject;
+                    if (hand)
+                    {
+                        this.transform.position = hand.transform.position;
+                    }
+                }
+                else    //Right hand
+                {
+                    GameObject hand = authorityManager.GetActor().transform.Find("ViveHands/Right").gameObject;
+                    if (hand)
+                    {
+                        this.transform.position = hand.transform.position;
+                    }
+                }
+            }
+            else if (authorityManager.GetActor().gameObject.tag == "leap")  // Leap grabbed
+            {
+                if (authorityManager.GetLeftGrabbed())  // Left hand
+                {
+                    GameObject hand = GameObject.FindGameObjectWithTag("LeftHandInteraction");
+                    if (hand)
+                    {
+                        this.transform.position = hand.transform.position;
+                    }
+                }
+                else    //Right hand
+                {
+                    GameObject hand = GameObject.FindGameObjectWithTag("RightHandInteraction");
+                    if (hand)
+                    {
+                        this.transform.position = hand.transform.position;
+                    }
+                }
             }
         }
-	}
+    }
 
     // called first time when the GO gets grabbed by a player
-    public void OnGrabbed(Actor actor)
+    public void OnGrabbed()
     {
-        currentActor = actor;
         grabbed = true;
         rigidbody.isKinematic = true;
         rigidbody.useGravity = false;
+
     }
 
     // called when the GO gets released by a player
     public void OnReleased()
     {
         grabbed = false;
-        currentActor = null;
         rigidbody.isKinematic = false;
         rigidbody.useGravity = true;
     }
