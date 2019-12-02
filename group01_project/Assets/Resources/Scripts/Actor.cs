@@ -146,8 +146,17 @@ public class Actor : NetworkBehaviour {
         GameObject model = (GameObject)Instantiate(modelPrefab, transform.position, transform.rotation) as GameObject;
         NetworkServer.Spawn(model);
 
-        // Attach character to player
-        AttachCharacter(model.GetComponent<Character>());
+        if (prefab.Contains("Hand"))
+        {
+            // Attach character to player
+            AttachCharacter(model.GetComponent<Character>());
+        }
+        else if (prefab.Contains("Foot"))
+        {
+            // Attach character to player
+            AttachFootCharacter(model.GetComponent<FootCharacter>());
+        }
+       
     }
 
     /// <summary>
@@ -186,6 +195,17 @@ public class Actor : NetworkBehaviour {
     public void AttachCharacter(Character newCharacter)
     {
         newCharacter.AttachToActor(netId);
+    }
+
+    /// <summary>
+    /// Main routine to attach the character to this actor
+    /// This runs only on Server.
+    /// </summary>
+    /// <param name="newCharacter">New character to attach.</param>
+    [Server]
+    public void AttachFootCharacter(FootCharacter newFootCharacter)
+    {
+        newFootCharacter.AttachToActor(netId);
     }
 
 
