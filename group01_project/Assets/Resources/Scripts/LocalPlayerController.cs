@@ -21,11 +21,14 @@ public class LocalPlayerController : MonoBehaviour {
         Actor actorPrefab = (Resources.Load("Prefabs/" + actor.name.Replace("(Clone)", "")) as GameObject).GetComponent<Actor>();
         actor.transform.SetParent(transform);
 
-        var prefabName = "";
-        
-        prefabName = actorPrefab.character != null ? actorPrefab.character.name : "";
+        var prefabNameHands = "";
+        prefabNameHands = actorPrefab.character != null ? actorPrefab.character.name : "";
+        actor.InitializeHands(prefabNameHands);
 
-        actor.Initialize(prefabName);
+        var prefabNameFoot = "";
+        prefabNameFoot = actorPrefab.footCharacter != null ? actorPrefab.footCharacter.name : "";
+        actor.InitializeFoot(prefabNameFoot);
+        
     }
 
     private void Awake()
@@ -46,6 +49,7 @@ public class LocalPlayerController : MonoBehaviour {
 
     public void UpdateFoot(Vector3 footPos, Quaternion footRot)
     {
+        Debug.Log("Starting Update foot " + footPos.ToString());
         actor.UpdateActorFoot(footPos, footRot);
     }
 

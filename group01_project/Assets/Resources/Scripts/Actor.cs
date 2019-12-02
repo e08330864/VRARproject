@@ -10,7 +10,10 @@ public class Actor : NetworkBehaviour {
     private GameObject createdObject = null;
 
     [SyncVar]
-    private string prefabName = "";
+    private string prefabNameHand = "";
+
+    [SyncVar]
+    private string prefabNameFoot = "";
 
     //this part is for object sharing
     //List<NetworkIdentity> sharedObjects = new List<NetworkIdentity>(); // shared objects on the server or localActor
@@ -22,7 +25,7 @@ public class Actor : NetworkBehaviour {
 
 
     // Use this for initialization
-    void Start () {
+    void Start() {
 
         if (isServer || isLocalPlayer)
         {
@@ -30,9 +33,10 @@ public class Actor : NetworkBehaviour {
             {
                 // Inform the local player about his new character
                 LocalPlayerController.Singleton.SetActor(this);
-                CmdInitialize(prefabName);
+                CmdInitialize(prefabNameHand);
+                CmdInitialize(prefabNameFoot);
             }
-         
+
 
             ////this part is for object sharing
             ////*******************************
@@ -60,7 +64,8 @@ public class Actor : NetworkBehaviour {
         else
         {
             // Initialize on startup
-            Initialize(prefabName);
+            InitializeHands(prefabNameHand);
+            InitializeFoot(prefabNameFoot);
         }
     }
 
@@ -78,7 +83,7 @@ public class Actor : NetworkBehaviour {
 
     public void UpdateActorFoot(Vector3 footPos, Quaternion footRot)
     {
-        if(footCharacter != null)
+        if (footCharacter != null)
         {
             footCharacter.UpdateCharacterRight(footPos, footRot);
         }
@@ -110,10 +115,23 @@ public class Actor : NetworkBehaviour {
     /// Initialize the player locally.
     /// </summary>
     /// <param name="prefab">Prefab character name.</param>
-    public void Initialize(string prefab)
+    public void InitializeHands(string prefab)
     {
-        prefabName = prefab;
-        name = name.Replace("(Clone)", "");
+        Debug.Log("InitializeFoot Hands: " + prefab);
+        if (prefab.Contains("Hand"))
+        {
+            prefabNameHand = prefab;
+            name = name.Replace("(Clone)", "");
+        }
+    }
+
+    public void InitializeFoot(string prefab)
+    {
+        Debug.Log("InitializeFoot Foot: " + prefab);
+        if (prefab.Contains("Foot"))
+        {
+            prefabNameFoot = prefab;
+        }
     }
 
     /// <summary>
@@ -155,7 +173,8 @@ public class Actor : NetworkBehaviour {
     public void CreateCharacter(string prefab)
     {
         SpawnCharacter(prefab);
-        Initialize(prefab);
+        InitializeHands(prefab);
+        InitializeFoot(prefab);
     }
 
     /// <summary>
