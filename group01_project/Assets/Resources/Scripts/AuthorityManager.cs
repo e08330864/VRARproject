@@ -14,8 +14,8 @@ public class AuthorityManager : NetworkBehaviour {
     Actor localActor; // Actor that is steering this player 
 
 
-    private bool isGrabbed = false;  // true, if object is currently grabbed
-    private bool m_playerGrabs = false; // true, if player is grabbing the object
+    private bool isGrabbed = false;  // true, if object is currently grabbed by local player
+    private bool m_playerGrabs = false; // true, if local player is grabbing the object
     public bool playerGrabs {
         get { return m_playerGrabs; }
         set { m_playerGrabs = value; }
