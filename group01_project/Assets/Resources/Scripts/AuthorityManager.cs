@@ -7,7 +7,8 @@ public class AuthorityManager : NetworkBehaviour {
 
     
     NetworkIdentity netID; // NetworkIdentity component attached to this game object
-    List<NetworkConnection> waitingNetID = new List<NetworkConnection>();
+    List<NetworkConnection> waitingNetIDList = new List<NetworkConnection>();
+    List<bool> leftHandGrabList = new List<bool>();
 
     // these variables should be set up on a client
     //**************************************************************************************************
@@ -15,13 +16,9 @@ public class AuthorityManager : NetworkBehaviour {
     Actor localActor; // Actor that is steering this player 
 
 
-    private bool grabbed = false; // if this is true client authority for the object should be requested
-    private bool isGrapping = false;
-    public bool grabbedByPlayer // private "grabbed" field can be accessed from other scripts through grabbedByPlayer
-    {
-        get { return grabbed; }
-        set { grabbed = value; }
-    }
+    public bool newGrabByPlayer = false; // true client authority for the object should be requested
+    public bool releaseGrabByPlayer = false; // true client authority (waiting) for the object should be removed
+    public bool grabbedByPlayer = false; // grabbedByPlayer = true, if object is currently held by a player
     private bool leftGrabbedNew = false; // the   
     private bool leftGrabbed = false; // if isGrapping=true --> true=left hand grabbed; false=right hand grabbed
 
@@ -73,16 +70,19 @@ public class AuthorityManager : NetworkBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (localActor != null) { 
-            if (grabbedByPlayer)
+            if (newGrabByPlayer)
             {
-                if (!isGrapping)
+
+                if (!grabbedByPlayer)
                 {
+
                     Debug.Log("calling RequestObjectAuthority --> isGrabbing = true");
                     Debug.Log("localActor=" + localActor.gameObject.tag);
                     leftGrabbed = leftGrabbedNew;
                     localActor.RequestObjectAuthority(netID);
                     isGrapping = true;
                 }
+                newGrabByPlayer = false;
             }
             else
             {
@@ -117,7 +117,7 @@ public class AuthorityManager : NetworkBehaviour {
             //Debug.Log("Has Authority " + this.GetComponent<NetworkIdentity>().hasAuthority);
             RpcGotAuthority();
         } else {
-            waitingNetID.Add(conn);
+            waitingNetIDList.Add(conn);
         }
     }
 
@@ -129,16 +129,16 @@ public class AuthorityManager : NetworkBehaviour {
         {
             this.netID.RemoveClientAuthority(conn);
             RpcLostAuthority();
-            if (waitingNetID.Count > 0)
+            if (waitingNetIDList.Count > 0)
             {
-                this.netID.AssignClientAuthority(waitingNetID[0]);
+                this.netID.AssignClientAuthority(waitingNetIDList[0]);
                 RpcGotAuthority();
-                waitingNetID.RemoveAt(0);
+                waitingNetIDList.RemoveAt(0);
             }
         }
         else
         {
-            waitingNetID.Remove(conn);
+            waitingNetIDList.Remove(conn);
         }       
     }
 
