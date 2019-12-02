@@ -72,7 +72,6 @@ public class AuthorityManager : NetworkBehaviour {
         if (localActor != null) { 
             if (newGrabByPlayer)
             {
-
                 if (!grabbedByPlayer)
                 {
 
@@ -80,17 +79,17 @@ public class AuthorityManager : NetworkBehaviour {
                     Debug.Log("localActor=" + localActor.gameObject.tag);
                     leftGrabbed = leftGrabbedNew;
                     localActor.RequestObjectAuthority(netID);
-                    isGrapping = true;
+                    grabbedByPlayer = true;
                 }
                 newGrabByPlayer = false;
             }
             else
             {
-                if (isGrapping)
+                if (grabbedByPlayer)
                 {
                     Debug.Log("calling ReturnObjectAuthority --> isGrapping = false");
                     localActor.ReturnObjectAuthority(netID);
-                    isGrapping = false;
+                    grabbedByPlayer = false;
                 }
             }
         }
