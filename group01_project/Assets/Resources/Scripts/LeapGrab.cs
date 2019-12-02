@@ -8,7 +8,7 @@ using Leap.Unity;
 public class LeapGrab : MonoBehaviour 
 {
     private Actor actor = null;
-    private GameObject player = null;
+    private Transform playerTransform = null;
     private PinchDetector pinchDetectorLeft = null;
     private PinchDetector pinchDetectorRight = null;
     private Vector3 pinchPositionLeft;
@@ -39,9 +39,9 @@ public class LeapGrab : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (actor == null && (player = GameObject.Find("Player")) != null)
+        if (actor == null && (playerTransform = gameObject.transform.Find("Player")) != null)
         {
-            actor = player.GetComponent<Actor>();
+            actor = playerTransform.GetComponent<Actor>();
             Debug.Log("Actor Initialized");
         }
         //if (leftTouch != null && leftTouch == rightTouch && rightPinch && leftPinch)
@@ -58,14 +58,14 @@ public class LeapGrab : MonoBehaviour
         //    colliderLeap = null;
         //}
 
-        //if (pinchDetectorLeft == null)
-        //{
-        //    leftPinch = false;
-        //}
-        //if (pinchDetectorRight == null)
-        //{
-        //    rightPinch = false;
-        //}
+        if (pinchDetectorLeft == null)
+        {
+            leftPinch = false;
+        }
+        if (pinchDetectorRight == null)
+        {
+            rightPinch = false;
+        }
 
         CheckCreateObject();
         CheckHoldingObject();
@@ -125,7 +125,7 @@ public class LeapGrab : MonoBehaviour
             {
                 Debug.Log("Holding with LEFT hand");
                 colliderLeap = leftTouch;
-                leftTouch.gameObject.GetComponent<AuthorityManager>().SetLeftGrabbedNew(true);
+                leftTouch.gameObject.GetComponent<AuthorityManager>().SetLeftGrabbedNew(true);  // sets leftGrabbed=true in AuthorityManager, only in case when not already grabbed
                 leftTouch.gameObject.GetComponent<AuthorityManager>().grabbedByPlayer = true;
             }
         }
@@ -137,7 +137,7 @@ public class LeapGrab : MonoBehaviour
                 {
                     Debug.Log("Holding with RIGHT hand");
                     colliderLeap = rightTouch;
-                    rightTouch.gameObject.GetComponent<AuthorityManager>().SetLeftGrabbedNew(false);
+                    rightTouch.gameObject.GetComponent<AuthorityManager>().SetLeftGrabbedNew(false);    // sets leftGrabbed=false in AuthorityManager, only in case when not already grabbed
                     rightTouch.gameObject.GetComponent<AuthorityManager>().grabbedByPlayer = true;
                 }
             }

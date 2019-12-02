@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
+using System.Collections.Generic;
 
 // TODO: this script should manage authority for a shared object
 public class AuthorityManager : NetworkBehaviour {
 
     
     NetworkIdentity netID; // NetworkIdentity component attached to this game object
-    NetworkConnection waitingNetID;
+    List<NetworkConnection> waitingNetID = new List<NetworkConnection>();
 
     // these variables should be set up on a client
     //**************************************************************************************************
@@ -21,8 +22,8 @@ public class AuthorityManager : NetworkBehaviour {
         get { return grabbed; }
         set { grabbed = value; }
     }
-    private bool leftGrabbedNew = false;    // if isGrapping=true --> true=left hand grabbed; false=right hand grabbed
-    private bool leftGrabbed = false; 
+    private bool leftGrabbedNew = false; // the   
+    private bool leftGrabbed = false; // if isGrapping=true --> true=left hand grabbed; false=right hand grabbed
 
     OnGrabbedBehaviour onb; // component defining the behaviour of this GO when it is grabbed by a player
                             // this component can implement different functionality for different GO´s
@@ -76,10 +77,9 @@ public class AuthorityManager : NetworkBehaviour {
             {
                 if (!isGrapping)
                 {
-                    Debug.Log("grabbed && !isGrapped");
-                    grabbedByPlayer = true;
-                    leftGrabbed = leftGrabbedNew;
+                    Debug.Log("calling RequestObjectAuthority --> isGrabbing = true");
                     Debug.Log("localActor=" + localActor.gameObject.tag);
+                    leftGrabbed = leftGrabbedNew;
                     localActor.RequestObjectAuthority(netID);
                     isGrapping = true;
                 }
@@ -88,8 +88,7 @@ public class AuthorityManager : NetworkBehaviour {
             {
                 if (isGrapping)
                 {
-                    Debug.Log("!grabbed && isGrapping");
-                    grabbedByPlayer = false;
+                    Debug.Log("calling ReturnObjectAuthority --> isGrapping = false");
                     localActor.ReturnObjectAuthority(netID);
                     isGrapping = false;
                 }
@@ -112,13 +111,13 @@ public class AuthorityManager : NetworkBehaviour {
     // assign the authority over this game object to a client with NetworkConnection conn
     public void AssignClientAuthority(NetworkConnection conn)
     {
-        Debug.Log("Has Authority " + this.GetComponent<NetworkIdentity>().hasAuthority);
         if (this.GetComponent<NetworkIdentity>().clientAuthorityOwner == null)
         {
             this.netID.AssignClientAuthority(conn);
+            //Debug.Log("Has Authority " + this.GetComponent<NetworkIdentity>().hasAuthority);
             RpcGotAuthority();
         } else {
-            waitingNetID = conn;
+            waitingNetID.Add(conn);
         }
     }
 
@@ -130,23 +129,23 @@ public class AuthorityManager : NetworkBehaviour {
         {
             this.netID.RemoveClientAuthority(conn);
             RpcLostAuthority();
+            if (waitingNetID.Count > 0)
+            {
+                this.netID.AssignClientAuthority(waitingNetID[0]);
+                RpcGotAuthority();
+                waitingNetID.RemoveAt(0);
+            }
         }
-        else if (waitingNetID == conn)
+        else
         {
-            waitingNetID = null;
-        } 
-        if( waitingNetID != null) 
-        {
-            this.netID.AssignClientAuthority(waitingNetID);
-            RpcGotAuthority();
-            waitingNetID = null;
-        }
+            waitingNetID.Remove(conn);
+        }       
     }
 
     [ClientRpc]
     void RpcGotAuthority()
     {
-        if (grabbed)
+        if (grabbedByPlayer)
         {
             onb.OnGrabbed();
         }
