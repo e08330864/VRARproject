@@ -69,8 +69,11 @@ public class LocalPlayerController : MonoBehaviour {
             if (right.gameObject.activeSelf)
                 UpdateActorRight(right.position, right.rotation);
 
-            if (foot.gameObject.activeSelf)
-                UpdateFoot(foot.position, foot.rotation);
+            if (transform.parent != null && transform.parent.name.Contains("Vive"))
+            {
+                if (foot.gameObject.activeSelf)
+                    UpdateFoot(foot.position, foot.rotation);
+            }
         }
       
     }
