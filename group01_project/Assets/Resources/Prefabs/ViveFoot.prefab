@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5160392418902838495}
   - component: {fileID: 2196890550225480714}
   - component: {fileID: 8360760548857560391}
+  - component: {fileID: 153637841096434522}
   m_Layer: 0
   m_Name: ViveFoot
   m_TagString: Untagged
@@ -102,6 +103,26 @@ MonoBehaviour:
   m_SnapThreshold: 5
   m_InterpolateRotation: 1
   m_InterpolateMovement: 1
+--- !u!114 &153637841096434522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2015361628309522211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1267208747, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Target: {fileID: 4109208672866074342}
+  m_ChildIndex: 0
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_MovementThreshold: 0.001
+  m_InterpolateRotation: 0.5
+  m_InterpolateMovement: 0.5
 --- !u!1 &9162098057571325489
 GameObject:
   m_ObjectHideFlags: 0
@@ -128,8 +149,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9162098057571325489}
-  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.03577604, y: 0.6895511, z: 0.7231635, w: 0.016554683}
+  m_LocalPosition: {x: -12.247398, y: -3.1328695, z: 12.27869}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6216588711853511542}

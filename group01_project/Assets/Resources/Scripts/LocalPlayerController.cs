@@ -49,7 +49,7 @@ public class LocalPlayerController : MonoBehaviour {
 
     public void UpdateFoot(Vector3 footPos, Quaternion footRot)
     {
-        Debug.Log("Starting Update foot " + footPos.ToString());
+        //Debug.Log("Starting Update foot " + footPos.ToString());
         actor.UpdateActorFoot(footPos, footRot);
     }
 
