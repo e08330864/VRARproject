@@ -141,11 +141,14 @@ public class LeapGrab : MonoBehaviour
                     rightTouch.gameObject.GetComponent<AuthorityManager>().playerGrabs = true;
                 }
             }
-            else    // release if no grab
+            else   
             {
-                Debug.Log("Holding RELEASED");
-                colliderLeap.gameObject.GetComponent<AuthorityManager>().playerGrabs = false;
-                colliderLeap = null;
+                if (colliderLeap != null)   // release if no grab
+                {
+                    Debug.Log("Holding RELEASED");
+                    colliderLeap.gameObject.GetComponent<AuthorityManager>().playerGrabs = false;
+                    colliderLeap = null;
+                }
             }
         }
     }

@@ -14,8 +14,12 @@ public class AuthorityManager : NetworkBehaviour {
     Actor localActor; // Actor that is steering this player 
 
 
-    public bool isGrabbed = false;  // true, if object is currently grabbed
-    public bool playerGrabs = false; // true, if object is grabbed by a player
+    private bool isGrabbed = false;  // true, if object is currently grabbed
+    private bool m_playerGrabs = false; // true, if player is grabbing the object
+    public bool playerGrabs {
+        get { return m_playerGrabs; }
+        set { m_playerGrabs = value; }
+    } 
     private bool leftGrabbedNew = false; // the   
     private bool leftGrabbed = false; // if isGrapping=true --> true=left hand grabbed; false=right hand grabbed
 
