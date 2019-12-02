@@ -37,7 +37,7 @@ public class ViveGrab : MonoBehaviour
             {
                 grabbedCollider = leftTouch;
                 leftTouch.gameObject.GetComponent<AuthorityManager>().SetLeftGrabbedNew(true);
-                leftTouch.gameObject.GetComponent<AuthorityManager>().grabbedByPlayer = true;
+                leftTouch.gameObject.GetComponent<AuthorityManager>().playerGrabs = true;
             }
         }
         else
@@ -48,14 +48,14 @@ public class ViveGrab : MonoBehaviour
                 {
                     grabbedCollider = rightTouch;
                     rightTouch.gameObject.GetComponent<AuthorityManager>().SetLeftGrabbedNew(false);
-                    rightTouch.gameObject.GetComponent<AuthorityManager>().grabbedByPlayer = true;
+                    rightTouch.gameObject.GetComponent<AuthorityManager>().playerGrabs = true;
                 }
             }
             else
             {
                 if (grabbedCollider != null)  // release if no grab
                 {
-                    grabbedCollider.gameObject.GetComponent<AuthorityManager>().grabbedByPlayer = false;
+                    grabbedCollider.gameObject.GetComponent<AuthorityManager>().playerGrabs = false;
                     grabbedCollider = null;
                 }
             }

@@ -14,8 +14,8 @@ public class AuthorityManager : NetworkBehaviour {
     Actor localActor; // Actor that is steering this player 
 
 
-    public bool isGrabbed = false; 
-    public bool grabbedByPlayer = false; // grabbedByPlayer = true, if object is currently held by a player
+    public bool isGrabbed = false;  // true, if object is currently grabbed
+    public bool playerGrabs = false; // true, if object is grabbed by a player
     private bool leftGrabbedNew = false; // the   
     private bool leftGrabbed = false; // if isGrapping=true --> true=left hand grabbed; false=right hand grabbed
 
@@ -67,21 +67,20 @@ public class AuthorityManager : NetworkBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (localActor != null) { 
-            if (grabbedByPlayer)
+            if (playerGrabs)    // local player is currently grabbing
             {
-                if (!grabbedByPlayer)
+                if (!isGrabbed) // the object is currently not grabbed
                 {
-                    Debug.Log("calling RequestObjectAuthority --> isGrabbing = true");
+                    Debug.Log("calling RequestObjectAuthority --> isGrabbed = true");
                     Debug.Log("localActor=" + localActor.gameObject.tag);
                     leftGrabbed = leftGrabbedNew;
                     localActor.RequestObjectAuthority(netID);
-                    //isGrapping = true;
+                    isGrabbed = true;
                 }
-                grabbedByPlayer = false;
             }
-            else
+            else    // the local player is currently not grabbing
             {
-                if (isGrabbed)
+                if (isGrabbed)  // the object is currently grabbed
                 {
                     Debug.Log("calling ReturnObjectAuthority --> isGrapping = false");
                     localActor.ReturnObjectAuthority(netID);
@@ -128,7 +127,7 @@ public class AuthorityManager : NetworkBehaviour {
     [ClientRpc]
     void RpcGotAuthority()
     {
-        if (grabbedByPlayer)
+        if (playerGrabs)
         {
             onb.OnGrabbed();
         }
