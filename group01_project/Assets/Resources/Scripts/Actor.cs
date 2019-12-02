@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class Actor : NetworkBehaviour {
 
     public Character character;
+    public FootCharacter footCharacter;
     public new Transform transform;
     private GameObject createdObject = null;
 
@@ -72,6 +73,14 @@ public class Actor : NetworkBehaviour {
         if (character != null)
         {
             character.UpdateCharacterLeft(leftPos, leftRot);
+        }
+    }
+
+    public void UpdateActorFoot(Vector3 footPos, Quaternion footRot)
+    {
+        if(footCharacter != null)
+        {
+            footCharacter.UpdateCharacterRight(footPos, footRot);
         }
     }
 
