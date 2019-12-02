@@ -6,6 +6,7 @@ public class LocalPlayerController : MonoBehaviour {
     public Actor actor; // The network actor runs on all clients
     public Transform left;
     public Transform right;
+    public Transform foot;
 
     public static LocalPlayerController Singleton { get; private set; }
     /// <summary>
@@ -43,6 +44,11 @@ public class LocalPlayerController : MonoBehaviour {
         actor.UpdateActorRight(rightPos, rightRot);
     }
 
+    public void UpdateFoot(Vector3 footPos, Quaternion footRot)
+    {
+        actor.UpdateActorFoot(footPos, footRot);
+    }
+
     // Use this for initialization
     void Start () {
 
@@ -58,6 +64,9 @@ public class LocalPlayerController : MonoBehaviour {
 
             if (right.gameObject.activeSelf)
                 UpdateActorRight(right.position, right.rotation);
+
+            if (foot.gameObject.activeSelf)
+                UpdateFoot(foot.position, foot.rotation);
         }
       
     }
