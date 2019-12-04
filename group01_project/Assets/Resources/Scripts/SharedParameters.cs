@@ -18,34 +18,11 @@ public class SharedParameters : NetworkBehaviour
             Debug.Log("ERROR: Allow Gamespace called on client");
             return;
         }
-           
-
         allowGameSpaceExtension = extensionAllowed;
     }
 
     public bool GameSpaceExtensionPossible()
     {
         return allowGameSpaceExtension;
-    }
-
-    public void AssignClientAuthority(NetworkConnection conn)
-    {
-        if (this.GetComponent<NetworkIdentity>().clientAuthorityOwner == null)
-        {
-            //this.netID.AssignClientAuthority(conn);
-            //Debug.Log("Has Authority " + this.GetComponent<NetworkIdentity>().hasAuthority);
-            //RpcGotAuthority();
-        }
-    }
-
-    // should only be called on server (by an Actor)
-    // remove the authority over this game object from a client with NetworkConnection conn
-    public void RemoveClientAuthority(NetworkConnection conn)
-    {
-        if (this.GetComponent<NetworkIdentity>().clientAuthorityOwner == conn)
-        {
-            //this.netID.RemoveClientAuthority(conn);
-            //RpcLostAuthority();
-        }
     }
 }
