@@ -28,8 +28,8 @@ public class OnGrabbedBehaviour : MonoBehaviour
         {
             Debug.Log("OnGrabbedBehaviour: grabbed = true");
             if (authorityManager.GetActor() == null || !netId.hasAuthority) return;
-            Debug.Log("OnGrabbedBehaviour: authorityManager.GetActor().gameObject.tag = " + authorityManager.GetActor().gameObject.tag);
-            if (authorityManager.GetActor().gameObject.tag == "vive")   // VIVE grabbed
+            Debug.Log("OnGrabbedBehaviour: authorityManager.GetActor().gameObject.transform.parent.tag = " + authorityManager.GetActor().gameObject.transform.parent.tag);
+            if (authorityManager.GetActor().gameObject.transform.parent.tag == "vive")   // VIVE grabbed
             {
                 if (authorityManager.GetLeftGrabbed())  // Left hand
                 {
@@ -48,7 +48,7 @@ public class OnGrabbedBehaviour : MonoBehaviour
                     }
                 }
             }
-            else if (authorityManager.GetActor().gameObject.tag == "leap")  // Leap grabbed
+            else if (authorityManager.GetActor().gameObject.transform.parent.tag == "leap")  // Leap grabbed
             {
                 Debug.Log("OnGrabbedBehaviour: grabbed = true");
                 if (authorityManager.GetLeftGrabbed())  // Left hand

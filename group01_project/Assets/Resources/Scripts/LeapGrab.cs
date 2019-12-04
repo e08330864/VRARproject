@@ -92,7 +92,7 @@ public class LeapGrab : MonoBehaviour
         {
             if (colliderLeap == null && !leftPinch)   // stop creation mode
             {
-                Debug.Log("LeapGrab: STOP creation mode");
+                Debug.Log("LeapGrab: STOP creation mode ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                 isInCreation = false;
             }
             else    // creation process is further on running
