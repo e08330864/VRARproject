@@ -11,7 +11,7 @@ public class ParametersAuthorityManager : NetworkBehaviour {
     // these variables should be set up on a client
     //**************************************************************************************************
     //[SyncVar]
-    Actor localActor; // Actor that is steering this player 
+    //Actor localActor; // Actor that is steering this player 
 
 
     //private bool isGrabbed = false;  // true, if object is currently grabbed by local player
@@ -53,10 +53,10 @@ public class ParametersAuthorityManager : NetworkBehaviour {
 
     // Use this for initialization
     void Start () {
-        if ((localActor = GameObject.Find("Player").GetComponent<Actor>()) == null)
-        {
+        //if ((localActor = GameObject.Find("Player").GetComponent<Actor>()) == null)
+        //{
             //Debug.LogError("localActor is NULL in AuthorityManager");
-        }
+        //}
 
         if ((netID = GetComponent<NetworkIdentity>()) == null)
         {
@@ -100,10 +100,10 @@ public class ParametersAuthorityManager : NetworkBehaviour {
     //    localActor = actor;
     //}
 
-    public Actor GetActor()
+   /* public Actor GetActor()
     {
         return localActor;
-    }
+    }*/
 
     // should only be called on server (by an Actor)
     // assign the authority over this game object to a client with NetworkConnection conn
