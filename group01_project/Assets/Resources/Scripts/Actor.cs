@@ -234,8 +234,21 @@ public class Actor : NetworkBehaviour {
     [Command]
     void CmdAssignObjectAuthorityToClient(NetworkIdentity netID)
     {
-        Debug.Log("Actor: in CmdAssign");
-        netID.GetComponent<AuthorityManager>().AssignClientAuthority(this.connectionToClient);
+        Debug.Log("in CmdAssign");
+
+        AuthorityManager authorityManager = netID.GetComponent<AuthorityManager>();
+        ParametersAuthorityManager parametersAuthorityManager = netID.GetComponent<ParametersAuthorityManager>();
+
+        if (authorityManager != null)
+        {
+            authorityManager.AssignClientAuthority(this.connectionToClient);
+            return;
+        }
+        else if(parametersAuthorityManager != null)
+        {
+            parametersAuthorityManager.AssignClientAuthority(this.connectionToClient);
+        }
+        
     }
 
     // run on the server
@@ -243,8 +256,21 @@ public class Actor : NetworkBehaviour {
     [Command]
     void CmdRemoveObjectAuthorityFromClient(NetworkIdentity netID)
     {
-        Debug.Log("Actor: in CmdRemove");
-        netID.GetComponent<AuthorityManager>().RemoveClientAuthority(this.connectionToClient);
+        Debug.Log("in CmdRemove");
+        //netID.GetComponent<AuthorityManager>().RemoveClientAuthority(this.connectionToClient);
+
+        AuthorityManager authorityManager = netID.GetComponent<AuthorityManager>();
+        ParametersAuthorityManager parametersAuthorityManager = netID.GetComponent<ParametersAuthorityManager>();
+
+        if (authorityManager != null)
+        {
+            authorityManager.RemoveClientAuthority(this.connectionToClient);
+            return;
+        }
+        else if (parametersAuthorityManager != null)
+        {
+            parametersAuthorityManager.RemoveClientAuthority(this.connectionToClient);
+        }
     }
     //*******************************
 
