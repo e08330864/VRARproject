@@ -284,13 +284,7 @@ public class Actor : NetworkBehaviour {
         createdObject.transform.position = pos;
         //createdObject.GetComponent<AuthorityManager>().AssignActor(this);
         //sharedObjects.Add(createdObject.GetComponent<NetworkIdentity>());
-        SpawnObject(createdObject);
-    }
-
-    public void SpawnObject(GameObject obj)
-    {
-        Debug.Log("In SpawnObject");
-        NetworkServer.Spawn(obj);
+        NetworkServer.Spawn(createdObject);
     }
 
     /// <summary>

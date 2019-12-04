@@ -28,6 +28,7 @@ public class Touching : MonoBehaviour
             }
             else if (this.gameObject.tag == "right")
             {
+                Debug.Log("Touching: Leap right touch");
                 leapGrab.rightTouch = other;
             }
         } 

@@ -42,7 +42,7 @@ public class LeapGrab : MonoBehaviour
         if (actor == null && (playerTransform = gameObject.transform.Find("Player")) != null)
         {
             actor = playerTransform.GetComponent<Actor>();
-            Debug.Log("Actor Initialized");
+            Debug.Log("LeapGrab: Actor Initialized");
         }
         //if (leftTouch != null && leftTouch == rightTouch && rightPinch && leftPinch)
         //{
@@ -84,7 +84,7 @@ public class LeapGrab : MonoBehaviour
                 objectSwitchingEnabled = false;
                 // new object is created on left hand pinch-position --> grapped by left hand afterwards
                 string prefabName = objectPrefab[objectIndex].name;
-                Debug.Log("CreateObject calling for..." + prefabName);
+                Debug.Log("LeapGrab: CreateObject calling for..." + prefabName);
                 actor.CreateObject(prefabName, pinchPositionLeft, objectScale);
             }
         }
@@ -92,7 +92,7 @@ public class LeapGrab : MonoBehaviour
         {
             if (colliderLeap == null && !leftPinch)   // stop creation mode
             {
-                Debug.Log("STOP creation mode");
+                Debug.Log("LeapGrab: STOP creation mode");
                 isInCreation = false;
             }
             else    // creation process is further on running
@@ -103,12 +103,12 @@ public class LeapGrab : MonoBehaviour
                     actor.CmdDestroyObject();
                     objectIndex = (++objectIndex) % objectPrefab.Count;
                     string prefabName = objectPrefab[objectIndex].name;
-                    Debug.Log("SWITCHING: CreateObject calling for..." + prefabName);
+                    Debug.Log("LeapGrab: SWITCHING: CreateObject calling for..." + prefabName);
                     actor.CreateObject(prefabName, pinchPositionLeft, objectScale);
                 }
                 else if (!rightPinch)     // new switching enabled
                 {
-                    Debug.Log("left pinch = false");
+                    Debug.Log("LeapGrab: eft pinch = false");
                     objectSwitchingEnabled = true;
                 }
             }
@@ -123,7 +123,7 @@ public class LeapGrab : MonoBehaviour
         {
             if (colliderLeap == null)
             {
-                Debug.Log("Holding with LEFT hand");
+                Debug.Log("LeapGrab: Holding with LEFT hand");
                 colliderLeap = leftTouch;
                 leftTouch.gameObject.GetComponent<AuthorityManager>().SetLeftGrabbedNew(true);  // sets leftGrabbed=true in AuthorityManager, only in case when not already grabbed
                 leftTouch.gameObject.GetComponent<AuthorityManager>().playerGrabs = true;
@@ -135,7 +135,7 @@ public class LeapGrab : MonoBehaviour
             { 
                 if (colliderLeap == null)
                 {
-                    Debug.Log("Holding with RIGHT hand");
+                    Debug.Log("LeapGrab: Holding with RIGHT hand");
                     colliderLeap = rightTouch;
                     rightTouch.gameObject.GetComponent<AuthorityManager>().SetLeftGrabbedNew(false);    // sets leftGrabbed=false in AuthorityManager, only in case when not already grabbed
                     rightTouch.gameObject.GetComponent<AuthorityManager>().playerGrabs = true;
@@ -145,7 +145,7 @@ public class LeapGrab : MonoBehaviour
             {
                 if (colliderLeap != null)   // release if no grab
                 {
-                    Debug.Log("Holding RELEASED");
+                    Debug.Log("LeapGrab: Holding RELEASED");
                     colliderLeap.gameObject.GetComponent<AuthorityManager>().playerGrabs = false;
                     colliderLeap = null;
                 }
@@ -163,13 +163,13 @@ public class LeapGrab : MonoBehaviour
             pinchDetectorLeft = hand.GetComponent<PinchDetector>();
         }
         pinchPositionLeft = pinchDetectorLeft.Position;
-        Debug.Log("Left Pinch with position = " + pinchPositionLeft);
+        Debug.Log("LeapGrab: Left Pinch with position = " + pinchPositionLeft);
         leftPinch = true;
     }
 
     public void offPinchLeft()
     {
-        Debug.Log("left pinch = false");
+        Debug.Log("LeapGrab: left pinch = false");
         leftPinch = false;
     }
 
@@ -181,13 +181,13 @@ public class LeapGrab : MonoBehaviour
             pinchDetectorRight = hand.GetComponent<PinchDetector>();
         }
         pinchPositionRight = pinchDetectorRight.Position;
-        Debug.Log("Right Pinch with position = " + pinchPositionRight);
+        Debug.Log("LeapGrab: Right Pinch with position = " + pinchPositionRight);
         rightPinch = true;
     }
 
     public void offPinchRight()
     {
-        Debug.Log("right pinch = false");
+        Debug.Log("LeapGrab: right pinch = false");
         rightPinch = false;
     }
 }

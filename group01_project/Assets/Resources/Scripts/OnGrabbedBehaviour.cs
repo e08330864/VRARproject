@@ -53,6 +53,7 @@ public class OnGrabbedBehaviour : MonoBehaviour
                     GameObject hand = GameObject.FindGameObjectWithTag("LeftHandInteraction");
                     if (hand)
                     {
+                        Debug.Log("OnGrabbedBehaviour: Left-Hand grabbed move object to position=" + hand.transform.position);
                         this.transform.position = hand.transform.position;
                     }
                 }
@@ -61,6 +62,7 @@ public class OnGrabbedBehaviour : MonoBehaviour
                     GameObject hand = GameObject.FindGameObjectWithTag("RightHandInteraction");
                     if (hand)
                     {
+                        Debug.Log("OnGrabbedBehaviour: Right-Hand grabbed move object to position=" + hand.transform.position);
                         this.transform.position = hand.transform.position;
                     }
                 }
