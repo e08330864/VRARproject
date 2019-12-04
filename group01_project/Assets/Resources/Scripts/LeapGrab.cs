@@ -108,7 +108,7 @@ public class LeapGrab : MonoBehaviour
                 }
                 else if (!rightPinch)     // new switching enabled
                 {
-                    Debug.Log("LeapGrab: eft pinch = false");
+                    Debug.Log("LeapGrab: left pinch = false");
                     objectSwitchingEnabled = true;
                 }
             }
