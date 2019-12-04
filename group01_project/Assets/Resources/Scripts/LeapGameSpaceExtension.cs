@@ -26,9 +26,12 @@ public class LeapGameSpaceExtension: MonoBehaviour
             allowGameSpaceExtension = !allowGameSpaceExtension;
             Debug.Log("Gamespace extension possible: " + allowGameSpaceExtension);
 
-            sharedParameters.GetComponent<NetworkIdentity>().AssignClientAuthority(actor.GetComponent<NetworkIdentity>().connectionToClient);
+            NetworkIdentity parameterID = sharedParameters.GetComponent<NetworkIdentity>();
+
+            actor.RequestObjectAuthority(parameterID);
             sharedParameters.CmdSetGameSpaceExtension(allowGameSpaceExtension);
-            sharedParameters.GetComponent<NetworkIdentity>().RemoveClientAuthority(actor.GetComponent<NetworkIdentity>().connectionToClient);
+            actor.ReturnObjectAuthority(parameterID);
+            
         }
     }
 
