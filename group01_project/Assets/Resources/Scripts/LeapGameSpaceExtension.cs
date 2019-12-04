@@ -10,8 +10,6 @@ public class LeapGameSpaceExtension: MonoBehaviour
     private Actor actor = null;
     private bool allowGameSpaceExtension = false;
 
-   
-
     // Update is called once per frame
     void Update()
     {
@@ -19,7 +17,6 @@ public class LeapGameSpaceExtension: MonoBehaviour
         {
             InitializeActor();
         }
-
 
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
@@ -31,7 +28,6 @@ public class LeapGameSpaceExtension: MonoBehaviour
             actor.RequestObjectAuthority(parameterID);
             sharedParameters.CmdSetGameSpaceExtension(allowGameSpaceExtension);
             actor.ReturnObjectAuthority(parameterID);
-            
         }
     }
 
