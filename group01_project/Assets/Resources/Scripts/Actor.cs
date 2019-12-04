@@ -217,7 +217,7 @@ public class Actor : NetworkBehaviour {
     // ask the server for the authority over an object with NetworkIdentity netID
     public void RequestObjectAuthority(NetworkIdentity netID)
     {
-        Debug.Log("in RequestObjectAuthority");
+        Debug.Log("Actor: in RequestObjectAuthority");
         CmdAssignObjectAuthorityToClient(netID);
     }
 
@@ -225,7 +225,7 @@ public class Actor : NetworkBehaviour {
     // ask the server to remove the authority over an object with NetworkIdentity netID
     public void ReturnObjectAuthority(NetworkIdentity netID)
     {
-        Debug.Log("in ReturnObjectAuthority");
+        Debug.Log("Actor: in ReturnObjectAuthority");
         CmdRemoveObjectAuthorityFromClient(netID);
     }
 
@@ -234,7 +234,7 @@ public class Actor : NetworkBehaviour {
     [Command]
     void CmdAssignObjectAuthorityToClient(NetworkIdentity netID)
     {
-        Debug.Log("in CmdAssign");
+        Debug.Log("Actor: in CmdAssign");
         netID.GetComponent<AuthorityManager>().AssignClientAuthority(this.connectionToClient);
     }
 
@@ -243,7 +243,7 @@ public class Actor : NetworkBehaviour {
     [Command]
     void CmdRemoveObjectAuthorityFromClient(NetworkIdentity netID)
     {
-        Debug.Log("in CmdRemove");
+        Debug.Log("Actor: in CmdRemove");
         netID.GetComponent<AuthorityManager>().RemoveClientAuthority(this.connectionToClient);
     }
     //*******************************
@@ -265,22 +265,22 @@ public class Actor : NetworkBehaviour {
 
     public void CreateObject(string objPrefab, Vector3 pos, float objectScale)
     {
-        Debug.Log("in CreateObject");
+        Debug.Log("Actor: in CreateObject");
         if (!isLocalPlayer)
         {
             return;
         }
-        Debug.Log("CmdCreateObject calling");
+        Debug.Log("Actor: CmdCreateObject calling");
         CmdCreateObject(objPrefab, pos, objectScale);
     }
 
     [Command]
     public void CmdCreateObject(string objPrefab, Vector3 pos, float objectScale)
     {
+        Debug.Log("Actor: create object in CmdCreateObject on position = " + pos);
         GameObject obj = Resources.Load("Prefabs/Objects/" + objPrefab) as GameObject;
         createdObject = Instantiate(obj);
         //createdObject.transform.localScale = createdObject.transform.localScale * objectScale;
-        Debug.Log("create object in CmdCreateObject on position = " + pos);
         createdObject.transform.position = pos;
         //createdObject.GetComponent<AuthorityManager>().AssignActor(this);
         //sharedObjects.Add(createdObject.GetComponent<NetworkIdentity>());
@@ -295,6 +295,7 @@ public class Actor : NetworkBehaviour {
     public void CmdDestroyObject()
     {
         if (!createdObject) return;
+        Debug.Log("Actor: Destroy object..." + createdObject.name);
         //sharedObjects.Remove(createdObject.GetComponent<NetworkIdentity>());
         NetworkServer.Destroy(createdObject);
     }

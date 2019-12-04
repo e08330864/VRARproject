@@ -73,6 +73,7 @@ public class OnGrabbedBehaviour : MonoBehaviour
     // called first time when the GO gets grabbed by a player
     public void OnGrabbed()
     {
+        Debug.Log("OnGrabbedBehaviour: OnGrabbed...isKinematic=true, useGravity=false");
         grabbed = true;
         rigidbody.isKinematic = true;
         rigidbody.useGravity = false;
@@ -82,6 +83,7 @@ public class OnGrabbedBehaviour : MonoBehaviour
     // called when the GO gets released by a player
     public void OnReleased()
     {
+        Debug.Log("OnGrabbedBehaviour: OnReleased...isKinematic=false, useGravity=true");
         grabbed = false;
         rigidbody.isKinematic = false;
         rigidbody.useGravity = true;

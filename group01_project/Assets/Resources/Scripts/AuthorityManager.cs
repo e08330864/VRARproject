@@ -75,8 +75,8 @@ public class AuthorityManager : NetworkBehaviour {
             {
                 if (!isGrabbed) // the object is currently not grabbed
                 {
-                    Debug.Log("calling RequestObjectAuthority --> isGrabbed = true");
-                    Debug.Log("localActor=" + localActor.gameObject.tag);
+                    Debug.Log("AuthorityManager: calling RequestObjectAuthority --> isGrabbed = true");
+                    Debug.Log("AuthorityManager: localActor=" + localActor.gameObject.transform.parent.name);
                     leftGrabbed = leftGrabbedNew;
                     localActor.RequestObjectAuthority(netID);
                     isGrabbed = true;
@@ -86,7 +86,7 @@ public class AuthorityManager : NetworkBehaviour {
             {
                 if (isGrabbed)  // the object is currently grabbed
                 {
-                    Debug.Log("calling ReturnObjectAuthority --> isGrapping = false");
+                    Debug.Log("AuthorityManager: calling ReturnObjectAuthority --> isGrapping = false");
                     localActor.ReturnObjectAuthority(netID);
                     isGrabbed = false;
                 }
@@ -133,6 +133,7 @@ public class AuthorityManager : NetworkBehaviour {
     {
         if (playerGrabs)
         {
+            Debug.Log("AuthorityManager: calling onb.OnGrabbed");
             onb.OnGrabbed();
         }
     }
@@ -140,6 +141,7 @@ public class AuthorityManager : NetworkBehaviour {
     [ClientRpc]
     void RpcLostAuthority()
     {
+        Debug.Log("AuthorityManager: calling onb.OnReleased");
         onb.OnReleased();
     }
 }
