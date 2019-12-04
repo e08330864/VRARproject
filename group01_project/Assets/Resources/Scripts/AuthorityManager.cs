@@ -4,19 +4,18 @@ using System.Collections.Generic;
 
 // TODO: this script should manage authority for a shared object
 public class AuthorityManager : NetworkBehaviour {
-
-    
+ 
     NetworkIdentity netID; // NetworkIdentity component attached to this game object
     
     // these variables should be set up on a client
     //**************************************************************************************************
-    //[SyncVar]
     Actor localActor; // Actor that is steering this player 
 
 
-    private bool isGrabbed = false;  // true, if object is currently grabbed by local player
+    private bool isGrabbed = false;  // true, if object is currently grabbed
     private bool m_playerGrabs = false; // true, if local player is grabbing the object
-    public bool playerGrabs {
+    public bool playerGrabs     // true, if object is currently grabbed by local player
+    {
         get { return m_playerGrabs; }
         set { m_playerGrabs = value; }
     } 
@@ -57,7 +56,6 @@ public class AuthorityManager : NetworkBehaviour {
         {
             Debug.LogError("localActor is NULL in AuthorityManager");
         }
-
         if ((netID = GetComponent<NetworkIdentity>()) == null)
         {
             Debug.LogError("netID is NULL in AuthorityManager");
@@ -73,7 +71,7 @@ public class AuthorityManager : NetworkBehaviour {
         if (localActor != null) { 
             if (playerGrabs)    // local player is currently grabbing
             {
-                if (!isGrabbed) // the object is currently not grabbed
+                if (!isGrabbed) // the object is currently not grabbed by the local player
                 {
                     Debug.Log("AuthorityManager: calling RequestObjectAuthority --> isGrabbed = true");
                     Debug.Log("AuthorityManager: localActor=" + localActor.gameObject.transform.parent.name);
@@ -111,9 +109,11 @@ public class AuthorityManager : NetworkBehaviour {
     {
         if (this.GetComponent<NetworkIdentity>().clientAuthorityOwner == null)
         {
-            this.netID.AssignClientAuthority(conn);
-            //Debug.Log("Has Authority " + this.GetComponent<NetworkIdentity>().hasAuthority);
-            RpcGotAuthority();
+            if (this.netID.AssignClientAuthority(conn))
+            {
+                Debug.Log("AuthorityManager: AssignClientAuthority...authority=" + this.GetComponent<NetworkIdentity>().hasAuthority);
+                RpcGotAuthority();
+            }
         }
     }
 
@@ -123,8 +123,11 @@ public class AuthorityManager : NetworkBehaviour {
     {
         if (this.GetComponent<NetworkIdentity>().clientAuthorityOwner == conn)
         {
-            this.netID.RemoveClientAuthority(conn);
-            RpcLostAuthority();
+            if (this.netID.RemoveClientAuthority(conn))
+            {
+                Debug.Log("AuthorityManager: RemoveClientAuthority...authority=" + this.GetComponent<NetworkIdentity>().hasAuthority);
+                RpcLostAuthority();
+            }
         }
     }
 

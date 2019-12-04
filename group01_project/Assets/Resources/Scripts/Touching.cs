@@ -20,54 +20,60 @@ public class Touching : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (leapGrab != null)
+        if (other.gameObject.tag == "TowerElement")
         {
-            if (this.gameObject.tag == "left")
+            if (leapGrab != null)
             {
-                Debug.Log("Touching: Leap left touch");
-                leapGrab.leftTouch = other;
+                if (this.gameObject.tag == "left")
+                {
+                    Debug.Log("Touching: Leap left touch");
+                    leapGrab.leftTouchOtherCollider = other;
+                }
+                else if (this.gameObject.tag == "right")
+                {
+                    Debug.Log("Touching: Leap right touch");
+                    leapGrab.rightTouchOtherCollider = other;
+                }
             }
-            else if (this.gameObject.tag == "right")
+            else if (viveGrab != null)
             {
-                Debug.Log("Touching: Leap right touch");
-                leapGrab.rightTouch = other;
-            }
-        } 
-        else if (viveGrab != null)
-        {
-            if (this.gameObject.tag == "left")
-            {
-                viveGrab.leftTouch = other;
-            }
-            else if (this.gameObject.tag == "right")
-            {
-                viveGrab.rightTouch = other;
+                if (this.gameObject.tag == "left")
+                {
+                    viveGrab.leftTouch = other;
+                }
+                else if (this.gameObject.tag == "right")
+                {
+                    viveGrab.rightTouch = other;
+                }
             }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (leapGrab != null)
+        if (other.gameObject.tag == "TowerElement")
         {
-            if (this.gameObject.tag == "left")
+            if (leapGrab != null)
             {
-                leapGrab.leftTouch = null;
+                if (this.gameObject.tag == "left")
+                {
+                    leapGrab.leftTouchOtherCollider = null;
+                }
+                else if (this.gameObject.tag == "right")
+                {
+                    leapGrab.rightTouchOtherCollider = null;
+                }
             }
-            else if (this.gameObject.tag == "right")
+            else if (viveGrab != null)
             {
-                leapGrab.rightTouch = null;
-            }
-        }
-        else if (viveGrab != null)
-        {
-            if (this.gameObject.tag == "left")
-            {
-                viveGrab.leftTouch = null;
-            }
-            else if (this.gameObject.tag == "right")
-            {
-                viveGrab.rightTouch = null;
+                if (this.gameObject.tag == "left")
+                {
+                    viveGrab.leftTouch = null;
+                }
+                else if (this.gameObject.tag == "right")
+                {
+                    viveGrab.rightTouch = null;
+                }
             }
         }
     }

@@ -26,9 +26,9 @@ public class OnGrabbedBehaviour : MonoBehaviour
     {
         if (grabbed)
         {
-            Debug.Log("OnGrabbedBehaviour: grabbed = true");
+            // Debug.Log("OnGrabbedBehaviour: grabbed = true");
             if (authorityManager.GetActor() == null || !netId.hasAuthority) return;
-            Debug.Log("OnGrabbedBehaviour: authorityManager.GetActor().gameObject.transform.parent.tag = " + authorityManager.GetActor().gameObject.transform.parent.tag);
+            // Debug.Log("OnGrabbedBehaviour: authorityManager.GetActor().gameObject.transform.parent.tag = " + authorityManager.GetActor().gameObject.transform.parent.tag);
             if (authorityManager.GetActor().gameObject.transform.parent.tag == "vive")   // VIVE grabbed
             {
                 if (authorityManager.GetLeftGrabbed())  // Left hand
@@ -50,13 +50,13 @@ public class OnGrabbedBehaviour : MonoBehaviour
             }
             else if (authorityManager.GetActor().gameObject.transform.parent.tag == "leap")  // Leap grabbed
             {
-                Debug.Log("OnGrabbedBehaviour: grabbed = true");
+                // Debug.Log("OnGrabbedBehaviour: grabbed = true");
                 if (authorityManager.GetLeftGrabbed())  // Left hand
                 {
                     GameObject hand = GameObject.FindGameObjectWithTag("LeftHandInteraction");
                     if (hand)
                     {
-                        Debug.Log("OnGrabbedBehaviour: Left-Hand grabbed move object to position=" + hand.transform.position);
+                        // Debug.Log("OnGrabbedBehaviour: Left-Hand grabbed move object to position=" + hand.transform.position);
                         this.transform.position = hand.transform.position;
                     }
                 }
@@ -65,7 +65,7 @@ public class OnGrabbedBehaviour : MonoBehaviour
                     GameObject hand = GameObject.FindGameObjectWithTag("RightHandInteraction");
                     if (hand)
                     {
-                        Debug.Log("OnGrabbedBehaviour: Right-Hand grabbed move object to position=" + hand.transform.position);
+                        // Debug.Log("OnGrabbedBehaviour: Right-Hand grabbed move object to position=" + hand.transform.position);
                         this.transform.position = hand.transform.position;
                     }
                 }
