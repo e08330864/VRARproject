@@ -55,7 +55,7 @@ public class ParametersAuthorityManager : NetworkBehaviour {
     void Start () {
         if ((localActor = GameObject.Find("Player").GetComponent<Actor>()) == null)
         {
-            Debug.LogError("localActor is NULL in AuthorityManager");
+            //Debug.LogError("localActor is NULL in AuthorityManager");
         }
 
         if ((netID = GetComponent<NetworkIdentity>()) == null)
