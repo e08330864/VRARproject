@@ -7,28 +7,38 @@ using UnityEngine.Networking;
 public class LeapGameSpaceExtension: MonoBehaviour
 {
     public SharedParameters sharedParameters;
+    private Actor actor = null;
     private bool allowGameSpaceExtension = false;
+
+   
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.RightArrow))
+        if(actor == null)
         {
-            //Debug.Log("Allow Gamespace extension from leap side");
-            allowGameSpaceExtension = true;
-
-            //sharedParameters.GetComponent<NetworkIdentity>().AssignClientAuthority(this.connectionToClient);
-            //sharedParameters.CmdSetGameSpaceExtension(allowGameSpaceExtension);
-            //sharedParameters.GetComponent<NetworkIdentity>().RemoveClientAuthority(this.connectionToClient);
+            InitializeActor();
         }
-        else
-        {
-            //Debug.Log("Deny Gamespace extension from leap side");
-            allowGameSpaceExtension = false;
 
-            //sharedParameters.GetComponent<NetworkIdentity>().AssignClientAuthority(this.connectionToClient);
-            //sharedParameters.CmdSetGameSpaceExtension(allowGameSpaceExtension);
-            //sharedParameters.GetComponent<NetworkIdentity>().RemoveClientAuthority(this.connectionToClient);
+
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            allowGameSpaceExtension = !allowGameSpaceExtension;
+            Debug.Log("Gamespace extension possible: " + allowGameSpaceExtension);
+
+            sharedParameters.GetComponent<NetworkIdentity>().AssignClientAuthority(actor.GetComponent<NetworkIdentity>().connectionToClient);
+            sharedParameters.CmdSetGameSpaceExtension(allowGameSpaceExtension);
+            sharedParameters.GetComponent<NetworkIdentity>().RemoveClientAuthority(actor.GetComponent<NetworkIdentity>().connectionToClient);
+        }
+    }
+
+    public void InitializeActor()
+    {
+        Transform playerTransform = transform.FindChild("Player");
+        if (playerTransform != null)
+        {
+            actor = playerTransform.GetComponent<Actor>();
+            Debug.Log("Actor Initialized");
         }
     }
 }
