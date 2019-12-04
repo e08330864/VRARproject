@@ -81,4 +81,6 @@ MonoBehaviour:
     type: 3}
   footCharacter: {fileID: 2196890550225480714, guid: cf0831144f723494caaec321f8ed2b51,
     type: 3}
+  sharedParameters: {fileID: 4286759158788704082, guid: 91f92df80a2756e45b932eff315f5847,
+    type: 3}
   transform: {fileID: 0}
