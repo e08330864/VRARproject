@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 public class OnGrabbedBehaviour : MonoBehaviour
 {
     [SerializeField]
-    private float throwingSpeedFactor = 50f;
+    private float throwingSpeedFactor = 300f;
 
     private bool isGrabbed;
     private bool releasing;

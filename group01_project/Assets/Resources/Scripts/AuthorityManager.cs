@@ -174,8 +174,6 @@ public class AuthorityManager : NetworkBehaviour {
             if (this.netID.RemoveClientAuthority(conn))
             {
                 Debug.Log("AuthorityManager: RemoveClientAuthority...authority=" + this.GetComponent<NetworkIdentity>().hasAuthority);
-                //isHeld = false;
-                //RpcLostAuthority();
             }
         }
     }
