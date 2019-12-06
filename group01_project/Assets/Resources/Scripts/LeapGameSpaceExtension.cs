@@ -6,12 +6,12 @@ using UnityEngine.Networking;
 
 public class LeapGameSpaceExtension: MonoBehaviour
 {
-    public GameObject sharedParameters;
-    private Actor actor = null;
+    private GameObject sharedParameters;
+    private ParametersAuthorityManager parametersAuthorityManager;
+    private SharedParameters sharedScript;
     private bool allowGameSpaceExtension = false;
 
     // Update is called once per frame
-
 
     void Update()
     {
@@ -23,24 +23,16 @@ public class LeapGameSpaceExtension: MonoBehaviour
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             allowGameSpaceExtension = !allowGameSpaceExtension;
-
-            ParametersAuthorityManager parametersAuthorityManager = sharedParameters.GetComponent<ParametersAuthorityManager>();
             parametersAuthorityManager.SetGameSpaceExtensionPossible(allowGameSpaceExtension);
         }
-    }
 
-    public void InitializeActor()
-    {
-        GameObject playerTransform = GameObject.Find("Player");
-        if (playerTransform != null)
-        {
-            actor = playerTransform.GetComponent<Actor>();
-            Debug.Log("Actor Initialized");
-        }
+        //update center position of the leap player
+        this.transform.position = transform.position + sharedScript.GetExtensionShift();
     }
 
     public void InitializeSharedParameters()
     {
         sharedParameters = GameObject.Find("Parameters");
+        parametersAuthorityManager = sharedParameters.GetComponent<ParametersAuthorityManager>();
     }
 }

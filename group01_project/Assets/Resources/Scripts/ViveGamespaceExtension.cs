@@ -5,6 +5,7 @@ using Valve.VR;
 
 public class ViveGamespaceExtension : MonoBehaviour
 {
+    public GameObject parameters;
     public SharedParameters sharedParameters;
 
     [HideInInspector]
@@ -15,6 +16,10 @@ public class ViveGamespaceExtension : MonoBehaviour
     Vector3? rightControllerPositionStart = null;
     float gameSpaceExtensionSpeed = 0.01f;
 
+    GameObject viveParams = null;
+    public ViveParamsAuthorityManager viveParamsAuthorityManager;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,16 +29,23 @@ public class ViveGamespaceExtension : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(viveParams == null)
+        {
+            InitializeSharedParameters();
+        }
+
         lastRightGrabPinch = rightGrabPinch;
         rightGrabPinch = SteamVR_Actions._default.GrabPinch.GetState(SteamVR_Input_Sources.RightHand);
 
         //game space extension
         Vector3 shift = calculateGameSpaceShift();
+        
 
         //Debug.Log("Gamespace Extension Possible: " + sharedParameters.GameSpaceExtensionPossible());
         //ask if Leap Player also allows game space extension
         if (sharedParameters.GameSpaceExtensionPossible())
         {
+            viveParamsAuthorityManager.SetShift(shift);
             transform.position += new Vector3(shift.x, 0.0f, shift.z);
         }
     }
@@ -47,6 +59,7 @@ public class ViveGamespaceExtension : MonoBehaviour
         if (!lastRightGrabPinch && rightGrabPinch)
         {
             rightControllerPositionStart = rightViveController.position;
+
         }
 
         //right hands continus grab Pinch
@@ -70,5 +83,14 @@ public class ViveGamespaceExtension : MonoBehaviour
         }
 
         return gameSpaceExtensionSpeed * shift;
+    }
+
+    public void InitializeSharedParameters()
+    {
+        viveParams = GameObject.Find("ViveParameters");
+        viveParamsAuthorityManager = viveParams.GetComponent<ViveParamsAuthorityManager>();
+
+        parameters = GameObject.Find("Parameters");
+        sharedParameters = parameters.GetComponent<SharedParameters>();
     }
 }
