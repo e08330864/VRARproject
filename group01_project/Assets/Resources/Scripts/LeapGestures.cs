@@ -11,6 +11,13 @@ public class LeapGestures : MonoBehaviour
     private Hand handLeft = null;
     private Hand handRight = null;
 
+    private int oldGestureStatus = 0;   // 0...at least one hand with no pistol
+                                        // 1...both hands pistol untriggered
+                                        // 2...both hands pistol triggered
+    private int newGestureStatus = 0;
+    private bool doMove = false;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,17 +45,26 @@ public class LeapGestures : MonoBehaviour
         
     }
 
+    private void CheckMovement()
+    {
+        int leftPG = CheckPistol(handLeft);
+        int rightPG = CheckPistol(handRight);
+        switch (oldGestureStatus)
+        {
+            case 0: // at least one hand with no pistol
+                break;
+        }
+    }
+
     // returns  0 = no pistol
-    //          1 = pistol index finger ray untriggered
-    //          2 = pistol index finger ray triggered
-    //          3 = pistol palm ray untriggered
-    //          4 = pistol palm ray triggered
-    private int CheckPistolLeft()
+    //          1 = pistol thumb finger untriggered
+    //          2 = pistol thumb finger triggered
+    private int CheckPistol(Hand hand)
     {
         int isPistol = 1;
-        for (int f = 0; f < handLeft.Fingers.Count; f++)
+        for (int f = 0; f < hand.Fingers.Count; f++)
         {
-            Finger finger = handLeft.Fingers[f];
+            Finger finger = hand.Fingers[f];
             switch (f)
             {
                 case 0: // thump
