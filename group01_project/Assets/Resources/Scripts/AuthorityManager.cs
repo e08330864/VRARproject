@@ -53,28 +53,17 @@ public class AuthorityManager : NetworkBehaviour {
     }
 
     // Use this for initialization
-    //void Start () {
-    //    if ((localPlayer = GameObject.FindGameObjectWithTag("vive")) != null)
-    //    {
-    //        localActor = localPlayer.transform.Find("Player").GetComponent<Actor>();
-    //    }
-    //    if ((localPlayer = GameObject.FindGameObjectWithTag("leap")) != null)
-    //    {
-    //        localActor = localPlayer.transform.Find("Player").GetComponent<Actor>();
-    //    }
-    //    if (localActor == null)
-    //    {
-    //        Debug.LogError("localActor is NULL in AuthorityMAnager");
-    //    }
-    //    if ((netID = GetComponent<NetworkIdentity>()) == null)
-    //    {
-    //        Debug.LogError("netID is NULL in AuthorityManager");
-    //    }
-    //    if ((onb = GetComponent<OnGrabbedBehaviour>()) == null)
-    //    {
-    //        Debug.LogError("onb is NULL in AuthorityManager");
-    //    }
-    //}
+    void Start()
+    {
+        if ((netID = GetComponent<NetworkIdentity>()) == null)
+        {
+            Debug.LogError("netID is NULL in AuthorityManager");
+        }
+        if ((onb = GetComponent<OnGrabbedBehaviour>()) == null)
+        {
+            Debug.LogError("onb is NULL in AuthorityManager");
+        }
+    }
 
     void OnStartClient()
     {
@@ -90,27 +79,19 @@ public class AuthorityManager : NetworkBehaviour {
         {
             Debug.LogError("localActor is NULL in AuthorityMAnager");
         }
-        if ((netID = GetComponent<NetworkIdentity>()) == null)
-        {
-            Debug.LogError("netID is NULL in AuthorityManager");
-        }
-        if ((onb = GetComponent<OnGrabbedBehaviour>()) == null)
-        {
-            Debug.LogError("onb is NULL in AuthorityManager");
-        }
     }
 
     // Update is called once per frame
     void Update () {
-        if (localActor != null)
+        if (localActor != null )
         {
-            Debug.Log("AuthorityManager: localActor = " + localActor.name);
-            if (localActor.gameObject != null)
-            {
-                Debug.Log("Rela local netID=" + GameObject.Find("Player").GetComponent<NetworkIdentity>().netId);
-                Debug.Log("AuthorityManager: localActor.gameObject = " + localActor.gameObject.name + ". netID=" + localActor.gameObject.GetComponent<NetworkIdentity>().netId);
-                if (localActor.gameObject.transform.parent != null)
-                {
+            //Debug.Log("AuthorityManager: localActor = " + localActor.name);
+            //if (localActor.gameObject != null)
+            //{
+            //    Debug.Log("Rela local netID=" + GameObject.Find("Player").GetComponent<NetworkIdentity>().netId);
+            //    Debug.Log("AuthorityManager: localActor.gameObject = " + localActor.gameObject.name + ". netID=" + localActor.gameObject.GetComponent<NetworkIdentity>().netId);
+            //    if (localActor.gameObject.transform.parent != null)
+            //    {
                     Debug.Log("AuthorityManager: localActor.gameObject.transform.parent = " + localActor.gameObject.transform.parent.name);
                     if (playerGrabs)    // local player is currently grabbing the object
                     {
@@ -130,8 +111,8 @@ public class AuthorityManager : NetworkBehaviour {
                             localActor.ReturnObjectAuthority(netID);
                         }
                     }
-                }
-            }
+            //    }
+            //}
         }
     }
 
