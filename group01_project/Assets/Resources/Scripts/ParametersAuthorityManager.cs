@@ -6,6 +6,8 @@ using System.Collections.Generic;
 public class ParametersAuthorityManager : NetworkBehaviour
 { 
     NetworkIdentity netID; // NetworkIdentity component attached to this game object
+    Actor localActor;
+    SharedParameters sharedParameters;
    
 
     // Use this for initialization
@@ -14,7 +16,19 @@ public class ParametersAuthorityManager : NetworkBehaviour
         {
             Debug.LogError("netID is NULL in AuthorityManager");
         }
+        
+        sharedParameters = GetComponent<SharedParameters>();
     }
+
+    public void SetGameSpaceExtensionPossible(bool gameSpaceExtensionPossible)
+    {
+        localActor.RequestObjectAuthority(netID);
+        Debug.Log("Authority: " + netID.hasAuthority);
+        sharedParameters.CmdSetGameSpaceExtension(gameSpaceExtensionPossible);
+        localActor.ReturnObjectAuthority(netID);
+        Debug.Log("Authority: " + netID.hasAuthority);
+    }
+
 
     // should only be called on server (by an Actor)
     // assign the authority over this game object to a client with NetworkConnection conn
@@ -23,7 +37,7 @@ public class ParametersAuthorityManager : NetworkBehaviour
         if (this.GetComponent<NetworkIdentity>().clientAuthorityOwner == null)
         {
             this.netID.AssignClientAuthority(conn);
-            Debug.Log("ParameterAuthorityManager: Has Authority " + this.GetComponent<NetworkIdentity>().hasAuthority);
+            Debug.Log("ParameterAuthorityManager Assign : Has Authority " + netID.hasAuthority);
         }
     }
 
@@ -34,7 +48,12 @@ public class ParametersAuthorityManager : NetworkBehaviour
         if (this.GetComponent<NetworkIdentity>().clientAuthorityOwner == conn)
         {
             this.netID.RemoveClientAuthority(conn);
-            Debug.Log("ParameterAuthorityManager: Has Authority " + this.GetComponent<NetworkIdentity>().hasAuthority);
+            Debug.Log("ParameterAuthorityManager - Remove Client Authority: Has Authority " + netID.hasAuthority);
         }
+    }
+
+    public void AssignActor(Actor actor)
+    {
+        localActor = actor;
     }
 }

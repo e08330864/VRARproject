@@ -9,6 +9,8 @@ public class Actor : NetworkBehaviour {
     public new Transform transform;
     private GameObject createdObject = null;
 
+    List<NetworkIdentity> sharedObjects = new List<NetworkIdentity>(); // shared objects on the server or localActor
+
     [SyncVar]
     private string prefabNameHand = "";
 
@@ -38,28 +40,27 @@ public class Actor : NetworkBehaviour {
             }
 
 
-            ////this part is for object sharing
-            ////*******************************
-            //if (isServer)
-            //{
-            //    // find objects that can be manipulated 
-            //    // TIPP : you can use a specific tag for all GO's that can be manipulated by players
-            //    foreach (GameObject go in GameObject.FindGameObjectsWithTag("shared"))
-            //    {
-            //        sharedObjects.Add(go.GetComponent<NetworkIdentity>());
-            //    }
-            //}
-            //if (isLocalPlayer) 
-            //{
-            //    // find objects that can be manipulated 
-            //    // assign this Actor to the localActor field of the AuthorityManager component of each shared object
-            //    foreach (GameObject go in GameObject.FindGameObjectsWithTag("shared"))
-            //    {
-            //        sharedObjects.Add(go.GetComponent<NetworkIdentity>());
-            //        go.GetComponent<AuthorityManager>().AssignActor(this);
-            //    }
-            //}
+            //this part is for object sharing
             //*******************************
+            if (isServer)
+            {
+                // find objects that can be manipulated 
+                // TIPP : you can use a specific tag for all GO's that can be manipulated by players
+                foreach (GameObject go in GameObject.FindGameObjectsWithTag("shared"))
+                {
+                    sharedObjects.Add(go.GetComponent<NetworkIdentity>());
+                }
+            }
+            if (isLocalPlayer)
+            {
+                // find objects that can be manipulated 
+                // assign this Actor to the localActor field of the AuthorityManager component of each shared object
+                foreach (GameObject go in GameObject.FindGameObjectsWithTag("shared"))
+                {
+                    sharedObjects.Add(go.GetComponent<NetworkIdentity>());
+                    go.GetComponent<ParametersAuthorityManager>().AssignActor(this);
+                }
+            }
         }
         else
         {
@@ -242,7 +243,6 @@ public class Actor : NetworkBehaviour {
         if (authorityManager != null)
         {
             authorityManager.AssignClientAuthority(this.connectionToClient);
-            return;
         }
         else if(parametersAuthorityManager != null)
         {
@@ -275,19 +275,19 @@ public class Actor : NetworkBehaviour {
     //*******************************
 
     //#######################################################################################################################################
- 
-    //void Update()
-    //{
-    //    if (!isLocalPlayer)
-    //    {
-    //        return;
-    //    }
-    //    if (Input.GetKeyDown(KeyCode.H))
-    //    {
-    //        //Spawn
-    //        CmdCreateObject();
-    //    }
-    //}
+
+    void Update()
+    {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            //Spawn
+            //Test();
+        }
+    }
 
     public void CreateObject(string objPrefab, Vector3 pos, float objectScale)
     {
@@ -325,6 +325,19 @@ public class Actor : NetworkBehaviour {
         //sharedObjects.Remove(createdObject.GetComponent<NetworkIdentity>());
         NetworkServer.Destroy(createdObject);
     }
+    public void Test()
+    {
+        SharedParameters sharedParameters = GameObject.Find("Parameters").GetComponent<SharedParameters>();
+        NetworkIdentity network = sharedParameters.gameObject.GetComponent<NetworkIdentity>();
+        RequestObjectAuthority(network);
+        Debug.Log("Authority: " + network.hasAuthority);
+        sharedParameters.CmdSetGameSpaceExtension(true);
+        ReturnObjectAuthority(network);
+        Debug.Log("Authority: " + network.hasAuthority);
+    }
+
+        
+
 
     //#######################################################################################################################################
 

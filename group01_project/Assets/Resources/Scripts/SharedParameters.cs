@@ -18,6 +18,7 @@ public class SharedParameters : NetworkBehaviour
             Debug.Log("ERROR: Allow Gamespace called on client");
             return;
         }
+        Debug.Log("Shared Parameter on Server - GameSpaceExtensionAllowed: " + extensionAllowed);
         allowGameSpaceExtension = extensionAllowed;
     }
 
