@@ -81,22 +81,6 @@ public class AuthorityManager : NetworkBehaviour {
         }
     }
 
-    //void OnStartClient()
-    //{
-    //    if ((localPlayer = GameObject.FindGameObjectWithTag("vive")) != null)
-    //    {
-    //        localActor = localPlayer.transform.Find("Player").GetComponent<Actor>();
-    //    }
-    //    if ((localPlayer = GameObject.FindGameObjectWithTag("leap")) != null)
-    //    {
-    //        localActor = localPlayer.transform.Find("Player").GetComponent<Actor>();
-    //    }
-    //    if (localActor == null)
-    //    {
-    //        Debug.LogError("localActor is NULL in AuthorityMAnager");
-    //    }
-    //}
-
     // Update is called once per frame
     void Update () {
         if (localActor == null)
@@ -127,7 +111,7 @@ public class AuthorityManager : NetworkBehaviour {
             //    Debug.Log("AuthorityManager: localActor.gameObject = " + localActor.gameObject.name + ". netID=" + localActor.gameObject.GetComponent<NetworkIdentity>().netId);
             //    if (localActor.gameObject.transform.parent != null)
             //    {
-            Debug.Log("AuthorityManager: localActor.gameObject.transform.parent = " + localActor.gameObject.transform.parent.name);
+            // Debug.Log("AuthorityManager: localActor.gameObject.transform.parent = " + localActor.gameObject.transform.parent.name);
             if (playerGrabs)    // local player is currently grabbing the object
             {
                 if (!isHeld)    // the object is currently held by a player
@@ -185,11 +169,13 @@ public class AuthorityManager : NetworkBehaviour {
     {
         if (this.GetComponent<NetworkIdentity>().clientAuthorityOwner == conn)
         {
+            isHeld = false;
+            RpcLostAuthority();
             if (this.netID.RemoveClientAuthority(conn))
             {
                 Debug.Log("AuthorityManager: RemoveClientAuthority...authority=" + this.GetComponent<NetworkIdentity>().hasAuthority);
-                isHeld = false;
-                RpcLostAuthority();
+                //isHeld = false;
+                //RpcLostAuthority();
             }
         }
     }

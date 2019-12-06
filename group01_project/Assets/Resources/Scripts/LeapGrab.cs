@@ -77,7 +77,7 @@ public class LeapGrab : MonoBehaviour
     {
         if (!isInCreation) // currently not in creation mode
         {
-            if (!isInCreation && holdingObjectCollider == null && rightPinch && leftPinch)    // currently not in creation mode --> start creating new object when l+r-pinch and no object is touched
+            if (holdingObjectCollider == null && rightPinch && leftPinch)    // currently not in creation mode --> start creating new object when l+r-pinch and no object is touched
             {
                 isInCreation = true;
                 objectIndex = 0;

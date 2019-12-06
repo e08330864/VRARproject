@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 
 public class OnGrabbedBehaviour : MonoBehaviour
 {
-    private bool held;
+    private bool isGrabbed;
     private bool releasing;
     private Vector3 oldPos;
     private Vector3 newPos;
@@ -22,30 +22,33 @@ public class OnGrabbedBehaviour : MonoBehaviour
         if ((authorityManager = GetComponent<AuthorityManager>()) == null) { Debug.LogError("authorityManager is NULL in OnGrabbedBehaviour"); }
         if ((rigidbody = GetComponent<Rigidbody>()) == null) { Debug.LogError("rigidbody is NULL in OnGrabbedBehaviour"); }
         if ((netId = GetComponent<NetworkIdentity>()) == null) { Debug.LogError("netId is NULL in OnGrabbedBehaviour"); }
-        oldPos = transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
         GetHands();
-        if (held && authorityManager.GetLeftGrabbed() && handLeft != null && netId.hasAuthority)
+        if (isGrabbed && authorityManager.GetLeftGrabbed() && handLeft != null && netId.hasAuthority)
         {
             oldPos = this.transform.position;
             this.transform.position = handLeft.transform.position;
             newPos = this.transform.position;
+            Vector3 speed = (newPos - oldPos) / Time.deltaTime;
+            Debug.Log("speed=" + speed * 1000f * rigidbody.mass);
         }
-        else if (held && !authorityManager.GetLeftGrabbed() && handRight != null && netId.hasAuthority)
+        else if (isGrabbed && !authorityManager.GetLeftGrabbed() && handRight != null && netId.hasAuthority)
         {
             oldPos = this.transform.position;
             this.transform.position = handRight.transform.position;
             newPos = this.transform.position;
+            Vector3 speed = (newPos - oldPos) / Time.deltaTime;
+            Debug.Log("speed=" + speed * 1000f * rigidbody.mass);
         }
         else if (releasing)
         {
             Vector3 speed = (newPos - oldPos) / Time.deltaTime;
-            Debug.Log("throwing velo=" + speed * 100);
-            rigidbody.AddForce(speed * 100);
+            Debug.Log("throwing speed=" + speed * 1000f * rigidbody.mass);
+            rigidbody.AddForce(speed * 1000f * rigidbody.mass);
             releasing = false;
         }
     }
@@ -54,7 +57,7 @@ public class OnGrabbedBehaviour : MonoBehaviour
     public void OnGrabbed()
     {
         Debug.Log("OnGrabbedBehaviour: OnGrabbed...isKinematic=true, useGravity=false");
-        held = true;
+        isGrabbed = true;
         rigidbody.isKinematic = true;
         rigidbody.useGravity = false;
         releasing = false;
@@ -64,7 +67,7 @@ public class OnGrabbedBehaviour : MonoBehaviour
     public void OnReleased()
     {
         Debug.Log("OnGrabbedBehaviour: OnReleased...isKinematic=false, useGravity=true");
-        held = false;
+        isGrabbed = false;
         rigidbody.isKinematic = false;
         rigidbody.useGravity = true;
         releasing = true;
