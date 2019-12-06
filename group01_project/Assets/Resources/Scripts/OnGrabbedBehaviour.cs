@@ -5,6 +5,9 @@ using UnityEngine.Networking;
 
 public class OnGrabbedBehaviour : MonoBehaviour
 {
+    [SerializeField]
+    private float throwingSpeedFactor = 50f;
+
     private bool isGrabbed;
     private bool releasing;
     private Vector3 oldPos;
@@ -34,7 +37,7 @@ public class OnGrabbedBehaviour : MonoBehaviour
             this.transform.position = handLeft.transform.position;
             newPos = this.transform.position;
             Vector3 speed = (newPos - oldPos) / Time.deltaTime;
-            Debug.Log("speed=" + speed * 1000f * rigidbody.mass);
+            Debug.Log("speed=" + speed * throwingSpeedFactor * rigidbody.mass);
         }
         else if (isGrabbed && !authorityManager.GetLeftGrabbed() && handRight != null && netId.hasAuthority)
         {
@@ -42,13 +45,13 @@ public class OnGrabbedBehaviour : MonoBehaviour
             this.transform.position = handRight.transform.position;
             newPos = this.transform.position;
             Vector3 speed = (newPos - oldPos) / Time.deltaTime;
-            Debug.Log("speed=" + speed * 1000f * rigidbody.mass);
+            Debug.Log("speed=" + speed * throwingSpeedFactor * rigidbody.mass);
         }
         else if (releasing)
         {
             Vector3 speed = (newPos - oldPos) / Time.deltaTime;
-            Debug.Log("throwing speed=" + speed * 1000f * rigidbody.mass);
-            rigidbody.AddForce(speed * 1000f * rigidbody.mass);
+            Debug.Log("throwing speed=" + speed * throwingSpeedFactor * rigidbody.mass);
+            rigidbody.AddForce(speed * throwingSpeedFactor * rigidbody.mass);
             releasing = false;
         }
     }
