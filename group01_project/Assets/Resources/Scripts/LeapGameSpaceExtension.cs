@@ -41,7 +41,6 @@ public class LeapGameSpaceExtension: MonoBehaviour
 
     public void InitializeSharedParameters()
     {
-
         sharedParameters = GameObject.Find("Parameters");
     }
 }

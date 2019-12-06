@@ -270,24 +270,12 @@ public class Actor : NetworkBehaviour {
         else if (parametersAuthorityManager != null)
         {
             parametersAuthorityManager.RemoveClientAuthority(this.connectionToClient);
+            return;
         }
     }
     //*******************************
 
     //#######################################################################################################################################
-
-    void Update()
-    {
-        if (!isLocalPlayer)
-        {
-            return;
-        }
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            //Spawn
-            //Test();
-        }
-    }
 
     public void CreateObject(string objPrefab, Vector3 pos, float objectScale)
     {
@@ -325,20 +313,6 @@ public class Actor : NetworkBehaviour {
         //sharedObjects.Remove(createdObject.GetComponent<NetworkIdentity>());
         NetworkServer.Destroy(createdObject);
     }
-    public void Test()
-    {
-        SharedParameters sharedParameters = GameObject.Find("Parameters").GetComponent<SharedParameters>();
-        NetworkIdentity network = sharedParameters.gameObject.GetComponent<NetworkIdentity>();
-        RequestObjectAuthority(network);
-        Debug.Log("Authority: " + network.hasAuthority);
-        sharedParameters.CmdSetGameSpaceExtension(true);
-        ReturnObjectAuthority(network);
-        Debug.Log("Authority: " + network.hasAuthority);
-    }
-
-        
-
-
     //#######################################################################################################################################
 
 }

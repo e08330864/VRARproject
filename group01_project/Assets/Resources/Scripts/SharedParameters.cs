@@ -29,6 +29,6 @@ public class SharedParameters : NetworkBehaviour
 
     private void Update()
     {
-        Debug.Log("GameSpaceExtensionPossible: " + allowGameSpaceExtension);
+        //Debug.Log("GameSpaceExtensionPossible: " + allowGameSpaceExtension);
     }
 }
