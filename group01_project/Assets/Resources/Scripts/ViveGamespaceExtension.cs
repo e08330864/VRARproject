@@ -29,9 +29,21 @@ public class ViveGamespaceExtension : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(viveParams == null)
+        if (parameters == null)
         {
             InitializeSharedParameters();
+        }
+        if(parameters != null)
+        {
+            sharedParameters = parameters.GetComponent<SharedParameters>();
+        }
+        if(viveParams == null)
+        {
+            InitializeViveParameters();
+        }
+        if(viveParams != null)
+        {
+            viveParamsAuthorityManager = viveParams.GetComponent<ViveParamsAuthorityManager>();
         }
 
         lastRightGrabPinch = rightGrabPinch;
@@ -87,10 +99,11 @@ public class ViveGamespaceExtension : MonoBehaviour
 
     public void InitializeSharedParameters()
     {
-        viveParams = GameObject.Find("ViveParameters");
-        viveParamsAuthorityManager = viveParams.GetComponent<ViveParamsAuthorityManager>();
-
         parameters = GameObject.Find("Parameters");
-        sharedParameters = parameters.GetComponent<SharedParameters>();
+    }
+
+    public void InitializeViveParameters()
+    {
+        viveParams = GameObject.Find("ViveParameters");
     }
 }
