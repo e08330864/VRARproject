@@ -5,14 +5,15 @@ using UnityEngine.Networking;
 
 public class OnGrabbedBehaviour : MonoBehaviour
 {
-    bool held;
-    //Actor currentActor;
+    private bool held;
+    private bool releasing;
+    private Vector3 velo;
 
-    Rigidbody rigidbody = null;
-    NetworkIdentity netId = null;
-    AuthorityManager authorityManager = null;
-    GameObject handLeft = null;
-    GameObject handRight = null;
+    private Rigidbody rigidbody = null;
+    private NetworkIdentity netId = null;
+    private AuthorityManager authorityManager = null;
+    private GameObject handLeft = null;
+    private GameObject handRight = null;
 
     // Use this for initialization
     void Start ()
@@ -26,15 +27,20 @@ public class OnGrabbedBehaviour : MonoBehaviour
     void Update()
     {
         GetHands();
-        if (handLeft != null && held && authorityManager.GetLeftGrabbed() && netId.hasAuthority)
-        {
-            
+        if (held && authorityManager.GetLeftGrabbed() && handLeft != null && netId.hasAuthority)
+        {          
             this.transform.position = handLeft.transform.position;
-            
+            velo = rigidbody.velocity;
         }
-        if (handRight != null && held && !authorityManager.GetLeftGrabbed() && netId.hasAuthority)
+        else if (held && !authorityManager.GetLeftGrabbed() && handRight != null && netId.hasAuthority)
         {
             this.transform.position = handRight.transform.position;
+            velo = rigidbody.velocity;
+        }
+        else if (releasing)
+        {
+            rigidbody.AddForce(velo * 100);
+            releasing = false;
         }
     }
 
@@ -45,7 +51,7 @@ public class OnGrabbedBehaviour : MonoBehaviour
         held = true;
         rigidbody.isKinematic = true;
         rigidbody.useGravity = false;
-
+        releasing = false;
     }
 
     // called when the GO gets released by a player
@@ -55,6 +61,7 @@ public class OnGrabbedBehaviour : MonoBehaviour
         held = false;
         rigidbody.isKinematic = false;
         rigidbody.useGravity = true;
+        releasing = true;
     }
 
     private void GetHands()
