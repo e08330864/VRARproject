@@ -10,7 +10,7 @@ public class ParametersAuthorityManager : NetworkBehaviour
     SharedParameters sharedParameters;
 
     bool gameSpaceExtensionPossible = false;
-    bool finisedUpdatingParams = false;
+    bool finishedUpdatingParams = false;
     bool updateParams = false;
    
 
@@ -44,16 +44,17 @@ public class ParametersAuthorityManager : NetworkBehaviour
 
         if (netID.hasAuthority)
         {
-            if (!finisedUpdatingParams)
+            if (updateParams && !finishedUpdatingParams)
             {
                 sharedParameters.CmdSetGameSpaceExtension(gameSpaceExtensionPossible);
-                finisedUpdatingParams = true;
+                finishedUpdatingParams = true;
                 return;
             }
-            if (finisedUpdatingParams)
+            if (finishedUpdatingParams)
             {
+                Debug.Log("Triggering Return authority from leap client to server");
                 localActor.ReturnObjectAuthority(netID);
-                finisedUpdatingParams = false;
+                finishedUpdatingParams = false;
                 updateParams = false;
                 return;
             }
@@ -87,18 +88,6 @@ public class ParametersAuthorityManager : NetworkBehaviour
             this.netID.RemoveClientAuthority(conn);
             Debug.Log("ParameterAuthorityManager - Remove Client Authority: Has Authority " + netID.hasAuthority);
         }
-    }
-
-    [ClientRpc]
-    void RpcGotAuthority(bool gameSpaceExtensionPossible)
-    {
-        sharedParameters.CmdSetGameSpaceExtension(gameSpaceExtensionPossible);
-    }
-
-    [ClientRpc]
-    void RpcLostAuthority()
-    {
-        
     }
 
     public void AssignActor(Actor actor)

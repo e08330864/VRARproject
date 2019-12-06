@@ -60,7 +60,6 @@ public class ViveGamespaceExtension : MonoBehaviour
             {
                 Debug.Log("Trying to calculate pinch, but not pinch start operation yet detected");
             }
-
         }
 
         //right hand stopped grab pinching
