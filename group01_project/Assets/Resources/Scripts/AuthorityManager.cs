@@ -51,7 +51,6 @@ public class AuthorityManager : NetworkBehaviour {
         return leftGrabbed;
     }
 
-
     // Use this for initialization
     void Start () {
         if ((localActor = GameObject.Find("Player").GetComponent<Actor>()) == null)
@@ -76,7 +75,7 @@ public class AuthorityManager : NetworkBehaviour {
                 if (!isHeld)    // the object is currently held by a player
                 {
                     Debug.Log("AuthorityManager: calling RequestObjectAuthority --> isGrabbed = true");
-                    Debug.Log("AuthorityManager: localActor=" + localActor.gameObject.transform.parent.name);
+                    //Debug.Log("AuthorityManager: localActor=" + localActor.gameObject.transform.parent.name);
                     leftGrabbed = leftGrabbedNew;
                     localActor.RequestObjectAuthority(netID);
                 }
