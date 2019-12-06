@@ -7,7 +7,8 @@ public class OnGrabbedBehaviour : MonoBehaviour
 {
     private bool held;
     private bool releasing;
-    private Vector3 velo;
+    private Vector3 oldPos;
+    private Vector3 newPos;
 
     private Rigidbody rigidbody = null;
     private NetworkIdentity netId = null;
@@ -20,7 +21,8 @@ public class OnGrabbedBehaviour : MonoBehaviour
     {
         if ((authorityManager = GetComponent<AuthorityManager>()) == null) { Debug.LogError("authorityManager is NULL in OnGrabbedBehaviour"); }
         if ((rigidbody = GetComponent<Rigidbody>()) == null) { Debug.LogError("rigidbody is NULL in OnGrabbedBehaviour"); }
-        if ((netId = GetComponent<NetworkIdentity>()) == null) { Debug.LogError("netId is NULL in OnGrabbedBehaviour"); } 
+        if ((netId = GetComponent<NetworkIdentity>()) == null) { Debug.LogError("netId is NULL in OnGrabbedBehaviour"); }
+        oldPos = transform.position;
     }
 
     // Update is called once per frame
@@ -28,21 +30,22 @@ public class OnGrabbedBehaviour : MonoBehaviour
     {
         GetHands();
         if (held && authorityManager.GetLeftGrabbed() && handLeft != null && netId.hasAuthority)
-        {          
+        {
+            oldPos = this.transform.position;
             this.transform.position = handLeft.transform.position;
-            velo = rigidbody.velocity;
-            Debug.Log("velo=" + velo);
+            newPos = this.transform.position;
         }
         else if (held && !authorityManager.GetLeftGrabbed() && handRight != null && netId.hasAuthority)
         {
+            oldPos = this.transform.position;
             this.transform.position = handRight.transform.position;
-            velo = rigidbody.velocity;
-            Debug.Log("velo=" + velo);
+            newPos = this.transform.position;
         }
         else if (releasing)
         {
-            Debug.Log("throwing velo=" + velo * 100);
-            rigidbody.AddForce(velo * 100);
+            Vector3 speed = (newPos - oldPos) / Time.deltaTime;
+            Debug.Log("throwing velo=" + speed * 100);
+            rigidbody.AddForce(speed * 100);
             releasing = false;
         }
     }

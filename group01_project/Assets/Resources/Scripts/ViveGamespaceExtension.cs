@@ -30,7 +30,7 @@ public class ViveGamespaceExtension : MonoBehaviour
         //game space extension
         Vector3 shift = calculateGameSpaceShift();
 
-        Debug.Log("Gamespace Extension Possible: " + sharedParameters.GameSpaceExtensionPossible());
+        //Debug.Log("Gamespace Extension Possible: " + sharedParameters.GameSpaceExtensionPossible());
         //ask if Leap Player also allows game space extension
         if (sharedParameters.GameSpaceExtensionPossible())
         {
