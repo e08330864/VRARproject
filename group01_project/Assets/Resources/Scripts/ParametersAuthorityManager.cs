@@ -8,6 +8,10 @@ public class ParametersAuthorityManager : NetworkBehaviour
     NetworkIdentity netID; // NetworkIdentity component attached to this game object
     Actor localActor;
     SharedParameters sharedParameters;
+
+    bool gameSpaceExtensionPossible = false;
+    bool finisedUpdatingParams = false;
+    bool updateParams = false;
    
 
     // Use this for initialization
@@ -20,13 +24,47 @@ public class ParametersAuthorityManager : NetworkBehaviour
         sharedParameters = GetComponent<SharedParameters>();
     }
 
-    public void SetGameSpaceExtensionPossible(bool gameSpaceExtensionPossible)
+    private void Update()
     {
-        localActor.RequestObjectAuthority(netID);
-        Debug.Log("Authority: " + netID.hasAuthority);
-        sharedParameters.CmdSetGameSpaceExtension(gameSpaceExtensionPossible);
-        localActor.ReturnObjectAuthority(netID);
-        Debug.Log("Authority: " + netID.hasAuthority);
+        //Debug.Log("HasAuthority: " + netID.hasAuthority);
+        UpdateSharedParams();
+    }
+
+    private void UpdateSharedParams()
+    {
+        if (isServer)
+        {
+            return;
+        }
+
+        if(updateParams && !netID.hasAuthority)
+        {
+            localActor.RequestObjectAuthority(netID);
+            return;
+        }
+
+        if (netID.hasAuthority)
+        {
+            if (!finisedUpdatingParams)
+            {
+                sharedParameters.CmdSetGameSpaceExtension(gameSpaceExtensionPossible);
+                finisedUpdatingParams = true;
+                return;
+            }
+            if (finisedUpdatingParams)
+            {
+                localActor.ReturnObjectAuthority(netID);
+                finisedUpdatingParams = false;
+                updateParams = false;
+                return;
+            }
+        }
+    }
+
+    public void SetGameSpaceExtensionPossible(bool my_gameSpaceExtensionPossible)
+    {
+        gameSpaceExtensionPossible = my_gameSpaceExtensionPossible;
+        updateParams = true;
     }
 
 
@@ -50,6 +88,18 @@ public class ParametersAuthorityManager : NetworkBehaviour
             this.netID.RemoveClientAuthority(conn);
             Debug.Log("ParameterAuthorityManager - Remove Client Authority: Has Authority " + netID.hasAuthority);
         }
+    }
+
+    [ClientRpc]
+    void RpcGotAuthority(bool gameSpaceExtensionPossible)
+    {
+        sharedParameters.CmdSetGameSpaceExtension(gameSpaceExtensionPossible);
+    }
+
+    [ClientRpc]
+    void RpcLostAuthority()
+    {
+        
     }
 
     public void AssignActor(Actor actor)

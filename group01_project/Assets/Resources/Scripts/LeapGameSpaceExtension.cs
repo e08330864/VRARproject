@@ -23,20 +23,9 @@ public class LeapGameSpaceExtension: MonoBehaviour
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             allowGameSpaceExtension = !allowGameSpaceExtension;
-            Debug.Log("Gamespace extension possible: " + allowGameSpaceExtension);
 
             ParametersAuthorityManager parametersAuthorityManager = sharedParameters.GetComponent<ParametersAuthorityManager>();
             parametersAuthorityManager.SetGameSpaceExtensionPossible(allowGameSpaceExtension);
-
-            /*NetworkIdentity parameterID = sharedParameters.GetComponent<NetworkIdentity>();
-
-
-            actor.RequestObjectAuthority(parameterID);
-            Debug.Log("LeapExtension Has Authority: " + parameterID.hasAuthority);
-            sharedParameters.CmdSetGameSpaceExtension(allowGameSpaceExtension);
-            actor.ReturnObjectAuthority(parameterID);
-            Debug.Log("LeapExtension Has Authority: " + parameterID.hasAuthority);*/
-
         }
     }
 
