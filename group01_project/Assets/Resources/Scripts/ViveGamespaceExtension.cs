@@ -5,9 +5,6 @@ using Valve.VR;
 
 public class ViveGamespaceExtension : MonoBehaviour
 {
-    public GameObject parameters;
-    public SharedParameters sharedParameters;
-
     [HideInInspector]
     public bool rightGrabPinch;
     private bool lastRightGrabPinch;
@@ -16,7 +13,7 @@ public class ViveGamespaceExtension : MonoBehaviour
     Vector3? rightControllerPositionStart = null;
     float gameSpaceExtensionSpeed = 0.01f;
 
-    GameObject viveParams = null;
+    public SharedParameters sharedParameters;
     public ViveParamsAuthorityManager viveParamsAuthorityManager;
 
 
@@ -28,24 +25,7 @@ public class ViveGamespaceExtension : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        if (parameters == null)
-        {
-            InitializeSharedParameters();
-        }
-        if(parameters != null)
-        {
-            sharedParameters = parameters.GetComponent<SharedParameters>();
-        }
-        if(viveParams == null)
-        {
-            InitializeViveParameters();
-        }
-        if(viveParams != null)
-        {
-            viveParamsAuthorityManager = viveParams.GetComponent<ViveParamsAuthorityManager>();
-        }
-
+    { 
         lastRightGrabPinch = rightGrabPinch;
         rightGrabPinch = SteamVR_Actions._default.GrabPinch.GetState(SteamVR_Input_Sources.RightHand);
 
@@ -95,15 +75,5 @@ public class ViveGamespaceExtension : MonoBehaviour
         }
 
         return gameSpaceExtensionSpeed * shift;
-    }
-
-    public void InitializeSharedParameters()
-    {
-        parameters = GameObject.Find("Parameters");
-    }
-
-    public void InitializeViveParameters()
-    {
-        viveParams = GameObject.Find("ViveParameters");
     }
 }
