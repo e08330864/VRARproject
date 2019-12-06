@@ -66,7 +66,7 @@ public class Actor : NetworkBehaviour {
                     }
 
                     ViveParamsAuthorityManager viveParamAuthority = go.GetComponent<ViveParamsAuthorityManager>();
-                    if (paramAuthority != null)
+                    if (viveParamAuthority != null)
                     {
                         viveParamAuthority.AssignActor(this);
                     }
