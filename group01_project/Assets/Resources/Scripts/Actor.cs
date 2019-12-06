@@ -58,7 +58,19 @@ public class Actor : NetworkBehaviour {
                 foreach (GameObject go in GameObject.FindGameObjectsWithTag("shared"))
                 {
                     sharedObjects.Add(go.GetComponent<NetworkIdentity>());
-                    go.GetComponent<ParametersAuthorityManager>().AssignActor(this);
+
+                    ParametersAuthorityManager paramAuthority = go.GetComponent<ParametersAuthorityManager>();
+                    if (paramAuthority != null)
+                    {
+                        paramAuthority.AssignActor(this);
+                    }
+
+                    ViveParamsAuthorityManager viveParamAuthority = go.GetComponent<ViveParamsAuthorityManager>();
+                    if (paramAuthority != null)
+                    {
+                        viveParamAuthority.AssignActor(this);
+                    }
+
                 }
             }
         }
@@ -239,6 +251,7 @@ public class Actor : NetworkBehaviour {
 
         AuthorityManager authorityManager = netID.GetComponent<AuthorityManager>();
         ParametersAuthorityManager parametersAuthorityManager = netID.GetComponent<ParametersAuthorityManager>();
+        ViveParamsAuthorityManager viveParamsAuthorityManager = netID.GetComponent<ViveParamsAuthorityManager>();
 
         if (authorityManager != null)
         {
@@ -248,7 +261,10 @@ public class Actor : NetworkBehaviour {
         {
             parametersAuthorityManager.AssignClientAuthority(this.connectionToClient);
         }
-        
+        else if(viveParamsAuthorityManager != null)
+        {
+            viveParamsAuthorityManager.AssignClientAuthority(this.connectionToClient);
+        }
     }
 
     // run on the server
@@ -261,6 +277,7 @@ public class Actor : NetworkBehaviour {
 
         AuthorityManager authorityManager = netID.GetComponent<AuthorityManager>();
         ParametersAuthorityManager parametersAuthorityManager = netID.GetComponent<ParametersAuthorityManager>();
+        ViveParamsAuthorityManager viveParamsAuthorityManager = netID.GetComponent<ViveParamsAuthorityManager>();
 
         if (authorityManager != null)
         {
@@ -271,6 +288,10 @@ public class Actor : NetworkBehaviour {
         {
             parametersAuthorityManager.RemoveClientAuthority(this.connectionToClient);
             return;
+        }
+        else if (viveParamsAuthorityManager != null)
+        {
+            viveParamsAuthorityManager.RemoveClientAuthority(this.connectionToClient);
         }
     }
     //*******************************
