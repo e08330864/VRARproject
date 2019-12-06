@@ -11,7 +11,7 @@ public class SharedParameters : NetworkBehaviour
     bool allowGameSpaceExtension = false;
 
     [SyncVar] 
-    Vector3 extensionShift = new Vector3(0.0f, 0.0f, 0.0f);
+    Vector3 updatedLeapPosition = new Vector3(0.0f, 0.0f, 0.0f);
 
     [Command]
     public void CmdSetGameSpaceExtension(bool extensionAllowed)
@@ -26,7 +26,7 @@ public class SharedParameters : NetworkBehaviour
     }
 
     [Command]
-    public void CmdSetExtensionShift(Vector3 shift)
+    public void CmdSetNewPosition(Vector3 position)
     {
         if (!isServer)
         {
@@ -34,7 +34,7 @@ public class SharedParameters : NetworkBehaviour
             return;
         }
         Debug.Log("Shared Parameter on Server - new shift");
-        extensionShift = shift;
+        updatedLeapPosition = position;
     }
 
     public bool GameSpaceExtensionPossible()
@@ -42,9 +42,9 @@ public class SharedParameters : NetworkBehaviour
         return allowGameSpaceExtension;
     }
 
-    public Vector3 GetExtensionShift()
+    public Vector3 GetNewPosition()
     {
-        return extensionShift;
+        return updatedLeapPosition;
     }
 
     private void Update()

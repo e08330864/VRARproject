@@ -13,6 +13,9 @@ public class ViveGamespaceExtension : MonoBehaviour
     Vector3? rightControllerPositionStart = null;
     float gameSpaceExtensionSpeed = 0.01f;
 
+    bool thisFrameExtensionPossible = false;
+    bool lastFrameExtensionPossible = false;
+
     public SharedParameters sharedParameters;
     public ViveParamsAuthorityManager viveParamsAuthorityManager;
 
@@ -37,9 +40,20 @@ public class ViveGamespaceExtension : MonoBehaviour
         //ask if Leap Player also allows game space extension
         if (sharedParameters.GameSpaceExtensionPossible())
         {
-            viveParamsAuthorityManager.SetShift(shift);
+            thisFrameExtensionPossible = true;
             transform.position += new Vector3(shift.x, 0.0f, shift.z);
         }
+        else
+        {
+            thisFrameExtensionPossible = false;
+        }
+
+        //currently stopped extending game space
+        if(!thisFrameExtensionPossible && lastFrameExtensionPossible)
+        {
+            viveParamsAuthorityManager.SetPosition(transform.position);
+        }
+        lastFrameExtensionPossible = thisFrameExtensionPossible;
     }
 
     Vector3 calculateGameSpaceShift()

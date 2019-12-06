@@ -8,7 +8,7 @@ public class ViveParamsAuthorityManager : NetworkBehaviour
     NetworkIdentity netID; // NetworkIdentity component attached to this game object
     Actor localActor;
     SharedParameters sharedParameters;
-    Vector3 shift = new Vector3(0.0f, 0.0f, 0.0f);
+    Vector3 position = new Vector3(0.0f, 0.0f, 0.0f);
     bool finishedUpdatingParams = false;
     bool updateParams = false;
    
@@ -45,7 +45,7 @@ public class ViveParamsAuthorityManager : NetworkBehaviour
         {
             if (updateParams && !finishedUpdatingParams)
             {
-                sharedParameters.CmdSetExtensionShift(shift);
+                sharedParameters.CmdSetNewPosition(position);
                 finishedUpdatingParams = true;
                 return;
             }
@@ -59,9 +59,9 @@ public class ViveParamsAuthorityManager : NetworkBehaviour
         }
     }
 
-    public void SetShift(Vector3 my_shift)
+    public void SetPosition(Vector3 my_position)
     {
-        shift = my_shift;
+        position = my_position;
         updateParams = true;
     }
 
