@@ -1748,11 +1748,11 @@ PrefabInstance:
     - target: {fileID: 2348914, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 1180343055}
+      objectReference: {fileID: 0}
     - target: {fileID: 3380982, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 1793835852}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
 --- !u!1 &518252052 stripped
@@ -2041,8 +2041,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 617d3d8dd2497874bb543b2a07c006f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leftTouch: {fileID: 0}
-  rightTouch: {fileID: 0}
+  leftTouchOtherCollider: {fileID: 0}
+  rightTouchOtherCollider: {fileID: 0}
   leftPinch: 0
   rightPinch: 0
   objectPrefab:

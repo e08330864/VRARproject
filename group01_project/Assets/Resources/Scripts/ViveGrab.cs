@@ -13,11 +13,11 @@ public class ViveGrab : MonoBehaviour
     public SteamVR_Behaviour_Pose rightPose;
    
     [HideInInspector]
-    public Collider leftTouch, rightTouch;
+    public Collider leftTouchOtherCollider, rightTouchOtherCollider;
     [HideInInspector]
     public bool leftGrabPinch, rightGrabPinch;
 
-    private Collider grabbedCollider;
+    private Collider holdingObjectCollider = null;
 
 
     // Update is called once per frame
@@ -31,32 +31,35 @@ public class ViveGrab : MonoBehaviour
 
     private void CheckHoldingObject()
     {
-        if ((leftTouch != null && leftGrabPinch))   // grab with left hand (1.priority)
+        if ((leftTouchOtherCollider != null && leftGrabPinch))   // grab with left hand (1.priority)
         {
-            if (grabbedCollider == null)
+            if (holdingObjectCollider == null)
             {
-                grabbedCollider = leftTouch;
-                leftTouch.gameObject.GetComponent<AuthorityManager>().SetLeftGrabbedNew(true);
-                leftTouch.gameObject.GetComponent<AuthorityManager>().playerGrabs = true;
+                Debug.Log("ViveGrab: Holding with LEFT hand");
+                holdingObjectCollider = leftTouchOtherCollider;
+                holdingObjectCollider.gameObject.GetComponent<AuthorityManager>().SetLeftGrabbedNew(true);
+                holdingObjectCollider.gameObject.GetComponent<AuthorityManager>().playerGrabs = true;
             }
         }
         else
         {
-            if ((rightTouch != null && rightGrabPinch))    // grab with right hand (2.priority)
+            if ((rightTouchOtherCollider != null && rightGrabPinch))    // grab with right hand (2.priority)
             {
-                if (grabbedCollider == null)
+                if (holdingObjectCollider == null)
                 {
-                    grabbedCollider = rightTouch;
-                    rightTouch.gameObject.GetComponent<AuthorityManager>().SetLeftGrabbedNew(false);
-                    rightTouch.gameObject.GetComponent<AuthorityManager>().playerGrabs = true;
+                    Debug.Log("ViveGrab: Holding with RIGHT hand");
+                    holdingObjectCollider = rightTouchOtherCollider;
+                    holdingObjectCollider.gameObject.GetComponent<AuthorityManager>().SetLeftGrabbedNew(false);
+                    holdingObjectCollider.gameObject.GetComponent<AuthorityManager>().playerGrabs = true;
                 }
             }
             else
             {
-                if (grabbedCollider != null)  // release if no grab
+                if (holdingObjectCollider != null)  // release if no grab
                 {
-                    grabbedCollider.gameObject.GetComponent<AuthorityManager>().playerGrabs = false;
-                    grabbedCollider = null;
+                    Debug.Log("ViveGrab: Holding RELEASED");
+                    holdingObjectCollider.gameObject.GetComponent<AuthorityManager>().playerGrabs = false;
+                    holdingObjectCollider = null;
                 }
             }
         }

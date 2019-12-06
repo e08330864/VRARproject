@@ -15,7 +15,7 @@ public class LeapGrab : MonoBehaviour
     private Vector3 pinchPositionRight;
 
     [HideInInspector]
-    public Collider leftTouch, rightTouch;
+    public Collider leftTouchOtherCollider, rightTouchOtherCollider;
     [HideInInspector]
     public bool leftPinch, rightPinch;
 
@@ -24,16 +24,16 @@ public class LeapGrab : MonoBehaviour
     [SerializeField]
     private float objectScale = 0.2f;
 
-    private Collider colliderLeap = null;
+    private Collider holdingObjectCollider = null;
     private bool isInCreation = false;
     private bool objectSwitchingEnabled = false;
     private int objectIndex = 0;
     
     private void Start()
     {
-        if (GameObject.FindGameObjectWithTag("LeftHandInteraction") != null) {
-            pinchDetectorLeft = GameObject.FindGameObjectWithTag("LeftHandInteraction").GetComponent<PinchDetector>();
-        }
+        //if (GameObject.FindGameObjectWithTag("LeftHandInteraction") != null) {
+        //    pinchDetectorLeft = GameObject.FindGameObjectWithTag("LeftHandInteraction").GetComponent<PinchDetector>();
+        //}
     }
 
     // Update is called once per frame
@@ -77,7 +77,7 @@ public class LeapGrab : MonoBehaviour
     {
         if (!isInCreation) // currently not in creation mode
         {
-            if (colliderLeap == null && rightPinch && leftPinch)    // start creating new object when l+r-pinch and no object is touched
+            if (!isInCreation && holdingObjectCollider == null && rightPinch && leftPinch)    // currently not in creation mode --> start creating new object when l+r-pinch and no object is touched
             {
                 isInCreation = true;
                 objectIndex = 0;
@@ -90,7 +90,7 @@ public class LeapGrab : MonoBehaviour
         }
         else    // currently in creation mode
         {
-            if (colliderLeap == null && !leftPinch)   // stop creation mode
+            if (!leftPinch)   // stop creation mode
             {
                 Debug.Log("LeapGrab: STOP creation mode ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                 isInCreation = false;
@@ -119,35 +119,35 @@ public class LeapGrab : MonoBehaviour
     // HOLDING
     private void CheckHoldingObject()
     {
-        if ((leftTouch != null && leftPinch))   // grab with left hand (1.priority)
+        if ((leftTouchOtherCollider != null && leftPinch))   // grab with left hand (1.priority)
         {
-            if (colliderLeap == null)
+            if (holdingObjectCollider == null)
             {
                 Debug.Log("LeapGrab: Holding with LEFT hand");
-                colliderLeap = leftTouch;
-                leftTouch.gameObject.GetComponent<AuthorityManager>().SetLeftGrabbedNew(true);  // sets leftGrabbed=true in AuthorityManager, only in case when not already grabbed
-                leftTouch.gameObject.GetComponent<AuthorityManager>().playerGrabs = true;
+                holdingObjectCollider = leftTouchOtherCollider;
+                holdingObjectCollider.gameObject.GetComponent<AuthorityManager>().SetLeftGrabbedNew(true);  // sets leftGrabbed=true in AuthorityManager, only in case when not already grabbed
+                holdingObjectCollider.gameObject.GetComponent<AuthorityManager>().playerGrabs = true;
             }
         }
         else
         {
-            if ((rightTouch != null && rightPinch))    // grab with right hand (2.priority)
+            if ((rightTouchOtherCollider != null && rightPinch))    // grab with right hand (2.priority)
             { 
-                if (colliderLeap == null)
+                if (holdingObjectCollider == null)
                 {
                     Debug.Log("LeapGrab: Holding with RIGHT hand");
-                    colliderLeap = rightTouch;
-                    rightTouch.gameObject.GetComponent<AuthorityManager>().SetLeftGrabbedNew(false);    // sets leftGrabbed=false in AuthorityManager, only in case when not already grabbed
-                    rightTouch.gameObject.GetComponent<AuthorityManager>().playerGrabs = true;
+                    holdingObjectCollider = rightTouchOtherCollider;
+                    holdingObjectCollider.gameObject.GetComponent<AuthorityManager>().SetLeftGrabbedNew(false);    // sets leftGrabbed=false in AuthorityManager, only in case when not already grabbed
+                    holdingObjectCollider.gameObject.GetComponent<AuthorityManager>().playerGrabs = true;
                 }
             }
             else   
             {
-                if (colliderLeap != null)   // release if no grab
+                if (holdingObjectCollider != null)   // release if no grab
                 {
                     Debug.Log("LeapGrab: Holding RELEASED");
-                    colliderLeap.gameObject.GetComponent<AuthorityManager>().playerGrabs = false;
-                    colliderLeap = null;
+                    holdingObjectCollider.gameObject.GetComponent<AuthorityManager>().playerGrabs = false;
+                    holdingObjectCollider = null;
                 }
             }
         }
