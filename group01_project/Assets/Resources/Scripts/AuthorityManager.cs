@@ -71,28 +71,29 @@ public class AuthorityManager : NetworkBehaviour {
 	void Update () {
         if (localActor != null)
         {
+            Debug.Log("AuthorityManager: localActor = " + localActor.name);
             if (localActor.gameObject != null)
             {
+                Debug.Log("AuthorityManager: localActor.gameObject = " + localActor.gameObject.name);
                 if (localActor.gameObject.transform.parent != null)
                 {
+                    Debug.Log("AuthorityManager: localActor.gameObject.transform.parent = " + localActor.gameObject.transform.parent.name);
+                    if (playerGrabs)    // local player is currently grabbing the object
                     {
-                        if (playerGrabs)    // local player is currently grabbing the object
+                        if (!isHeld)    // the object is currently held by a player
                         {
-                            if (!isHeld)    // the object is currently held by a player
-                            {
-                                Debug.Log("AuthorityManager: calling RequestObjectAuthority --> isGrabbed = true");
-                                Debug.Log("AuthorityManager: localActor=" + localActor.gameObject.transform.parent.name);
-                                leftGrabbed = leftGrabbedNew;
-                                localActor.RequestObjectAuthority(netID);
-                            }
+                            Debug.Log("AuthorityManager: calling RequestObjectAuthority --> isGrabbed = true");
+                            Debug.Log("AuthorityManager: localActor=" + localActor.gameObject.transform.parent.name);
+                            leftGrabbed = leftGrabbedNew;
+                            localActor.RequestObjectAuthority(netID);
                         }
-                        else    // the local player is currently not grabbing the object
+                    }
+                    else    // the local player is currently not grabbing the object
+                    {
+                        if (isHeld)  // the object is currently held, but not grabbed by local player
                         {
-                            if (isHeld)  // the object is currently held, but not grabbed by local player
-                            {
-                                Debug.Log("AuthorityManager: calling ReturnObjectAuthority --> isGrapping = false");
-                                localActor.ReturnObjectAuthority(netID);
-                            }
+                            Debug.Log("AuthorityManager: calling ReturnObjectAuthority --> isGrapping = false");
+                            localActor.ReturnObjectAuthority(netID);
                         }
                     }
                 }
