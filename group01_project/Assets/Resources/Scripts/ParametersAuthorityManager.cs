@@ -26,7 +26,6 @@ public class ParametersAuthorityManager : NetworkBehaviour
 
     private void Update()
     {
-        //Debug.Log("HasAuthority: " + netID.hasAuthority);
         UpdateSharedParams();
     }
 
