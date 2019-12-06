@@ -57,15 +57,19 @@ public class AuthorityManager : NetworkBehaviour {
     {
         if ((localPlayer = GameObject.FindGameObjectWithTag("vive")) != null)
         {
-            localActor = localPlayer.transform.Find("Player").GetComponent<Actor>();
+            Transform tr = null;
+            if ((tr = localPlayer.transform.Find("Player")) != null)
+            {
+                localActor = tr.gameObject.GetComponent<Actor>();
+            }
         }
         if ((localPlayer = GameObject.FindGameObjectWithTag("leap")) != null)
         {
-            localActor = localPlayer.transform.Find("Player").GetComponent<Actor>();
-        }
-        if (localActor == null)
-        {
-            Debug.LogError("localActor is NULL in AuthorityMAnager");
+            Transform tr = null;
+            if ((tr = localPlayer.transform.Find("Player")) != null)
+            {
+                localActor = tr.gameObject.GetComponent<Actor>();
+            }
         }
         if ((netID = GetComponent<NetworkIdentity>()) == null)
         {
@@ -95,7 +99,26 @@ public class AuthorityManager : NetworkBehaviour {
 
     // Update is called once per frame
     void Update () {
-        if (localActor != null )
+        if (localActor == null)
+        {
+            if ((localPlayer = GameObject.FindGameObjectWithTag("vive")) != null)
+            {
+                Transform tr = null;
+                if ((tr = localPlayer.transform.Find("Player")) != null)
+                {
+                    localActor = tr.gameObject.GetComponent<Actor>();
+                }
+            }
+            if ((localPlayer = GameObject.FindGameObjectWithTag("leap")) != null)
+            {
+                Transform tr = null;
+                if ((tr = localPlayer.transform.Find("Player")) != null)
+                {
+                    localActor = tr.gameObject.GetComponent<Actor>();
+                }
+            }
+        }
+        else
         {
             //Debug.Log("AuthorityManager: localActor = " + localActor.name);
             //if (localActor.gameObject != null)
