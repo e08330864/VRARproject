@@ -10,7 +10,9 @@ public class LeapGameSpaceExtension: MonoBehaviour
     public SharedParameters viveSharedScript;
 
     private bool allowGameSpaceExtension = false;
-    private bool lastFrameallowGameSpaceExtension = false;
+
+    private Vector3? thisSharedPosition = null;
+    private Vector3? lastSharedPosition = null;
 
     // Update is called once per frame
     void Update()
@@ -21,15 +23,13 @@ public class LeapGameSpaceExtension: MonoBehaviour
             parametersAuthorityManager.SetGameSpaceExtensionPossible(allowGameSpaceExtension);
         }
 
-        if(viveSharedScript != null)
-        {
-            //update center position of the leap player
-            if(!allowGameSpaceExtension && lastFrameallowGameSpaceExtension)
-            {
-                transform.position = viveSharedScript.GetNewPosition();
-            }   
-        }
+        thisSharedPosition = viveSharedScript.GetNewPosition();
 
-        lastFrameallowGameSpaceExtension = allowGameSpaceExtension;
+        //update center position of the leap player
+        if(thisSharedPosition.HasValue && lastSharedPosition.HasValue && lastSharedPosition.Value != thisSharedPosition.Value)
+        {
+            transform.position = thisSharedPosition.Value;
+        }
+        lastSharedPosition = thisSharedPosition;
     }
 }
