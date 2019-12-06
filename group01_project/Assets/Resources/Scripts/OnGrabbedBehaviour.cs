@@ -13,7 +13,6 @@ public class OnGrabbedBehaviour : MonoBehaviour
     AuthorityManager authorityManager = null;
     GameObject handLeft = null;
     GameObject handRight = null;
-    Actor actor = null;
 
     // Use this for initialization
     void Start ()
@@ -27,19 +26,15 @@ public class OnGrabbedBehaviour : MonoBehaviour
     void Update()
     {
         GetHands();
-        if (handLeft != null && handRight != null && held)
+        if (handLeft != null && held && authorityManager.GetLeftGrabbed() && netId.hasAuthority)
         {
-            // Debug.Log("OnGrabbedBehaviour: held = true");
-            if (authorityManager.GetActor() == null || !netId.hasAuthority) return;
-            // Debug.Log("OnGrabbedBehaviour: authorityManager.GetActor().gameObject.transform.parent.tag = " + authorityManager.GetActor().gameObject.transform.parent.tag);
-            // handLeft = GameObject.FindGameObjectWithTag("LeftHandInteraction");
-            if (authorityManager.GetLeftGrabbed())  // held with left hand
-            {
-                this.transform.position = handLeft.transform.position;
-            } else
-            {
-                this.transform.position = handRight.transform.position;
-            }
+            
+            this.transform.position = handLeft.transform.position;
+            
+        }
+        if (handRight != null && held && !authorityManager.GetLeftGrabbed() && netId.hasAuthority)
+        {
+            this.transform.position = handRight.transform.position;
         }
     }
 
@@ -64,17 +59,33 @@ public class OnGrabbedBehaviour : MonoBehaviour
 
     private void GetHands()
     {
-        if (actor == null && (actor = authorityManager.GetActor()) != null)
+        if (handLeft == null || handRight == null)
         {
-            if (actor.gameObject.transform.parent.tag == "vive")
+            Actor actor = authorityManager.GetActor();
+            if (actor != null)
             {
-                handLeft = authorityManager.GetActor().transform.Find("ViveHands/Left").gameObject;
-                handRight = authorityManager.GetActor().transform.Find("ViveHands/Right").gameObject;
-            }
-            else if (actor.gameObject.transform.parent.tag == "leap")
-            {
-                handLeft = GameObject.FindGameObjectWithTag("LeftHandInteraction");
-                handRight = GameObject.FindGameObjectWithTag("RightHandInteraction");
+                if (actor.gameObject.transform.parent.tag == "vive")
+                {
+                    if (handLeft == null)
+                    {
+                        handLeft = authorityManager.GetActor().transform.Find("ViveHands/Left").gameObject;
+                    }
+                    if (handRight == null)
+                    {
+                        handRight = authorityManager.GetActor().transform.Find("ViveHands/Right").gameObject;
+                    }
+                }
+                else if (actor.gameObject.transform.parent.tag == "leap")
+                {
+                    if (handLeft == null)
+                    {
+                        handLeft = GameObject.FindGameObjectWithTag("LeftHandInteraction");
+                    }
+                    if (handRight == null)
+                    {
+                        handRight = GameObject.FindGameObjectWithTag("RightHandInteraction");
+                    }
+                }
             }
         }
     }
