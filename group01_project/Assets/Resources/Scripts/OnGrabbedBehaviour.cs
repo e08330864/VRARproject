@@ -64,26 +64,34 @@ public class OnGrabbedBehaviour : MonoBehaviour
             Actor actor = authorityManager.GetActor();
             if (actor != null)
             {
-                if (actor.gameObject.transform.parent.tag == "vive")
+                GameObject go = actor.gameObject;
+                if (go != null)
                 {
-                    if (handLeft == null)
+                    Transform trParent = go.transform.parent;
+                    if (trParent != null)
                     {
-                        handLeft = authorityManager.GetActor().transform.Find("ViveHands/Left").gameObject;
-                    }
-                    if (handRight == null)
-                    {
-                        handRight = authorityManager.GetActor().transform.Find("ViveHands/Right").gameObject;
-                    }
-                }
-                else if (actor.gameObject.transform.parent.tag == "leap")
-                {
-                    if (handLeft == null)
-                    {
-                        handLeft = GameObject.FindGameObjectWithTag("LeftHandInteraction");
-                    }
-                    if (handRight == null)
-                    {
-                        handRight = GameObject.FindGameObjectWithTag("RightHandInteraction");
+                        if (trParent.tag == "vive")
+                        {
+                            if (handLeft == null)
+                            {
+                                handLeft = authorityManager.GetActor().transform.Find("ViveHands/Left").gameObject;
+                            }
+                            if (handRight == null)
+                            {
+                                handRight = authorityManager.GetActor().transform.Find("ViveHands/Right").gameObject;
+                            }
+                        }
+                        else if (trParent.tag == "leap")
+                        {
+                            if (handLeft == null)
+                            {
+                                handLeft = GameObject.FindGameObjectWithTag("LeftHandInteraction");
+                            }
+                            if (handRight == null)
+                            {
+                                handRight = GameObject.FindGameObjectWithTag("RightHandInteraction");
+                            }
+                        }
                     }
                 }
             }
