@@ -31,9 +31,9 @@ public class LeapGrab : MonoBehaviour
     
     private void Start()
     {
-        if (GameObject.FindGameObjectWithTag("LeftHandInteraction") != null) {
-            pinchDetectorLeft = GameObject.FindGameObjectWithTag("LeftHandInteraction").GetComponent<PinchDetector>();
-        }
+        //if (GameObject.FindGameObjectWithTag("LeftHandInteraction") != null) {
+        //    pinchDetectorLeft = GameObject.FindGameObjectWithTag("LeftHandInteraction").GetComponent<PinchDetector>();
+        //}
     }
 
     // Update is called once per frame

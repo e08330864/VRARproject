@@ -26,12 +26,12 @@ public class Touching : MonoBehaviour
             {
                 if (this.gameObject.tag == "left")
                 {
-                    Debug.Log("Touching: Leap left touch");
+                    Debug.Log("Touching: Leap left touch START");
                     leapGrab.leftTouchOtherCollider = other;
                 }
                 else if (this.gameObject.tag == "right")
                 {
-                    Debug.Log("Touching: Leap right touch");
+                    Debug.Log("Touching: Leap right touch START");
                     leapGrab.rightTouchOtherCollider = other;
                 }
             }
@@ -39,11 +39,13 @@ public class Touching : MonoBehaviour
             {
                 if (this.gameObject.tag == "left")
                 {
-                    viveGrab.leftTouch = other;
+                    Debug.Log("Touching: Vive left touch START");
+                    viveGrab.leftTouchOtherCollider = other;
                 }
                 else if (this.gameObject.tag == "right")
                 {
-                    viveGrab.rightTouch = other;
+                    Debug.Log("Touching: Vive right touch START");
+                    viveGrab.rightTouchOtherCollider = other;
                 }
             }
         }
@@ -57,10 +59,12 @@ public class Touching : MonoBehaviour
             {
                 if (this.gameObject.tag == "left")
                 {
+                    Debug.Log("Touching: Leap left touch END");
                     leapGrab.leftTouchOtherCollider = null;
                 }
                 else if (this.gameObject.tag == "right")
                 {
+                    Debug.Log("Touching: Leap right touch END");
                     leapGrab.rightTouchOtherCollider = null;
                 }
             }
@@ -68,11 +72,13 @@ public class Touching : MonoBehaviour
             {
                 if (this.gameObject.tag == "left")
                 {
-                    viveGrab.leftTouch = null;
+                    Debug.Log("Touching: Vive left touch END");
+                    viveGrab.leftTouchOtherCollider = null;
                 }
                 else if (this.gameObject.tag == "right")
                 {
-                    viveGrab.rightTouch = null;
+                    Debug.Log("Touching: Vive right touch END");
+                    viveGrab.rightTouchOtherCollider = null;
                 }
             }
         }
