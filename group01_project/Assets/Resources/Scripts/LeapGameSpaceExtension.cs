@@ -19,6 +19,12 @@ public class LeapGameSpaceExtension: MonoBehaviour
         {
             InitializeSharedParameters();
         }
+        if(sharedParameters != null)
+        {
+            parametersAuthorityManager = sharedParameters.GetComponent<ParametersAuthorityManager>();
+            sharedScript = sharedParameters.GetComponent<SharedParameters>();
+
+        }
 
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
@@ -26,13 +32,16 @@ public class LeapGameSpaceExtension: MonoBehaviour
             parametersAuthorityManager.SetGameSpaceExtensionPossible(allowGameSpaceExtension);
         }
 
-        //update center position of the leap player
-        this.transform.position = transform.position + sharedScript.GetExtensionShift();
+        if(sharedScript != null)
+        {
+            //update center position of the leap player
+            this.transform.position = transform.position + sharedScript.GetExtensionShift();
+        }
+        
     }
 
     public void InitializeSharedParameters()
     {
         sharedParameters = GameObject.Find("Parameters");
-        parametersAuthorityManager = sharedParameters.GetComponent<ParametersAuthorityManager>();
     }
 }
