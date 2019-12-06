@@ -25,6 +25,7 @@ public class ViveParamsAuthorityManager : NetworkBehaviour
 
     private void Update()
     {
+        Debug.Log("Vive Params - hasAuthority: " + netID.hasAuthority);
         UpdateSharedParams();
     }
 
