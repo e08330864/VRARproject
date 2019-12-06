@@ -74,7 +74,7 @@ public class AuthorityManager : NetworkBehaviour {
             Debug.Log("AuthorityManager: localActor = " + localActor.name);
             if (localActor.gameObject != null)
             {
-                Debug.Log("AuthorityManager: localActor.gameObject = " + localActor.gameObject.name);
+                Debug.Log("AuthorityManager: localActor.gameObject = " + localActor.gameObject.name + ". netID=" + localActor.gameObject.GetComponent<NetworkIdentity>().netId);
                 if (localActor.gameObject.transform.parent != null)
                 {
                     Debug.Log("AuthorityManager: localActor.gameObject.transform.parent = " + localActor.gameObject.transform.parent.name);
