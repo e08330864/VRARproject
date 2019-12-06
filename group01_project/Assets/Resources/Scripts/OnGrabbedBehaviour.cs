@@ -31,14 +31,17 @@ public class OnGrabbedBehaviour : MonoBehaviour
         {          
             this.transform.position = handLeft.transform.position;
             velo = rigidbody.velocity;
+            Debug.Log("velo=" + velo);
         }
         else if (held && !authorityManager.GetLeftGrabbed() && handRight != null && netId.hasAuthority)
         {
             this.transform.position = handRight.transform.position;
             velo = rigidbody.velocity;
+            Debug.Log("velo=" + velo);
         }
         else if (releasing)
         {
+            Debug.Log("throwing velo=" + velo * 100);
             rigidbody.AddForce(velo * 100);
             releasing = false;
         }
