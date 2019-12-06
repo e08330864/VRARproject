@@ -66,9 +66,25 @@ public class AuthorityManager : NetworkBehaviour {
             Debug.LogError("onb is NULL in AuthorityManager");
         }
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    void OnStartClient()
+    {
+        if ((localActor = GameObject.Find("Player").GetComponent<Actor>()) == null)
+        {
+            Debug.LogError("localActor is NULL in AuthorityManager");
+        }
+        if ((netID = GetComponent<NetworkIdentity>()) == null)
+        {
+            Debug.LogError("netID is NULL in AuthorityManager");
+        }
+        if ((onb = GetComponent<OnGrabbedBehaviour>()) == null)
+        {
+            Debug.LogError("onb is NULL in AuthorityManager");
+        }
+    }
+
+    // Update is called once per frame
+    void Update () {
         if (localActor != null)
         {
             Debug.Log("AuthorityManager: localActor = " + localActor.name);
