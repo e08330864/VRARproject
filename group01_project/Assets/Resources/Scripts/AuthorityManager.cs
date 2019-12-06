@@ -107,9 +107,7 @@ public class AuthorityManager : NetworkBehaviour {
             Debug.Log("AuthorityManager: localActor = " + localActor.name);
             if (localActor.gameObject != null)
             {
-                Debug.Log("Rela local netID=" + GameObject.Find("Player").GetComponent<Actor>().gameObject.GetComponent<NetworkIdentity>().netId);
                 Debug.Log("Rela local netID=" + GameObject.Find("Player").GetComponent<NetworkIdentity>().netId);
-                Debug.Log("Rela local netID=" + GameObject.Find("Player").transform.parent.name);
                 Debug.Log("AuthorityManager: localActor.gameObject = " + localActor.gameObject.name + ". netID=" + localActor.gameObject.GetComponent<NetworkIdentity>().netId);
                 if (localActor.gameObject.transform.parent != null)
                 {
