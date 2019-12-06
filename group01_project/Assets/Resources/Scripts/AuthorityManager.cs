@@ -9,7 +9,8 @@ public class AuthorityManager : NetworkBehaviour {
     
     // these variables should be set up on a client
     //**************************************************************************************************
-    Actor localActor; // Actor that is steering this player 
+    Actor localActor; // Actor that is steering this player
+    GameObject localPlayer;
 
     [SyncVar]
     private bool isHeld; // true, if object is currently held by any player
@@ -53,9 +54,17 @@ public class AuthorityManager : NetworkBehaviour {
 
     // Use this for initialization
     void Start () {
-        if ((localActor = GameObject.Find("Player").GetComponent<Actor>()) == null)
+        if ((localPlayer = GameObject.FindGameObjectWithTag("vive")) != null)
         {
-            Debug.LogError("localActor is NULL in AuthorityManager");
+            localActor = localPlayer.transform.Find("Player").GetComponent<Actor>();
+        }
+        if ((localPlayer = GameObject.FindGameObjectWithTag("leap")) != null)
+        {
+            localActor = localPlayer.transform.Find("Player").GetComponent<Actor>();
+        }
+        if (localActor == null)
+        {
+            Debug.LogError("localActor is NULL in AuthorityMAnager");
         }
         if ((netID = GetComponent<NetworkIdentity>()) == null)
         {
@@ -69,9 +78,17 @@ public class AuthorityManager : NetworkBehaviour {
 
     void OnStartClient()
     {
-        if ((localActor = GameObject.Find("Player").GetComponent<Actor>()) == null)
+        if ((localPlayer = GameObject.FindGameObjectWithTag("vive")) != null)
         {
-            Debug.LogError("localActor is NULL in AuthorityManager");
+            localActor = localPlayer.transform.Find("Player").GetComponent<Actor>();
+        }
+        if ((localPlayer = GameObject.FindGameObjectWithTag("leap")) != null)
+        {
+            localActor = localPlayer.transform.Find("Player").GetComponent<Actor>();
+        }
+        if (localActor == null)
+        {
+            Debug.LogError("localActor is NULL in AuthorityMAnager");
         }
         if ((netID = GetComponent<NetworkIdentity>()) == null)
         {
