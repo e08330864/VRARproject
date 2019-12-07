@@ -11,6 +11,7 @@ public class ViveParamsAuthorityManager : NetworkBehaviour
     Vector3 position = new Vector3(0.0f, 0.0f, 0.0f);
     bool finishedUpdatingParams = false;
     bool updateParams = false;
+    bool authorithyRequested = false;
    
 
     // Use this for initialization
@@ -36,10 +37,11 @@ public class ViveParamsAuthorityManager : NetworkBehaviour
             return;
         }
         
-        if(updateParams && !netID.hasAuthority)
+        if(updateParams && !netID.hasAuthority && !authorithyRequested)
         {
             Debug.Log("ViveShared Params - REQUESTING AUTHORITY");
             localActor.RequestObjectAuthority(netID);
+            authorithyRequested = true;
             return;
         }
         
@@ -59,6 +61,7 @@ public class ViveParamsAuthorityManager : NetworkBehaviour
                 updateParams = false;
                 return;
             }
+            authorithyRequested = false;
         }
     }
 
