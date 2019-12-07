@@ -31,8 +31,8 @@ public class LeapGameSpaceExtension: MonoBehaviour
         //update center position of the leap player
         if(thisSharedPosition.HasValue && lastSharedPosition.HasValue && lastSharedPosition.Value != thisSharedPosition.Value)
         {
-            transform.position = new Vector3(thisSharedPosition.Value.x, transform.position.y, thisSharedPosition.Value.z);
+            transform.position = thisSharedPosition.Value;
         }
         lastSharedPosition = thisSharedPosition;
-    }
+    } 
 }

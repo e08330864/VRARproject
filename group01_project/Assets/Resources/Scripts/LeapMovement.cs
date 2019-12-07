@@ -100,18 +100,18 @@ public class LeapMovement : MonoBehaviour
             case 2: // forward movement
                 // limit to game space extension
                 Vector3 newPos = transform.position + transform.forward * movementDistancePerSecond * Time.deltaTime;
-                if (newPos.x < sharedParameters.GetNewPosition().x - sharedParameters.GetPlaySpaceMeasures().x ||
-                    newPos.x > sharedParameters.GetNewPosition().x + sharedParameters.GetPlaySpaceMeasures().x ||
-                    newPos.z < sharedParameters.GetNewPosition().z - sharedParameters.GetPlaySpaceMeasures().y ||
-                    newPos.z > sharedParameters.GetNewPosition().z + sharedParameters.GetPlaySpaceMeasures().y)
+                if (sharedParameters != null && sharedParameters.GetPlaySpaceMeasures() != Vector2.zero)
                 {
-                    break;
+                    if (newPos.x < sharedParameters.GetNewPosition().x - sharedParameters.GetPlaySpaceMeasures().x ||
+                        newPos.x > sharedParameters.GetNewPosition().x + sharedParameters.GetPlaySpaceMeasures().x ||
+                        newPos.z < sharedParameters.GetNewPosition().z - sharedParameters.GetPlaySpaceMeasures().y ||
+                        newPos.z > sharedParameters.GetNewPosition().z + sharedParameters.GetPlaySpaceMeasures().y)
+                    {
+                        break;
+                    }
                 }
-                else
-                {
-                    transform.position = newPos;
-                    break;
-                }
+                transform.position = newPos;
+                break;
             case 3: // turn left
                 transform.Rotate(Vector3.up * rotationAnglePerSecond * Time.deltaTime);
                 break;

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
+using System.Collections.Generic;
 
 // TODO: define the behaviour of a shared object when it is manipulated by a client
 
@@ -12,6 +13,7 @@ public class OnGrabbedBehaviour : MonoBehaviour
     private bool releasing;
     private Vector3 oldPos;
     private Vector3 newPos;
+    private List<Vector3> speedList = new List<Vector3>();
 
     private Rigidbody rigidbody = null;
     private NetworkIdentity netId = null;
@@ -33,27 +35,57 @@ public class OnGrabbedBehaviour : MonoBehaviour
         GetHands();
         if (isGrabbed && authorityManager.GetLeftGrabbed() && handLeft != null && netId.hasAuthority)
         {
+            // object is gabbed and moved by left hand
             oldPos = this.transform.position;
             this.transform.position = handLeft.transform.position;
             newPos = this.transform.position;
             Vector3 speed = (newPos - oldPos) / Time.deltaTime;
-            Debug.Log("speed=" + speed * throwingSpeedFactor * rigidbody.mass);
+            AddSpeedVector(speed);
+            //Debug.Log("speed=" + speed * throwingSpeedFactor * rigidbody.mass);
         }
         else if (isGrabbed && !authorityManager.GetLeftGrabbed() && handRight != null && netId.hasAuthority)
         {
+            // object is gabbed and moved by right hand
             oldPos = this.transform.position;
             this.transform.position = handRight.transform.position;
             newPos = this.transform.position;
             Vector3 speed = (newPos - oldPos) / Time.deltaTime;
-            Debug.Log("speed=" + speed * throwingSpeedFactor * rigidbody.mass);
+            AddSpeedVector(speed);
+            //Debug.Log("speed=" + speed * throwingSpeedFactor * rigidbody.mass);
         }
         else if (releasing)
         {
+            // object is released
             Vector3 speed = (newPos - oldPos) / Time.deltaTime;
+            AddSpeedVector(speed);
+            speed = GetSpeedAverage();
             Debug.Log("throwing speed=" + speed * throwingSpeedFactor * rigidbody.mass);
             rigidbody.AddForce(speed * throwingSpeedFactor * rigidbody.mass);
             releasing = false;
         }
+    }
+
+    private void AddSpeedVector(Vector3 speed)
+    {
+        if (speedList.Count >= 5)
+        {
+            speedList.RemoveAt(0);
+            speedList.Add(speed);
+        }
+    }
+
+    private Vector3 GetSpeedAverage()
+    {
+        Vector3 average = Vector3.zero;
+        foreach (Vector3 v in speedList)
+        {
+            average += v;
+        }
+        if (speedList.Count > 0)
+        {
+            average = average / speedList.Count;
+        }
+        return average;
     }
 
     // called first time when the GO gets grabbed by a player
