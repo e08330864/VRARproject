@@ -31,9 +31,6 @@ public class LeapGrab : MonoBehaviour
     
     private void Start()
     {
-        //if (GameObject.FindGameObjectWithTag("LeftHandInteraction") != null) {
-        //    pinchDetectorLeft = GameObject.FindGameObjectWithTag("LeftHandInteraction").GetComponent<PinchDetector>();
-        //}
     }
 
     // Update is called once per frame
@@ -44,19 +41,6 @@ public class LeapGrab : MonoBehaviour
             actor = playerTransform.GetComponent<Actor>();
             Debug.Log("LeapGrab: Actor Initialized");
         }
-        //if (leftTouch != null && leftTouch == rightTouch && rightPinch && leftPinch)
-        //{
-        //    if (colliderLeap == null)
-        //    {
-        //        colliderLeap = leftTouch;
-        //        leftTouch.gameObject.GetComponent<AuthorityManager>().grabbedByPlayer = true;
-        //    }
-        //}
-        //else if (colliderLeap != null && (!rightPinch || !leftPinch))
-        //{
-        //    colliderLeap.gameObject.GetComponent<AuthorityManager>().grabbedByPlayer = false;
-        //    colliderLeap = null;
-        //}
 
         if (pinchDetectorLeft == null)
         {
