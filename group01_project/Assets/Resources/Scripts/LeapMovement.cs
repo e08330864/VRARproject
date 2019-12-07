@@ -14,10 +14,14 @@ using Leap;
 /// </summary>
 public class LeapMovement : MonoBehaviour
 {
+    public SharedParameters viveSharedScript;
+
     public float movementDistancePerSecond = 2f;
     public float rotationAnglePerSecond = 30f;
     private CapsuleHand capsuleHandLeft = null;
     private CapsuleHand capsuleHandRight = null;
+    private GameObject leftHandModel = null;
+    private GameObject rightHandModel = null;
     private Hand handLeft = null;
     private Hand handRight = null;
 
@@ -37,28 +41,38 @@ public class LeapMovement : MonoBehaviour
     void Update()
     {
         // getting hand objects
-        if (handLeft == null)
-        {
-            GameObject go = GameObject.FindGameObjectWithTag("LeftHandInteraction");
-            if (go != null)
+        //if (handLeft == null)
+        //{
+            leftHandModel = GameObject.FindGameObjectWithTag("LeftHandInteraction");
+            if (leftHandModel != null)
             {
-                if ((capsuleHandLeft = go.GetComponent<CapsuleHand>()) != null)
+                if ((capsuleHandLeft = leftHandModel.GetComponent<CapsuleHand>()) != null)
                 {
                     handLeft = capsuleHandLeft.GetLeapHand();
+                    if (handLeft.IsRight)
+                    {
+                        handRight = handLeft;
+                        handLeft = null;
+                    }
                 }
             }
-        }
-        if (handRight == null)
-        {
-            GameObject go = GameObject.FindGameObjectWithTag("RightHandInteraction");
-            if (go != null)
+        //}
+        //if (handRight == null)
+        //{
+            rightHandModel = GameObject.FindGameObjectWithTag("RightHandInteraction");
+            if (rightHandModel != null)
             {
-                if ((capsuleHandRight = go.GetComponent<CapsuleHand>()) != null)
+                if ((capsuleHandRight = rightHandModel.GetComponent<CapsuleHand>()) != null)
                 {
                     handRight = capsuleHandRight.GetLeapHand();
+                    if (handRight.IsLeft)
+                    {
+                        handLeft = handRight;
+                        handRight = null;
+                    }
                 }
             }
-        }
+        //}
         
         if (handLeft != null && handRight != null) {
             
@@ -87,10 +101,10 @@ public class LeapMovement : MonoBehaviour
                 transform.position += transform.forward * movementDistancePerSecond * Time.deltaTime;
                 break;
             case 3: // turn left
-                transform.Rotate(-Vector3.up * rotationAnglePerSecond * Time.deltaTime);
+                transform.Rotate(Vector3.up * rotationAnglePerSecond * Time.deltaTime);
                 break;
             case 4: // turn right
-                transform.Rotate(Vector3.up * rotationAnglePerSecond * Time.deltaTime);
+                transform.Rotate(-Vector3.up * rotationAnglePerSecond * Time.deltaTime);
                 break;
             default:
                 break;
