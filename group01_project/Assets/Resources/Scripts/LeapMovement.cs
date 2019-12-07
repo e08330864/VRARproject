@@ -90,6 +90,7 @@ public class LeapMovement : MonoBehaviour
         if (gameSpaceExtension != null && handRight != null)
         {
             bool isFist = CheckFist(handRight);
+            Debug.Log("LeapMovement: isFist = " + isFist);
             if (isFist && !allowGameSpaceExtension)
             {
                 gameSpaceExtension.SetAllowGameSpaceExtension(true);
@@ -124,6 +125,7 @@ public class LeapMovement : MonoBehaviour
                 Vector3 newPos = transform.position + transform.forward * movementDistancePerSecond * Time.deltaTime;
                 if (sharedParameters != null && sharedParameters.GetPlaySpaceMeasures() != Vector2.zero)
                 {
+                    Debug.Log("space-dim=" + sharedParameters.GetPlaySpaceMeasures() + "  space-center=" + sharedParameters.GetNewPosition() + "  new-pos=" + newPos);
                     if (newPos.x < sharedParameters.GetNewPosition().x - sharedParameters.GetPlaySpaceMeasures().x ||
                         newPos.x > sharedParameters.GetNewPosition().x + sharedParameters.GetPlaySpaceMeasures().x ||
                         newPos.z < sharedParameters.GetNewPosition().z - sharedParameters.GetPlaySpaceMeasures().y ||
