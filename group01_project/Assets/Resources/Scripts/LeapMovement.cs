@@ -18,6 +18,8 @@ public class LeapMovement : MonoBehaviour
     public float rotationAnglePerSecond = 30f;
     private CapsuleHand capsuleHandLeft = null;
     private CapsuleHand capsuleHandRight = null;
+    private GameObject leftHandModel = null;
+    private GameObject rightHandModel = null;
     private Hand handLeft = null;
     private Hand handRight = null;
 
@@ -39,10 +41,10 @@ public class LeapMovement : MonoBehaviour
         // getting hand objects
         if (handLeft == null)
         {
-            GameObject go = GameObject.FindGameObjectWithTag("LeftHandInteraction");
-            if (go != null)
+            leftHandModel = GameObject.FindGameObjectWithTag("LeftHandInteraction");
+            if (leftHandModel != null)
             {
-                if ((capsuleHandLeft = go.GetComponent<CapsuleHand>()) != null)
+                if ((capsuleHandLeft = leftHandModel.GetComponent<CapsuleHand>()) != null)
                 {
                     handLeft = capsuleHandLeft.GetLeapHand();
                 }
@@ -50,10 +52,10 @@ public class LeapMovement : MonoBehaviour
         }
         if (handRight == null)
         {
-            GameObject go = GameObject.FindGameObjectWithTag("RightHandInteraction");
-            if (go != null)
+            rightHandModel = GameObject.FindGameObjectWithTag("RightHandInteraction");
+            if (rightHandModel != null)
             {
-                if ((capsuleHandRight = go.GetComponent<CapsuleHand>()) != null)
+                if ((capsuleHandRight = rightHandModel.GetComponent<CapsuleHand>()) != null)
                 {
                     handRight = capsuleHandRight.GetLeapHand();
                 }
@@ -87,10 +89,10 @@ public class LeapMovement : MonoBehaviour
                 transform.position += transform.forward * movementDistancePerSecond * Time.deltaTime;
                 break;
             case 3: // turn left
-                transform.Rotate(-Vector3.up * rotationAnglePerSecond * Time.deltaTime);
+                transform.Rotate(Vector3.up * rotationAnglePerSecond * Time.deltaTime);
                 break;
             case 4: // turn right
-                transform.Rotate(Vector3.up * rotationAnglePerSecond * Time.deltaTime);
+                transform.Rotate(-Vector3.up * rotationAnglePerSecond * Time.deltaTime);
                 break;
             default:
                 break;
