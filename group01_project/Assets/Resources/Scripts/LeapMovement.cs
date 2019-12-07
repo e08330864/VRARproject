@@ -78,6 +78,10 @@ public class LeapMovement : MonoBehaviour
                         handLeft = handRight;
                         handRight = null;
                     }
+                    if (handRight == handLeft)
+                    {
+                        handRight = null;
+                    }
                 }
             }
         }
