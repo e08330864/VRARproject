@@ -36,13 +36,25 @@ public class ViveGamespaceExtension : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*Vector3? gameSpaceMeasures = playArea.GetGameSpaceMeasures();
-        if (gameSpaceMeasures.HasValue && !GameSpaceMeasuresInitialized)
-        {
-            Debug.Log("INITIALIZE MEASURES: " + gameSpaceMeasures.Value.ToString());
-            viveParamsAuthorityManager.SetPlaySpaceMeasures(gameSpaceMeasures.Value);
+        var rect = new Valve.VR.HmdQuad_t();
+        bool success = OpenVR.Chaperone.GetPlayAreaRect(ref rect);
+
+        //initialize playspace measures and send them to leap
+        if (success && !GameSpaceMeasuresInitialized)
+        { 
+            float[] x_values = { rect.vCorners0.v0, rect.vCorners1.v0, rect.vCorners2.v0, rect.vCorners3.v0 };
+            float max_x = Mathf.Max(x_values);
+            float min_x = Mathf.Min(x_values);
+
+            float[] z_values = { rect.vCorners0.v2, rect.vCorners1.v2, rect.vCorners2.v2, rect.vCorners3.v2 };
+            float max_z = Mathf.Max(z_values);
+            float min_z = Mathf.Min(z_values);
+
+            Vector2 measures = new Vector2(max_x - min_x, max_z - min_z);
+
+            viveParamsAuthorityManager.SetPlaySpaceMeasures(measures);
             GameSpaceMeasuresInitialized = true;
-        }*/
+        }
 
         lastRightGrabPinch = rightGrabPinch;
         rightGrabPinch = SteamVR_Actions._default.GrabPinch.GetState(SteamVR_Input_Sources.RightHand);
