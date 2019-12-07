@@ -26,7 +26,7 @@ public class ViveParamsAuthorityManager : NetworkBehaviour
 
     private void Update()
     {
-        Debug.Log("Vive Params - hasAuthority: " + netID.hasAuthority);
+        //Debug.Log("Vive Params - hasAuthority: " + netID.hasAuthority);
         UpdateSharedParams();
     }
 
@@ -39,7 +39,7 @@ public class ViveParamsAuthorityManager : NetworkBehaviour
         
         if(updateParams && !netID.hasAuthority && !authorithyRequested)
         {
-            Debug.Log("ViveShared Params - REQUESTING AUTHORITY");
+            //Debug.Log("ViveShared Params - REQUESTING AUTHORITY");
             localActor.RequestObjectAuthority(netID);
             authorithyRequested = true;
             return;
@@ -55,7 +55,7 @@ public class ViveParamsAuthorityManager : NetworkBehaviour
             }
             if (finishedUpdatingParams)
             {
-                Debug.Log("ViveShared Params - REMOVING AUTHORITY");
+                //Debug.Log("ViveShared Params - REMOVING AUTHORITY");
                 localActor.ReturnObjectAuthority(netID);
                 finishedUpdatingParams = false;
                 updateParams = false;

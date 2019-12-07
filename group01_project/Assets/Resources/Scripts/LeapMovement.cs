@@ -6,11 +6,16 @@ using Leap;
 
 /// <summary>
 /// the movement of the leap player works like this:
-/// - for starting movement
+/// - for starting movement both hand must make pistol gesture
+/// - afterwards, at one and only one hand by triggering the thumb, the leap player is rotating: 
+///         right thumb triggered --> turn right
+///         left thumb triggered --> turn left
+/// - if both thumbs are triggered simultaniously, the leap player is moving in viewing direction
 /// </summary>
 public class LeapMovement : MonoBehaviour
 {
-    public float movmentStepDistance = 1f; 
+    public float movementDistancePerSecond = 2f;
+    public float rotationAnglePerSecond = 30f;
     private CapsuleHand capsuleHandLeft = null;
     private CapsuleHand capsuleHandRight = null;
     private Hand handLeft = null;
@@ -18,86 +23,80 @@ public class LeapMovement : MonoBehaviour
 
     private int gestureStatus = 0;      // 0...at least one hand with no pistol
                                         // 1...both hands pistol untriggered
-                                        // 2...both hands pistol triggered
-    private bool doMove = false;
+                                        // 2...both hands pistol triggered --> movement in viewing direction
+                                        // 3...left hand with pistol triggerd and right hand not triggered --> turn left
+                                        // 4...right hand with pistol triggerd and left hand not triggered --> turn right
 
 
     // Start is called before the first frame update
     void Start()
     {
-        if ((capsuleHandLeft = GameObject.FindGameObjectWithTag("LeftHandInteraction").GetComponent<CapsuleHand>()) == null)
-        {
-            Debug.LogError("capsuleHandLeft is NULL in LeapGesture");
-        }
-        if ((handLeft = capsuleHandLeft.GetLeapHand()) == null)
-        {
-            Debug.LogError("handLeft is NULL in LeapGesture");
-        }
-        if ((capsuleHandRight = GameObject.FindGameObjectWithTag("RightHandInteraction").GetComponent<CapsuleHand>()) == null)
-        {
-            Debug.LogError("capsuleHandRight is NULL in LeapGesture");
-        }
-        if ((handRight = capsuleHandRight.GetLeapHand()) == null)
-        {
-            Debug.LogError("handRight is NULL in LeapGesture");
-        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        CheckMovement();
-        if (doMove)
+        // getting hand objects
+        if (handLeft == null)
         {
-            DoMovement();
+            GameObject go = GameObject.FindGameObjectWithTag("LeftHandInteraction");
+            if (go != null)
+            {
+                //Debug.Log("Left hand go NOT NULL");
+                if ((capsuleHandLeft = go.GetComponent<CapsuleHand>()) != null)
+                {
+                    //Debug.Log("Left hand go NOT NULL");
+                    handLeft = capsuleHandLeft.GetLeapHand();
+                }
+            }
+        }
+        if (handRight == null)
+        {
+            GameObject go = GameObject.FindGameObjectWithTag("RightHandInteraction");
+            if (go != null)
+            {
+                if ((capsuleHandRight = go.GetComponent<CapsuleHand>()) != null)
+                {
+                    handRight = capsuleHandRight.GetLeapHand();
+                }
+            }
+        }
+        
+        if (handLeft != null && handRight != null) {
+            
+            CheckMovementRotation();
+            DoMovementRotation();
         }
     }
 
-    private void DoMovement()
+    private void DoMovementRotation()
     {
-        Vector3 direction = UnityVectorExtension.ToVector3(handLeft.Fingers[1].Direction + handRight.Fingers[1].Direction).normalized;
-
+        Debug.Log("LeapMovement: gestureStatus=" + gestureStatus);
+        switch (gestureStatus)
+        {
+            case 2: // forward movement
+                transform.position += transform.forward * movementDistancePerSecond * Time.deltaTime;
+                break;
+            case 3: // turn left
+                transform.Rotate(-Vector3.up * rotationAnglePerSecond * Time.deltaTime);
+                break;
+            case 4: // turn right
+                transform.Rotate(Vector3.up * rotationAnglePerSecond * Time.deltaTime);
+                break;
+            default:
+                break;
+        }
     }
 
-    private void CheckMovement()
+    private void CheckMovementRotation()
     {
         int leftPG = CheckPistol(handLeft);
         int rightPG = CheckPistol(handRight);
-        switch (gestureStatus)
-        {
-            case 0: // at least one hand with no pistol
-                if (leftPG == 1 && rightPG == 1)
-                {
-                    gestureStatus = 1;
-                }
-                if (leftPG == 2 && rightPG == 2)
-                {
-                    gestureStatus = 2;
-                }
-                break;
-            case 1: // both hands pistol untriggered
-                if (leftPG == 0 || rightPG == 0)
-                {
-                    gestureStatus = 0;
-                }
-                if (leftPG == 2 && rightPG == 2)
-                {
-                    gestureStatus = 2;
-                    doMove = true;
-                }
-                break;
-            case 2: // 2...both hands pistol triggered
-                if (leftPG == 0 || rightPG == 0)
-                {
-                    gestureStatus = 0;
-                }
-                if (leftPG == 1 && rightPG == 1)
-                {
-                    gestureStatus = 1;
-                    doMove = true;
-                }
-                break;
-        }
+        Debug.Log("LeapMovement: leftPG=" + leftPG + "  , rightPG=" + rightPG);
+        if (leftPG == 2 && rightPG == 2) { gestureStatus = 2; return; }
+        if (leftPG == 2 && rightPG == 1) { gestureStatus = 3; return; }
+        if (leftPG == 1 && rightPG == 2) { gestureStatus = 4; return; }
+        gestureStatus = 0;
     }
 
     // returns  0 = no pistol
