@@ -27,6 +27,8 @@ public class LeapMovement : MonoBehaviour
     private Hand handLeft = null;
     private Hand handRight = null;
 
+    private bool allowGameSpaceExtension = false;
+
     private int gestureStatus = 0;      // 0...at least one hand with no pistol
                                         // 1...both hands pistol untriggered
                                         // 2...both hands pistol triggered --> movement in viewing direction
@@ -88,9 +90,15 @@ public class LeapMovement : MonoBehaviour
         if (gameSpaceExtension != null && handRight != null)
         {
             bool isFist = CheckFist(handRight);
-            if (isFist)
+            if (isFist && !allowGameSpaceExtension)
             {
                 gameSpaceExtension.SetAllowGameSpaceExtension(true);
+                allowGameSpaceExtension = true;
+            }
+            if (!isFist && allowGameSpaceExtension)
+            {
+                gameSpaceExtension.SetAllowGameSpaceExtension(false);
+                allowGameSpaceExtension = false;
             }
         }
     }
