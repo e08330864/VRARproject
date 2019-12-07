@@ -22,7 +22,7 @@ public class LeapGrab : MonoBehaviour
     [SerializeField]
     private List<GameObject> objectPrefab = null;
     [SerializeField]
-    private float objectScale = 0.2f;
+    private float objectScale = 1.0f;
 
     private Collider holdingObjectCollider = null;
     private bool isInCreation = false;

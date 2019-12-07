@@ -90,7 +90,7 @@ public class LeapMovement : MonoBehaviour
         // allow game space extension by right hand fist gesture
         if (gameSpaceExtension != null && handRight != null)
         {
-            bool isFist = CheckFist(handRight);
+            isFist = CheckFist(handRight);
         }
         if (gameSpaceExtension != null)
         { 
@@ -130,10 +130,10 @@ public class LeapMovement : MonoBehaviour
                 if (sharedParameters != null && sharedParameters.GetPlaySpaceMeasures() != Vector2.zero)
                 {
                     Debug.Log("space-dim=" + sharedParameters.GetPlaySpaceMeasures() + "  space-center=" + sharedParameters.GetNewPosition() + "  new-pos=" + newPos);
-                    if (newPos.x < sharedParameters.GetNewPosition().x - sharedParameters.GetPlaySpaceMeasures().x / 2f ||
-                        newPos.x > sharedParameters.GetNewPosition().x + sharedParameters.GetPlaySpaceMeasures().x / 2f ||
-                        newPos.z < sharedParameters.GetNewPosition().z - sharedParameters.GetPlaySpaceMeasures().y / 2f ||
-                        newPos.z > sharedParameters.GetNewPosition().z + sharedParameters.GetPlaySpaceMeasures().y / 2f)
+                    if (newPos.x < sharedParameters.GetNewPosition().x - sharedParameters.GetPlaySpaceMeasures().x / 2.0f ||
+                        newPos.x > sharedParameters.GetNewPosition().x + sharedParameters.GetPlaySpaceMeasures().x / 2.0f ||
+                        newPos.z < sharedParameters.GetNewPosition().z - sharedParameters.GetPlaySpaceMeasures().y / 2.0f ||
+                        newPos.z > sharedParameters.GetNewPosition().z + sharedParameters.GetPlaySpaceMeasures().y / 2.0f)
                     {
                         break;
                     }
