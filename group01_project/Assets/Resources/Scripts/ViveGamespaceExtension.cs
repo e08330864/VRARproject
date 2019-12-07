@@ -36,13 +36,13 @@ public class ViveGamespaceExtension : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3? gameSpaceMeasures = playArea.GetGameSpaceMeasures();
+        /*Vector3? gameSpaceMeasures = playArea.GetGameSpaceMeasures();
         if (gameSpaceMeasures.HasValue && !GameSpaceMeasuresInitialized)
         {
             Debug.Log("INITIALIZE MEASURES: " + gameSpaceMeasures.Value.ToString());
             viveParamsAuthorityManager.SetPlaySpaceMeasures(gameSpaceMeasures.Value);
             GameSpaceMeasuresInitialized = true;
-        }
+        }*/
 
         lastRightGrabPinch = rightGrabPinch;
         rightGrabPinch = SteamVR_Actions._default.GrabPinch.GetState(SteamVR_Input_Sources.RightHand);
