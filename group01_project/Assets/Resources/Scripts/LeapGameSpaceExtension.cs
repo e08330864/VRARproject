@@ -9,7 +9,7 @@ public class LeapGameSpaceExtension: MonoBehaviour
     public ParametersAuthorityManager parametersAuthorityManager;
     public SharedParameters viveSharedScript;
 
-    private bool allowGameSpaceExtension = false;
+    //private bool allowGameSpaceExtension = false;
 
     private Vector3? thisSharedPosition = null;
     private Vector3? lastSharedPosition = null;
@@ -20,11 +20,11 @@ public class LeapGameSpaceExtension: MonoBehaviour
         //Debug.Log("GameSpaceMeasures: " + viveSharedScript.GetPlaySpaceMeasures().ToString());
         //Debug.Log("GameSpacePosition: " + viveSharedScript.GetNewPosition().ToString());
 
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            allowGameSpaceExtension = !allowGameSpaceExtension;
-            parametersAuthorityManager.SetGameSpaceExtensionPossible(allowGameSpaceExtension);
-        }
+        //if (Input.GetKeyDown(KeyCode.RightArrow))
+        //{
+        //    allowGameSpaceExtension = !allowGameSpaceExtension;
+        //    parametersAuthorityManager.SetGameSpaceExtensionPossible(allowGameSpaceExtension);
+        //}
 
         thisSharedPosition = viveSharedScript.GetNewPosition();
 
@@ -34,5 +34,10 @@ public class LeapGameSpaceExtension: MonoBehaviour
             transform.position = thisSharedPosition.Value;
         }
         lastSharedPosition = thisSharedPosition;
-    } 
+    }
+
+    public void SetAllowGameSpaceExtension(bool value)
+    {
+        parametersAuthorityManager.SetGameSpaceExtensionPossible(value);
+    }
 }
