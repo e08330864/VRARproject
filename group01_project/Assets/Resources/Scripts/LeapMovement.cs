@@ -16,6 +16,7 @@ public class LeapMovement : MonoBehaviour
 {
     [SerializeField]
     private SharedParameters sharedParameters = null;
+    private LeapGameSpaceExtension gameSpaceExtension = null;
 
     public float movementDistancePerSecond = 2f;
     public float rotationAnglePerSecond = 30f;
@@ -36,6 +37,10 @@ public class LeapMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if ((gameSpaceExtension = GetComponent<LeapGameSpaceExtension>()) == null)
+        {
+            Debug.LogError("gameSpaceExtension is NULL in LeapMovement");
+        }
     }
 
     // Update is called once per frame
@@ -73,11 +78,20 @@ public class LeapMovement : MonoBehaviour
                 }
             }
         }
-        
-        if (handLeft != null && handRight != null) {
-            
+        // movement and rotation
+        if (handLeft != null && handRight != null)
+        {    
             CheckMovementRotation();
             DoMovementRotation();
+        }
+        // allow game space extension by right hand fist gesture
+        if (gameSpaceExtension != null && handRight != null)
+        {
+            bool isFist = CheckFist(handRight);
+            if (isFist)
+            {
+                gameSpaceExtension.SetAllowGameSpaceExtension(true);
+            }
         }
     }
 
@@ -151,5 +165,28 @@ public class LeapMovement : MonoBehaviour
             }
         }
         return isPistol;
+    }
+
+    // returns  true = fist
+    //          false = no fist
+    private bool CheckFist(Hand hand)
+    {
+        bool isFist = true;
+        for (int f = 0; f < hand.Fingers.Count; f++)
+        {
+            Finger finger = hand.Fingers[f];
+            switch (f)
+            {
+                case 0: // thump
+                case 1: // index
+                case 2: // middle
+                case 3: // ring
+                case 4: // small
+                    if (finger.IsExtended)
+                        isFist = false;
+                    break;
+            }
+        }
+        return isFist;
     }
 }
