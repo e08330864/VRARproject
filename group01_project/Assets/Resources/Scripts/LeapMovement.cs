@@ -4,8 +4,13 @@ using UnityEngine;
 using Leap.Unity;
 using Leap;
 
-public class LeapGestures : MonoBehaviour
+/// <summary>
+/// the movement of the leap player works like this:
+/// - for starting movement
+/// </summary>
+public class LeapMovement : MonoBehaviour
 {
+    public float movmentStepDistance = 1f; 
     private CapsuleHand capsuleHandLeft = null;
     private CapsuleHand capsuleHandRight = null;
     private Hand handLeft = null;
@@ -51,6 +56,7 @@ public class LeapGestures : MonoBehaviour
     private void DoMovement()
     {
         Vector3 direction = UnityVectorExtension.ToVector3(handLeft.Fingers[1].Direction + handRight.Fingers[1].Direction).normalized;
+
     }
 
     private void CheckMovement()
