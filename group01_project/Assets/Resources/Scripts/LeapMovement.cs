@@ -47,6 +47,11 @@ public class LeapMovement : MonoBehaviour
                 if ((capsuleHandLeft = leftHandModel.GetComponent<CapsuleHand>()) != null)
                 {
                     handLeft = capsuleHandLeft.GetLeapHand();
+                    if (handLeft.IsRight)
+                    {
+                        handRight = handLeft;
+                        handLeft = null;
+                    }
                 }
             }
         }
@@ -58,6 +63,11 @@ public class LeapMovement : MonoBehaviour
                 if ((capsuleHandRight = rightHandModel.GetComponent<CapsuleHand>()) != null)
                 {
                     handRight = capsuleHandRight.GetLeapHand();
+                    if (handLeft.IsLeft)
+                    {
+                        handLeft = handRight;
+                        handRight = null;
+                    }
                 }
             }
         }
