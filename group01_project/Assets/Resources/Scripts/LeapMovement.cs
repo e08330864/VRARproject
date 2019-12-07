@@ -28,7 +28,7 @@ public class LeapMovement : MonoBehaviour
     private Hand handRight = null;
 
     private bool allowGameSpaceExtension = false;
-    private bool isFist = false;
+    private bool isFistThumbUp = false;
 
     private int gestureStatus = 0;      // 0...at least one hand with no pistol
                                         // 1...both hands pistol untriggered
@@ -90,17 +90,17 @@ public class LeapMovement : MonoBehaviour
         // allow game space extension by right hand fist gesture
         if (gameSpaceExtension != null && handRight != null)
         {
-            isFist = CheckFist(handRight);
+            isFistThumbUp = CheckFistThumbUp(handRight);
         }
         if (gameSpaceExtension != null)
         { 
-            Debug.Log("LeapMovement: isFist = " + isFist);
-            if (isFist && !allowGameSpaceExtension)
+            Debug.Log("LeapMovement: isFist = " + isFistThumbUp);
+            if (isFistThumbUp && !allowGameSpaceExtension)
             {
                 gameSpaceExtension.SetAllowGameSpaceExtension(true);
                 allowGameSpaceExtension = true;
             }
-            if (!isFist && allowGameSpaceExtension)
+            if (!isFistThumbUp && allowGameSpaceExtension)
             {
                 gameSpaceExtension.SetAllowGameSpaceExtension(false);
                 allowGameSpaceExtension = false;
@@ -181,9 +181,9 @@ public class LeapMovement : MonoBehaviour
         return isPistol;
     }
 
-    // returns  true = fist
-    //          false = no fist
-    private bool CheckFist(Hand hand)
+    // returns  true = fist with thumb up
+    //          false = no fist with thumb up
+    private bool CheckFistThumbUp(Hand hand)
     {
         bool isFist = true;
         for (int f = 0; f < hand.Fingers.Count; f++)
@@ -192,6 +192,9 @@ public class LeapMovement : MonoBehaviour
             switch (f)
             {
                 case 0: // thump
+                    if (!finger.IsExtended)
+                        isFist = false;
+                    break;
                 case 1: // index
                 case 2: // middle
                 case 3: // ring
