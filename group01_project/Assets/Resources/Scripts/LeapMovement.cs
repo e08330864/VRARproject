@@ -42,10 +42,8 @@ public class LeapMovement : MonoBehaviour
             GameObject go = GameObject.FindGameObjectWithTag("LeftHandInteraction");
             if (go != null)
             {
-                //Debug.Log("Left hand go NOT NULL");
                 if ((capsuleHandLeft = go.GetComponent<CapsuleHand>()) != null)
                 {
-                    //Debug.Log("Left hand go NOT NULL");
                     handLeft = capsuleHandLeft.GetLeapHand();
                 }
             }
@@ -69,6 +67,17 @@ public class LeapMovement : MonoBehaviour
         }
     }
 
+    private void CheckMovementRotation()
+    {
+        int leftPG = CheckPistol(handLeft);
+        int rightPG = CheckPistol(handRight);
+        Debug.Log("LeapMovement: leftPG=" + leftPG + "  , rightPG=" + rightPG);
+        if (leftPG == 2 && rightPG == 2) { gestureStatus = 2; return; }
+        if (leftPG == 2 && rightPG == 1) { gestureStatus = 3; return; }
+        if (leftPG == 1 && rightPG == 2) { gestureStatus = 4; return; }
+        gestureStatus = 0;
+    }
+
     private void DoMovementRotation()
     {
         Debug.Log("LeapMovement: gestureStatus=" + gestureStatus);
@@ -86,17 +95,6 @@ public class LeapMovement : MonoBehaviour
             default:
                 break;
         }
-    }
-
-    private void CheckMovementRotation()
-    {
-        int leftPG = CheckPistol(handLeft);
-        int rightPG = CheckPistol(handRight);
-        Debug.Log("LeapMovement: leftPG=" + leftPG + "  , rightPG=" + rightPG);
-        if (leftPG == 2 && rightPG == 2) { gestureStatus = 2; return; }
-        if (leftPG == 2 && rightPG == 1) { gestureStatus = 3; return; }
-        if (leftPG == 1 && rightPG == 2) { gestureStatus = 4; return; }
-        gestureStatus = 0;
     }
 
     // returns  0 = no pistol
