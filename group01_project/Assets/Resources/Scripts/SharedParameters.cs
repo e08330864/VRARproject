@@ -13,6 +13,9 @@ public class SharedParameters : NetworkBehaviour
     [SyncVar] 
     Vector3 updatedLeapPosition = new Vector3(0.0f, 0.0f, 0.0f);
 
+    [SyncVar]
+    Vector2 playSpaceMeasures = new Vector2(0.0f, 0.0f);
+
     [Command]
     public void CmdSetGameSpaceExtension(bool extensionAllowed)
     {
@@ -30,11 +33,24 @@ public class SharedParameters : NetworkBehaviour
     {
         if (!isServer)
         {
-            Debug.Log("ERROR: Allow Gamespace called on client");
+            Debug.Log("ERROR: SetPosition called on client");
             return;
         }
         Debug.Log("Shared Parameter on Server - new shift");
         updatedLeapPosition = position;
+    }
+
+
+    [Command]
+    public void CmdSetPlaySpaceMeasures(Vector2 measures)
+    {
+        if (!isServer)
+        {
+            Debug.Log("ERROR: SetPlaySpaceMeasures called on client");
+            return;
+        }
+        Debug.Log("Shared Parameter on Server - new playSpaceMeasure");
+        playSpaceMeasures = measures;
     }
 
     public bool GameSpaceExtensionPossible()
@@ -47,8 +63,8 @@ public class SharedParameters : NetworkBehaviour
         return updatedLeapPosition;
     }
 
-    private void Update()
+    public Vector2 GetPlaySpaceMeasures()
     {
-        //Debug.Log("GameSpaceExtensionPossible: " + allowGameSpaceExtension);
+        return playSpaceMeasures;
     }
 }

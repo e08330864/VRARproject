@@ -8,7 +8,8 @@ public class ViveParamsAuthorityManager : NetworkBehaviour
     NetworkIdentity netID; // NetworkIdentity component attached to this game object
     Actor localActor;
     SharedParameters sharedParameters;
-    Vector3 position = new Vector3(0.0f, 0.0f, 0.0f);
+    Vector3? position = null;
+    Vector2? playSpaceMeasures = null;
     bool finishedUpdatingParams = false;
     bool updateParams = false;
     bool authorithyRequested = false;
@@ -49,7 +50,15 @@ public class ViveParamsAuthorityManager : NetworkBehaviour
         {
             if (updateParams && !finishedUpdatingParams)
             {
-                sharedParameters.CmdSetNewPosition(position);
+                if (position.HasValue)
+                {
+                    sharedParameters.CmdSetNewPosition(position.Value);
+                }
+                if (playSpaceMeasures.HasValue)
+                {
+                    sharedParameters.CmdSetPlaySpaceMeasures(playSpaceMeasures.Value);
+                }
+
                 finishedUpdatingParams = true;
                 return;
             }
@@ -68,6 +77,12 @@ public class ViveParamsAuthorityManager : NetworkBehaviour
     public void SetPosition(Vector3 my_position)
     {
         position = my_position;
+        updateParams = true;
+    }
+
+    public void SetPlaySpaceMeasures(Vector2 measures)
+    {
+        playSpaceMeasures = measures;
         updateParams = true;
     }
 
