@@ -41,11 +41,14 @@ public class StationController : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("StationController: in collieder");
         if (other.gameObject.tag == "TowerElement")
         {
-            if(!other.gameObject.GetComponent<NetworkIdentity>().hasAuthority)
+            Debug.Log("StationController: is TowerElement");
+            if (!other.gameObject.GetComponent<NetworkIdentity>().hasAuthority)
             {
-                ShowLightning();
+                Debug.Log("StationController: no Authority");
+                StartCoroutine(ShowLightning());
             }
         }
     }
@@ -53,7 +56,7 @@ public class StationController : NetworkBehaviour
     IEnumerator ShowLightning()
     {
         lightning.SetActive(true);
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(20);
         lightning.SetActive(false);
     }
 }
