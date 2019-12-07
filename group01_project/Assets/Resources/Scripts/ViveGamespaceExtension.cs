@@ -52,6 +52,7 @@ public class ViveGamespaceExtension : MonoBehaviour
 
             Vector2 measures = new Vector2(max_x - min_x, max_z - min_z);
 
+            //initialize playspace measures
             viveParamsAuthorityManager.SetPlaySpaceMeasures(measures);
             GameSpaceMeasuresInitialized = true;
         }
