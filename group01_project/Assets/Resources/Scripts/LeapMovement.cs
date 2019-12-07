@@ -126,10 +126,10 @@ public class LeapMovement : MonoBehaviour
                 if (sharedParameters != null && sharedParameters.GetPlaySpaceMeasures() != Vector2.zero)
                 {
                     Debug.Log("space-dim=" + sharedParameters.GetPlaySpaceMeasures() + "  space-center=" + sharedParameters.GetNewPosition() + "  new-pos=" + newPos);
-                    if (newPos.x < sharedParameters.GetNewPosition().x - sharedParameters.GetPlaySpaceMeasures().x ||
-                        newPos.x > sharedParameters.GetNewPosition().x + sharedParameters.GetPlaySpaceMeasures().x ||
-                        newPos.z < sharedParameters.GetNewPosition().z - sharedParameters.GetPlaySpaceMeasures().y ||
-                        newPos.z > sharedParameters.GetNewPosition().z + sharedParameters.GetPlaySpaceMeasures().y)
+                    if (newPos.x < sharedParameters.GetNewPosition().x - sharedParameters.GetPlaySpaceMeasures().x / 2f ||
+                        newPos.x > sharedParameters.GetNewPosition().x + sharedParameters.GetPlaySpaceMeasures().x / 2f ||
+                        newPos.z < sharedParameters.GetNewPosition().z - sharedParameters.GetPlaySpaceMeasures().y / 2f ||
+                        newPos.z > sharedParameters.GetNewPosition().z + sharedParameters.GetPlaySpaceMeasures().y / 2f)
                     {
                         break;
                     }
