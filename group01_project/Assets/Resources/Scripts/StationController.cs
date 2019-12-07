@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class StationController : NetworkBehaviour
+public class StationController : MonoBehaviour
 {
     Transform station_head = null;
 
