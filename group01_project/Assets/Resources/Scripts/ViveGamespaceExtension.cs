@@ -46,6 +46,22 @@ public class ViveGamespaceExtension : MonoBehaviour
             float max_x = Mathf.Max(x_values);
             float min_x = Mathf.Min(x_values);
 
+            /*GameObject sphere1 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            sphere1.transform.parent = transform;
+            sphere1.transform.localPosition = new Vector3(rect.vCorners0.v0, rect.vCorners0.v1, rect.vCorners0.v2);
+
+            GameObject sphere2 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            sphere2.transform.parent = transform;
+            sphere2.transform.localPosition = new Vector3(rect.vCorners1.v0, rect.vCorners1.v1, rect.vCorners1.v2);
+
+            GameObject sphere3 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            sphere3.transform.parent = transform;
+            sphere3.transform.localPosition = new Vector3(rect.vCorners2.v0, rect.vCorners2.v1, rect.vCorners2.v2);
+
+            GameObject sphere4 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            sphere4.transform.parent = transform;
+            sphere4.transform.localPosition = new Vector3(rect.vCorners3.v0, rect.vCorners3.v1, rect.vCorners3.v2);*/
+
             float[] z_values = { rect.vCorners0.v2, rect.vCorners1.v2, rect.vCorners2.v2, rect.vCorners3.v2 };
             float max_z = Mathf.Max(z_values);
             float min_z = Mathf.Min(z_values);
