@@ -18,6 +18,7 @@ public class LeapGameSpaceExtension: MonoBehaviour
     void Update()
     {
         //Debug.Log("GameSpaceMeasures: " + viveSharedScript.GetPlaySpaceMeasures().ToString());
+        //Debug.Log("GameSpacePosition: " + viveSharedScript.GetNewPosition().ToString());
 
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {

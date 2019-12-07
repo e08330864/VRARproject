@@ -14,6 +14,8 @@ using Leap;
 /// </summary>
 public class LeapMovement : MonoBehaviour
 {
+    public SharedParameters viveSharedScript;
+
     public float movementDistancePerSecond = 2f;
     public float rotationAnglePerSecond = 30f;
     private CapsuleHand capsuleHandLeft = null;
@@ -39,8 +41,8 @@ public class LeapMovement : MonoBehaviour
     void Update()
     {
         // getting hand objects
-        if (handLeft == null)
-        {
+        //if (handLeft == null)
+        //{
             leftHandModel = GameObject.FindGameObjectWithTag("LeftHandInteraction");
             if (leftHandModel != null)
             {
@@ -54,23 +56,23 @@ public class LeapMovement : MonoBehaviour
                     }
                 }
             }
-        }
-        if (handRight == null)
-        {
+        //}
+        //if (handRight == null)
+        //{
             rightHandModel = GameObject.FindGameObjectWithTag("RightHandInteraction");
             if (rightHandModel != null)
             {
                 if ((capsuleHandRight = rightHandModel.GetComponent<CapsuleHand>()) != null)
                 {
                     handRight = capsuleHandRight.GetLeapHand();
-                    if (handLeft.IsLeft)
+                    if (handRight.IsLeft)
                     {
                         handLeft = handRight;
                         handRight = null;
                     }
                 }
             }
-        }
+        //}
         
         if (handLeft != null && handRight != null) {
             
