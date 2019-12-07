@@ -14,7 +14,8 @@ using Leap;
 /// </summary>
 public class LeapMovement : MonoBehaviour
 {
-    public SharedParameters viveSharedScript;
+    [SerializeField]
+    private SharedParameters sharedParameters = null;
 
     public float movementDistancePerSecond = 2f;
     public float rotationAnglePerSecond = 30f;
@@ -40,9 +41,8 @@ public class LeapMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // getting hand objects
-        //if (handLeft == null)
-        //{
+        if (handLeft == null)
+        {
             leftHandModel = GameObject.FindGameObjectWithTag("LeftHandInteraction");
             if (leftHandModel != null)
             {
@@ -56,9 +56,9 @@ public class LeapMovement : MonoBehaviour
                     }
                 }
             }
-        //}
-        //if (handRight == null)
-        //{
+        }
+        if (handRight == null)
+        {
             rightHandModel = GameObject.FindGameObjectWithTag("RightHandInteraction");
             if (rightHandModel != null)
             {
@@ -72,7 +72,7 @@ public class LeapMovement : MonoBehaviour
                     }
                 }
             }
-        //}
+        }
         
         if (handLeft != null && handRight != null) {
             
@@ -98,8 +98,20 @@ public class LeapMovement : MonoBehaviour
         switch (gestureStatus)
         {
             case 2: // forward movement
-                transform.position += transform.forward * movementDistancePerSecond * Time.deltaTime;
-                break;
+                // limit to game space extension
+                Vector3 newPos = transform.position + transform.forward * movementDistancePerSecond * Time.deltaTime;
+                if (newPos.x < sharedParameters.GetNewPosition().x - sharedParameters.GetPlaySpaceMeasures().x ||
+                    newPos.x > sharedParameters.GetNewPosition().x + sharedParameters.GetPlaySpaceMeasures().x ||
+                    newPos.z < sharedParameters.GetNewPosition().z - sharedParameters.GetPlaySpaceMeasures().y ||
+                    newPos.z > sharedParameters.GetNewPosition().z + sharedParameters.GetPlaySpaceMeasures().y)
+                {
+                    break;
+                }
+                else
+                {
+                    transform.position = newPos;
+                    break;
+                }
             case 3: // turn left
                 transform.Rotate(Vector3.up * rotationAnglePerSecond * Time.deltaTime);
                 break;
