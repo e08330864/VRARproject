@@ -18,17 +18,32 @@ public class ViveGamespaceExtension : MonoBehaviour
 
     public SharedParameters sharedParameters;
     public ViveParamsAuthorityManager viveParamsAuthorityManager;
+    private SteamVR_PlayArea playArea;
+    bool GameSpaceMeasuresInitialized = false;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        playArea = GetComponent<SteamVR_PlayArea>();
+
         rightViveController = GameObject.Find("Controller (right)").transform;
+
+        //set Leap Player to center of PlaySpace
+        viveParamsAuthorityManager.SetPosition(transform.position);
     }
 
     // Update is called once per frame
     void Update()
-    { 
+    {
+        Vector3? gameSpaceMeasures = playArea.GetGameSpaceMeasures();
+        if (gameSpaceMeasures.HasValue && !GameSpaceMeasuresInitialized)
+        {
+            Debug.Log("INITIALIZE MEASURES: " + gameSpaceMeasures.Value.ToString());
+            viveParamsAuthorityManager.SetPlaySpaceMeasures(gameSpaceMeasures.Value);
+            GameSpaceMeasuresInitialized = true;
+        }
+
         lastRightGrabPinch = rightGrabPinch;
         rightGrabPinch = SteamVR_Actions._default.GrabPinch.GetState(SteamVR_Input_Sources.RightHand);
 

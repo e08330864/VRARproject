@@ -17,6 +17,8 @@ public class LeapGameSpaceExtension: MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log("GameSpaceMeasures: " + viveSharedScript.GetPlaySpaceMeasures().ToString());
+
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             allowGameSpaceExtension = !allowGameSpaceExtension;
