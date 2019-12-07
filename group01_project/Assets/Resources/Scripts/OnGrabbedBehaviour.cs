@@ -39,8 +39,8 @@ public class OnGrabbedBehaviour : MonoBehaviour
             oldPos = this.transform.position;
             this.transform.position = handLeft.transform.position;
             newPos = this.transform.position;
-            Vector3 speed = (newPos - oldPos) / Time.deltaTime;
-            AddSpeedVector(speed);
+            //Vector3 speed = (newPos - oldPos) / Time.deltaTime;
+            //AddSpeedVector(speed);
             //Debug.Log("speed=" + speed * throwingSpeedFactor * rigidbody.mass);
         }
         else if (isGrabbed && !authorityManager.GetLeftGrabbed() && handRight != null && netId.hasAuthority)
@@ -49,16 +49,16 @@ public class OnGrabbedBehaviour : MonoBehaviour
             oldPos = this.transform.position;
             this.transform.position = handRight.transform.position;
             newPos = this.transform.position;
-            Vector3 speed = (newPos - oldPos) / Time.deltaTime;
-            AddSpeedVector(speed);
+            //Vector3 speed = (newPos - oldPos) / Time.deltaTime;
+            //AddSpeedVector(speed);
             //Debug.Log("speed=" + speed * throwingSpeedFactor * rigidbody.mass);
         }
         else if (releasing)
         {
             // object is released
             Vector3 speed = (newPos - oldPos) / Time.deltaTime;
-            AddSpeedVector(speed);
-            speed = GetSpeedAverage();
+            //AddSpeedVector(speed);
+            //speed = GetSpeedAverage();
             Debug.Log("throwing speed=" + speed * throwingSpeedFactor * rigidbody.mass);
             rigidbody.AddForce(speed * throwingSpeedFactor * rigidbody.mass);
             releasing = false;
