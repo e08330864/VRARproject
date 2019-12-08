@@ -37,10 +37,10 @@ public class ParametersAuthorityManager : NetworkBehaviour
             return;
         }
 
-        if(updateParams && !netID.hasAuthority && !authorithyRequested)
+        if(updateParams && !netID.hasAuthority /*&& !authorithyRequested*/)
         {
             localActor.RequestObjectAuthority(netID);
-            authorithyRequested = true;
+            //authorithyRequested = true;
             return;
         }
 
@@ -60,7 +60,7 @@ public class ParametersAuthorityManager : NetworkBehaviour
                 updateParams = false;
                 return;
             }
-            authorithyRequested = false;
+            //authorithyRequested = false;
         }
     }
 
