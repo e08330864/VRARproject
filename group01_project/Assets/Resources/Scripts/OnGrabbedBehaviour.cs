@@ -10,7 +10,7 @@ public class OnGrabbedBehaviour : MonoBehaviour
     private float throwingSpeedFactor = 300f;
 
     private bool isGrabbed;
-    //private bool releasing;
+    private bool releasing;
     private Vector3 oldPos;
     private Vector3 newPos;
     private List<Vector3> speedList = new List<Vector3>();
@@ -53,27 +53,27 @@ public class OnGrabbedBehaviour : MonoBehaviour
             //AddSpeedVector(speed);
             //Debug.Log("speed=" + speed * throwingSpeedFactor * rigidbody.mass);
         }
-        //else if (releasing)
-        //{
-        //    // object is released
-        //    Vector3 speed = (newPos - oldPos) / Time.deltaTime;
-        //    //AddSpeedVector(speed);
-        //    //speed = GetSpeedAverage();
-        //    Debug.Log("throwing speed=" + speed * throwingSpeedFactor * rigidbody.mass);
-        //    //if (netId.isServer)
-        //    //{
-        //    //    Debug.Log("is server");
-        //    //    RpcAddClientForce(speed, throwingSpeedFactor);
-        //    //}
-        //    //else if (netId.isClient)
-        //    //{
-        //    //    Debug.Log("is client");
-        //    //    CmdAddForce(speed, throwingSpeedFactor);
-        //    //}
-        //    authorityManager.CmdAddForce(speed, throwingSpeedFactor, netId.netId);
-        //    //rigidbody.AddForce(speed * throwingSpeedFactor * rigidbody.mass);
-        //    releasing = false;
-        //}
+        else if (releasing)
+        {
+            // object is released
+            Vector3 speed = (newPos - oldPos) / Time.deltaTime;
+            //AddSpeedVector(speed);
+            //speed = GetSpeedAverage();
+            Debug.Log("throwing speed=" + speed * throwingSpeedFactor * rigidbody.mass);
+            //if (netId.isServer)
+            //{
+            //    Debug.Log("is server");
+            //    RpcAddClientForce(speed, throwingSpeedFactor);
+            //}
+            //else if (netId.isClient)
+            //{
+            //    Debug.Log("is client");
+            //    CmdAddForce(speed, throwingSpeedFactor);
+            //}
+            //authorityManager.CmdAddForce(speed, throwingSpeedFactor, netId.netId);
+            rigidbody.AddForce(speed * throwingSpeedFactor * rigidbody.mass);
+            releasing = false;
+        }
     }
 
     private void AddSpeedVector(Vector3 speed)
@@ -106,7 +106,7 @@ public class OnGrabbedBehaviour : MonoBehaviour
         isGrabbed = true;
         rigidbody.isKinematic = true;
         rigidbody.useGravity = false;
-        //releasing = false;
+        releasing = false;
     }
 
     // called when the GO gets released by a player
@@ -116,7 +116,7 @@ public class OnGrabbedBehaviour : MonoBehaviour
         isGrabbed = false;
         rigidbody.isKinematic = false;
         rigidbody.useGravity = true;
-        //releasing = true;
+        releasing = true;
     }
 
     //public void OnThrowObject()
@@ -129,15 +129,15 @@ public class OnGrabbedBehaviour : MonoBehaviour
     //    authorityManager.CmdAddForce(speed, throwingSpeedFactor, netId.netId);
     //}
 
-    public Vector3 GetSpeedVector()
-    {
-        return (newPos - oldPos) / Time.deltaTime;
-    }
+    //public Vector3 GetSpeedVector()
+    //{
+    //    return (newPos - oldPos) / Time.deltaTime;
+    //}
 
-    public float GetSpeedFactor()
-    {
-        return throwingSpeedFactor;
-    }
+    //public float GetSpeedFactor()
+    //{
+    //    return throwingSpeedFactor;
+    //}
 
     public void AddClientForce(Vector3 forcevector, float throwingSpeedFactor)
     {

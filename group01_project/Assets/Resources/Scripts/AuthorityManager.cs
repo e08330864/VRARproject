@@ -130,7 +130,7 @@ public class AuthorityManager : NetworkBehaviour {
                 if (isHeld && isHeldByLocalPlayer)  // the object is currently held, but not grabbed by local player
                 {
                     Debug.Log("AuthorityManager: calling ReturnObjectAuthority --> isGrapping = false");
-                    localActor.ReturnObjectAuthorityForSharedObject(netID, onGrabbedBehaviour.GetSpeedVector(), onGrabbedBehaviour.GetSpeedFactor());
+                    localActor.ReturnObjectAuthorityForSharedObject(netID); //, onGrabbedBehaviour.GetSpeedVector(), onGrabbedBehaviour.GetSpeedFactor());
                     isHeldByLocalPlayer = false;
                 }
             }
@@ -167,12 +167,12 @@ public class AuthorityManager : NetworkBehaviour {
 
     // should only be called on server (by an Actor)
     // remove the authority over this game object from a client with NetworkConnection conn
-    public void RemoveClientAuthority(NetworkConnection conn, Vector3 forcevector, float throwingSpeedFactor, NetworkIdentity netID)
+    public void RemoveClientAuthority(NetworkConnection conn) //, Vector3 forcevector, float throwingSpeedFactor, NetworkIdentity netID)
     {
         if (this.GetComponent<NetworkIdentity>().clientAuthorityOwner == conn)
         {
             isHeld = false;
-            RpcAddForce(forcevector, throwingSpeedFactor, netID);
+            //RpcAddForce(forcevector, throwingSpeedFactor, netID);
             RpcLostAuthority();
             if (this.netID.RemoveClientAuthority(conn))
             {
@@ -217,12 +217,12 @@ public class AuthorityManager : NetworkBehaviour {
     //    RpcAddForce(forcevector, throwingSpeedFactor, netId);
     //}
 
-    [ClientRpc]
-    void RpcAddForce(Vector3 forcevector, float throwingSpeedFactor, NetworkIdentity netId)
-    {
-        Debug.Log("command add force at client");
-        //onGrabbedBehaviour.AddClientForce(forcevector, throwingSpeedFactor);
+    //[ClientRpc]
+    //void RpcAddForce(Vector3 forcevector, float throwingSpeedFactor, NetworkIdentity netId)
+    //{
+    //    Debug.Log("command add force at client");
+    //    //onGrabbedBehaviour.AddClientForce(forcevector, throwingSpeedFactor);
 
-        netID.GetComponent<Rigidbody>().AddForce(forcevector * throwingSpeedFactor * 1000, ForceMode.Impulse);
-    }
+    //    netID.GetComponent<Rigidbody>().AddForce(forcevector * throwingSpeedFactor * 1000, ForceMode.Impulse);
+    //}
 }
