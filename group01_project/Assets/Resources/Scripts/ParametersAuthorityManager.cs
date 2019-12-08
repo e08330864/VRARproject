@@ -12,6 +12,7 @@ public class ParametersAuthorityManager : NetworkBehaviour
     bool gameSpaceExtensionPossible = false;
     bool finishedUpdatingParams = false;
     bool updateParams = false;
+    bool authorithyRequested = false;
    
 
     // Use this for initialization
@@ -36,9 +37,10 @@ public class ParametersAuthorityManager : NetworkBehaviour
             return;
         }
 
-        if(updateParams && !netID.hasAuthority)
+        if(updateParams && !netID.hasAuthority && !authorithyRequested)
         {
             localActor.RequestObjectAuthority(netID);
+            authorithyRequested = true;
             return;
         }
 
@@ -58,6 +60,7 @@ public class ParametersAuthorityManager : NetworkBehaviour
                 updateParams = false;
                 return;
             }
+            authorithyRequested = false;
         }
     }
 
