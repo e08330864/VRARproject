@@ -92,12 +92,13 @@ public class LeapMovement : MonoBehaviour
             DoMovementRotation();
         }
         // allow game space extension by right hand fist gesture
-        if (gameSpaceExtension != null && handRight != null)
-        {
-            isFistThumbUp = CheckFistThumbUp(handRight);
-        } else if (allowGameSpaceExtension && GameObject.FindGameObjectWithTag("RightHandInteraction").activeSelf)
+        if (allowGameSpaceExtension && GameObject.FindGameObjectWithTag("RightHandInteraction").activeSelf)
         {
             isFistThumbUp = false;
+        }
+        else if (gameSpaceExtension != null && handRight != null)
+        {
+            isFistThumbUp = CheckFistThumbUp(handRight);
         }
         if (gameSpaceExtension != null)
         { 
