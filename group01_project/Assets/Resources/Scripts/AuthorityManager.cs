@@ -202,7 +202,7 @@ public class AuthorityManager : NetworkBehaviour {
     // AddForce
 
     [Command]
-    public void CmdAddForce(Vector3 forcevector, float throwingSpeedFactor, NetworkIdentity netId)
+    public void CmdAddForce(Vector3 forcevector, float throwingSpeedFactor, NetworkInstanceId netId)
     {
         Debug.Log("command add force at server");
         //rigidbody.AddForce(forcevector * throwingSpeedFactor * rigidbody.mass);
@@ -210,12 +210,12 @@ public class AuthorityManager : NetworkBehaviour {
     }
 
     [ClientRpc]
-    void RpcAddForce(Vector3 forcevector, float throwingSpeedFactor, NetworkIdentity netId)
+    void RpcAddForce(Vector3 forcevector, float throwingSpeedFactor, NetworkInstanceId netId)
     {
         Debug.Log("command add force at client");
         //onGrabbedBehaviour.AddClientForce(forcevector, throwingSpeedFactor);
 
-        GameObject ourThingToMove = ClientScene.FindLocalObject(netId.netId); //This will have each client get a reference to the thing we want to move by searching for its netID.
+        GameObject ourThingToMove = ClientScene.FindLocalObject(netId); //This will have each client get a reference to the thing we want to move by searching for its netID.
         ourThingToMove.GetComponent<Rigidbody>().AddForce(forcevector * throwingSpeedFactor, ForceMode.Impulse);
     }
 }
