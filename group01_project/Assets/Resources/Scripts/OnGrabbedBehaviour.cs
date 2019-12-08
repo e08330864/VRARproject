@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 // TODO: define the behaviour of a shared object when it is manipulated by a client
 
-public class OnGrabbedBehaviour : MonoBehaviour
+public class OnGrabbedBehaviour : NetworkBehaviour
 {
     [SerializeField]
     private float throwingSpeedFactor = 300f;
@@ -60,7 +60,17 @@ public class OnGrabbedBehaviour : MonoBehaviour
             //AddSpeedVector(speed);
             //speed = GetSpeedAverage();
             Debug.Log("throwing speed=" + speed * throwingSpeedFactor * rigidbody.mass);
-            rigidbody.AddForce(speed * throwingSpeedFactor * rigidbody.mass);
+            if (netId.isServer)
+            {
+                Debug.Log("is server");
+                RpcAddClientForce(speed, throwingSpeedFactor);
+            }
+            else if (netId.isClient)
+            {
+                Debug.Log("is client");
+                CmdAddForce(speed, throwingSpeedFactor);
+            }
+            //rigidbody.AddForce(speed * throwingSpeedFactor * rigidbody.mass);
             releasing = false;
         }
     }
@@ -106,6 +116,20 @@ public class OnGrabbedBehaviour : MonoBehaviour
         rigidbody.isKinematic = false;
         rigidbody.useGravity = true;
         releasing = true;
+    }
+
+    [Command]
+    public void CmdAddForce(Vector3 forcevector, float throwingSpeedFactor)
+    {
+        Debug.Log("command add force");
+        rigidbody.AddForce(forcevector * throwingSpeedFactor * rigidbody.mass);
+    }
+
+    [ClientRpc]
+    public void RpcAddClientForce(Vector3 forcevector, float throwingSpeedFactor)
+    {
+        Debug.Log("clientrpc add force");
+        rigidbody.AddForce(forcevector * throwingSpeedFactor * rigidbody.mass);
     }
 
     private void GetHands()
