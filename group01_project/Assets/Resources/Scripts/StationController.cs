@@ -1,14 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Networking;
+﻿using UnityEngine;
 
 public class StationController : MonoBehaviour
 {
     Transform station_head = null;
-
-    public GameObject lightningPrefab = null;
-    private GameObject lightning = null;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -20,10 +15,7 @@ public class StationController : MonoBehaviour
                 station_head = child;
             }
         }
-        if ((lightning = Instantiate(lightningPrefab, transform.position, Quaternion.identity)) == null)
-        {
-            Debug.LogError("lightning is NULL in StationController");
-        }
+        
     }
 
     // Update is called once per frame
@@ -39,24 +31,5 @@ public class StationController : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log("StationController: in collider");
-        if (other.gameObject.tag == "TowerElement")
-        {
-            Debug.Log("StationController: is TowerElement");
-            if (!other.gameObject.GetComponent<NetworkIdentity>().hasAuthority)
-            {
-                Debug.Log("StationController: no Authority");
-                StartCoroutine(ShowLightning());
-            }
-        }
-    }
-
-    IEnumerator ShowLightning()
-    {
-        lightning.SetActive(true);
-        yield return new WaitForSeconds(20);
-        lightning.SetActive(false);
-    }
+   
 }
