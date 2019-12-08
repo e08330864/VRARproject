@@ -11,6 +11,7 @@ public class AuthorityManager : NetworkBehaviour {
     //**************************************************************************************************
     Actor localActor; // Actor that is steering this player
     GameObject localPlayer;
+    private Rigidbody rigidbody = null;
 
     [SyncVar]
     private bool isHeld; // true, if object is currently held by any player
@@ -79,6 +80,7 @@ public class AuthorityManager : NetworkBehaviour {
         {
             Debug.LogError("onb is NULL in AuthorityManager");
         }
+        if ((rigidbody = GetComponent<Rigidbody>()) == null) { Debug.LogError("rigidbody is NULL in OnGrabbedBehaviour"); }
     }
 
     // Update is called once per frame
@@ -196,7 +198,7 @@ public class AuthorityManager : NetworkBehaviour {
     }
 
     [Command]
-    public void CmdAddForce(Rigidbody rigidbody, Vector3 forcevector, float throwingSpeedFactor)
+    public void CmdAddForce(Vector3 forcevector, float throwingSpeedFactor)
     {
         Debug.Log("command add force");
         rigidbody.AddForce(forcevector * throwingSpeedFactor * rigidbody.mass);

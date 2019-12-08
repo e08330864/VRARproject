@@ -70,7 +70,7 @@ public class OnGrabbedBehaviour : MonoBehaviour
             //    Debug.Log("is client");
             //    CmdAddForce(speed, throwingSpeedFactor);
             //}
-            authorityManager.CmdAddForce(rigidbody, speed, throwingSpeedFactor);
+            authorityManager.CmdAddForce(speed, throwingSpeedFactor);
             //rigidbody.AddForce(speed * throwingSpeedFactor * rigidbody.mass);
             releasing = false;
         }
