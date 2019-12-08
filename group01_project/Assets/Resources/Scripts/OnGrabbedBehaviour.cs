@@ -126,12 +126,11 @@ public class OnGrabbedBehaviour : MonoBehaviour
     //    rigidbody.AddForce(forcevector * throwingSpeedFactor * rigidbody.mass);
     //}
 
-    //[ClientRpc]
-    //public void RpcAddClientForce(Vector3 forcevector, float throwingSpeedFactor)
-    //{
-    //    Debug.Log("clientrpc add force");
-    //    rigidbody.AddForce(forcevector * throwingSpeedFactor * rigidbody.mass);
-    //}
+    public void AddClientForce(Vector3 forcevector, float throwingSpeedFactor)
+    {
+        Debug.Log("OnGrabbedBehaviour: client add force");
+        rigidbody.AddForce(forcevector * throwingSpeedFactor * rigidbody.mass);
+    }
 
     private void GetHands()
     {
