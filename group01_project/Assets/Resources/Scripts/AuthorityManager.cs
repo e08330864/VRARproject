@@ -170,11 +170,11 @@ public class AuthorityManager : NetworkBehaviour {
         if (this.GetComponent<NetworkIdentity>().clientAuthorityOwner == conn)
         {
             isHeld = false;
-            RpcLostAuthority();
             if (this.netID.RemoveClientAuthority(conn))
             {
                 Debug.Log("AuthorityManager: RemoveClientAuthority...authority=" + this.GetComponent<NetworkIdentity>().hasAuthority);
             }
+            RpcLostAuthority();
         }
     }
 
@@ -193,5 +193,12 @@ public class AuthorityManager : NetworkBehaviour {
     {
         Debug.Log("AuthorityManager: calling onb.OnReleased");
         onb.OnReleased();
+    }
+
+    [Command]
+    public void CmdAddForce(Rigidbody rigidbody, Vector3 forcevector, float throwingSpeedFactor)
+    {
+        Debug.Log("command add force");
+        rigidbody.AddForce(forcevector * throwingSpeedFactor * rigidbody.mass);
     }
 }
