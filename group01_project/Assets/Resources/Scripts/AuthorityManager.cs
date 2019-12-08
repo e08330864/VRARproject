@@ -223,6 +223,6 @@ public class AuthorityManager : NetworkBehaviour {
         //onGrabbedBehaviour.AddClientForce(forcevector, throwingSpeedFactor);
 
         GameObject ourThingToMove = ClientScene.FindLocalObject(netId); //This will have each client get a reference to the thing we want to move by searching for its netID.
-        ourThingToMove.GetComponent<Rigidbody>().AddForce(forcevector * throwingSpeedFactor * 10, ForceMode.Impulse);
+        ourThingToMove.GetComponent<Rigidbody>().AddForce(forcevector * throwingSpeedFactor * 1000, ForceMode.Impulse);
     }
 }
