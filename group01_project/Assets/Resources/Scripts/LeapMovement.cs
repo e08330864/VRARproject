@@ -103,7 +103,7 @@ public class LeapMovement : MonoBehaviour
         }
         if (gameSpaceExtension != null)
         { 
-            Debug.Log("LeapMovement: isFist = " + isFistThumbUp);
+            Debug.Log("LeapMovement: isFist = " + isFistThumbUp + "  allowGameSpaceExtension=" + allowGameSpaceExtension);
             if (isFistThumbUp && !allowGameSpaceExtension)
             {
                 gameSpaceExtension.SetAllowGameSpaceExtension(true);
