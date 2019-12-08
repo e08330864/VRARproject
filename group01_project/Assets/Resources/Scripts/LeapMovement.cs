@@ -95,7 +95,7 @@ public class LeapMovement : MonoBehaviour
         if (gameSpaceExtension != null && handRight != null)
         {
             isFistThumbUp = CheckFistThumbUp(handRight);
-        } else if (allowGameSpaceExtension && GameObject.FindGameObjectWithTag("LeftHandInteraction") == null)
+        } else if (allowGameSpaceExtension && GameObject.FindGameObjectWithTag("RightHandInteraction").activeSelf)
         {
             isFistThumbUp = false;
         }
