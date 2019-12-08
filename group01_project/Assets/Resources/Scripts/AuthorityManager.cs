@@ -172,12 +172,12 @@ public class AuthorityManager : NetworkBehaviour {
         if (this.GetComponent<NetworkIdentity>().clientAuthorityOwner == conn)
         {
             isHeld = false;
+            RpcThrowObject();
             if (this.netID.RemoveClientAuthority(conn))
             {
                 Debug.Log("AuthorityManager: RemoveClientAuthority...authority=" + this.GetComponent<NetworkIdentity>().hasAuthority);
             }
             RpcLostAuthority();
-
         }
     }
 
@@ -198,6 +198,13 @@ public class AuthorityManager : NetworkBehaviour {
         onb.OnReleased();
     }
 
+    [ClientRpc]
+    void RpcThrowObject()
+    {
+        Debug.Log("AuthorityManager: calling onb.OnReleased");
+        onb.OnThrowObject();
+    }
+
     //----------------------------------------------------------------------------
     // AddForce
 
@@ -216,6 +223,6 @@ public class AuthorityManager : NetworkBehaviour {
         //onGrabbedBehaviour.AddClientForce(forcevector, throwingSpeedFactor);
 
         GameObject ourThingToMove = ClientScene.FindLocalObject(netId); //This will have each client get a reference to the thing we want to move by searching for its netID.
-        ourThingToMove.GetComponent<Rigidbody>().AddForce(forcevector * throwingSpeedFactor, ForceMode.Impulse);
+        ourThingToMove.GetComponent<Rigidbody>().AddForce(forcevector * throwingSpeedFactor * 10, ForceMode.Impulse);
     }
 }

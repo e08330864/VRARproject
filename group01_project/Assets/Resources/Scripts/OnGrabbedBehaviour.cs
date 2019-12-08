@@ -53,27 +53,27 @@ public class OnGrabbedBehaviour : MonoBehaviour
             //AddSpeedVector(speed);
             //Debug.Log("speed=" + speed * throwingSpeedFactor * rigidbody.mass);
         }
-        else if (releasing)
-        {
-            // object is released
-            Vector3 speed = (newPos - oldPos) / Time.deltaTime;
-            //AddSpeedVector(speed);
-            //speed = GetSpeedAverage();
-            Debug.Log("throwing speed=" + speed * throwingSpeedFactor * rigidbody.mass);
-            //if (netId.isServer)
-            //{
-            //    Debug.Log("is server");
-            //    RpcAddClientForce(speed, throwingSpeedFactor);
-            //}
-            //else if (netId.isClient)
-            //{
-            //    Debug.Log("is client");
-            //    CmdAddForce(speed, throwingSpeedFactor);
-            //}
-            authorityManager.CmdAddForce(speed, throwingSpeedFactor, netId.netId);
-            //rigidbody.AddForce(speed * throwingSpeedFactor * rigidbody.mass);
-            releasing = false;
-        }
+        //else if (releasing)
+        //{
+        //    // object is released
+        //    Vector3 speed = (newPos - oldPos) / Time.deltaTime;
+        //    //AddSpeedVector(speed);
+        //    //speed = GetSpeedAverage();
+        //    Debug.Log("throwing speed=" + speed * throwingSpeedFactor * rigidbody.mass);
+        //    //if (netId.isServer)
+        //    //{
+        //    //    Debug.Log("is server");
+        //    //    RpcAddClientForce(speed, throwingSpeedFactor);
+        //    //}
+        //    //else if (netId.isClient)
+        //    //{
+        //    //    Debug.Log("is client");
+        //    //    CmdAddForce(speed, throwingSpeedFactor);
+        //    //}
+        //    authorityManager.CmdAddForce(speed, throwingSpeedFactor, netId.netId);
+        //    //rigidbody.AddForce(speed * throwingSpeedFactor * rigidbody.mass);
+        //    releasing = false;
+        //}
     }
 
     private void AddSpeedVector(Vector3 speed)
@@ -114,9 +114,19 @@ public class OnGrabbedBehaviour : MonoBehaviour
     {
         Debug.Log("OnGrabbedBehaviour: OnReleased...isKinematic=false, useGravity=true");
         isGrabbed = false;
+        //rigidbody.isKinematic = false;
+        //rigidbody.useGravity = true;
+        //releasing = true;
+    }
+
+    public void OnThrowObject()
+    {
+        Debug.Log("OnGrabbedBehaviour: OnThrowObject...isKinematic=false, useGravity=true");
         rigidbody.isKinematic = false;
         rigidbody.useGravity = true;
-        releasing = true;
+        Vector3 speed = (newPos - oldPos) / Time.deltaTime;
+        Debug.Log("throwing speed=" + speed * throwingSpeedFactor * rigidbody.mass);
+        authorityManager.CmdAddForce(speed, throwingSpeedFactor, netId.netId);
     }
 
     //[Command]
