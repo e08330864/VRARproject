@@ -173,11 +173,12 @@ public class AuthorityManager : NetworkBehaviour {
         {
             isHeld = false;
             RpcAddForce(forcevector, throwingSpeedFactor, netInsID);
+            RpcLostAuthority();
             if (this.netID.RemoveClientAuthority(conn))
             {
                 Debug.Log("AuthorityManager: RemoveClientAuthority...authority=" + this.GetComponent<NetworkIdentity>().hasAuthority);
             }
-            RpcLostAuthority();
+            
         }
     }
 
