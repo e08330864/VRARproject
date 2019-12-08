@@ -245,7 +245,7 @@ public class Actor : NetworkBehaviour {
     public void ReturnObjectAuthorityForSharedObject(NetworkIdentity netID, Vector3 forcevector, float throwingSpeedFactor)
     {
         Debug.Log("Actor: in ReturnObjectAuthority");
-        CmdRemoveObjectAuthorityFromClientForSharedObjects(netID, forcevector, throwingSpeedFactor, netID.netId);
+        CmdRemoveObjectAuthorityFromClientForSharedObjects(netID, forcevector, throwingSpeedFactor);
     }
 
     // run on the server
@@ -301,9 +301,9 @@ public class Actor : NetworkBehaviour {
     }
 
     [Command]
-    void CmdRemoveObjectAuthorityFromClientForSharedObjects(NetworkIdentity netID, Vector3 forcevector, float throwingSpeedFactor, NetworkInstanceId netInsID)
+    void CmdRemoveObjectAuthorityFromClientForSharedObjects(NetworkIdentity netID, Vector3 forcevector, float throwingSpeedFactor)
     {
-        Debug.Log("in CmdRemoveObjectAuthorityFromClientForSharedObjects for shared object netInsid=" + netInsID);
+        Debug.Log("in CmdRemoveObjectAuthorityFromClientForSharedObjects for shared object netInsid=" + netID);
         //netID.GetComponent<AuthorityManager>().RemoveClientAuthority(this.connectionToClient);
 
         AuthorityManager authorityManager = netID.GetComponent<AuthorityManager>();
@@ -311,7 +311,7 @@ public class Actor : NetworkBehaviour {
         if (authorityManager != null)
         {
             Debug.Log("...for shared objects");
-            authorityManager.RemoveClientAuthority(this.connectionToClient, forcevector, throwingSpeedFactor, netInsID);
+            authorityManager.RemoveClientAuthority(this.connectionToClient, forcevector, throwingSpeedFactor, netID);
             return;
         }
     }

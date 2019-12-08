@@ -167,12 +167,12 @@ public class AuthorityManager : NetworkBehaviour {
 
     // should only be called on server (by an Actor)
     // remove the authority over this game object from a client with NetworkConnection conn
-    public void RemoveClientAuthority(NetworkConnection conn, Vector3 forcevector, float throwingSpeedFactor, NetworkInstanceId netInsID)
+    public void RemoveClientAuthority(NetworkConnection conn, Vector3 forcevector, float throwingSpeedFactor, NetworkIdentity netID)
     {
         if (this.GetComponent<NetworkIdentity>().clientAuthorityOwner == conn)
         {
             isHeld = false;
-            //RpcAddForce(forcevector, throwingSpeedFactor, netInsID);
+            RpcAddForce(forcevector, throwingSpeedFactor, netID);
             RpcLostAuthority();
             if (this.netID.RemoveClientAuthority(conn))
             {
@@ -218,12 +218,11 @@ public class AuthorityManager : NetworkBehaviour {
     //}
 
     [ClientRpc]
-    void RpcAddForce(Vector3 forcevector, float throwingSpeedFactor, NetworkInstanceId netId)
+    void RpcAddForce(Vector3 forcevector, float throwingSpeedFactor, NetworkIdentity netId)
     {
         Debug.Log("command add force at client");
         //onGrabbedBehaviour.AddClientForce(forcevector, throwingSpeedFactor);
 
-        GameObject ourThingToMove = ClientScene.FindLocalObject(netId); //This will have each client get a reference to the thing we want to move by searching for its netID.
-        ourThingToMove.GetComponent<Rigidbody>().AddForce(forcevector * throwingSpeedFactor * 1000, ForceMode.Impulse);
+        netID.GetComponent<Rigidbody>().AddForce(forcevector * throwingSpeedFactor * 1000, ForceMode.Impulse);
     }
 }
