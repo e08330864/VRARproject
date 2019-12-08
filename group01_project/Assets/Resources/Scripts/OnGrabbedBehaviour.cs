@@ -10,7 +10,7 @@ public class OnGrabbedBehaviour : MonoBehaviour
     private float throwingSpeedFactor = 300f;
 
     private bool isGrabbed;
-    private bool releasing;
+    //private bool releasing;
     private Vector3 oldPos;
     private Vector3 newPos;
     private List<Vector3> speedList = new List<Vector3>();
@@ -106,7 +106,7 @@ public class OnGrabbedBehaviour : MonoBehaviour
         isGrabbed = true;
         rigidbody.isKinematic = true;
         rigidbody.useGravity = false;
-        releasing = false;
+        //releasing = false;
     }
 
     // called when the GO gets released by a player
@@ -114,8 +114,8 @@ public class OnGrabbedBehaviour : MonoBehaviour
     {
         Debug.Log("OnGrabbedBehaviour: OnReleased...isKinematic=false, useGravity=true");
         isGrabbed = false;
-        //rigidbody.isKinematic = false;
-        //rigidbody.useGravity = true;
+        rigidbody.isKinematic = false;
+        rigidbody.useGravity = true;
         //releasing = true;
     }
 
