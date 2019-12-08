@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 // TODO: define the behaviour of a shared object when it is manipulated by a client
 
-public class OnGrabbedBehaviour : NetworkBehaviour
+public class OnGrabbedBehaviour : MonoBehaviour
 {
     [SerializeField]
     private float throwingSpeedFactor = 300f;
