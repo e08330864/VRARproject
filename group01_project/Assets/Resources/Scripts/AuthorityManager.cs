@@ -130,7 +130,7 @@ public class AuthorityManager : NetworkBehaviour {
                 if (isHeld && isHeldByLocalPlayer)  // the object is currently held, but not grabbed by local player
                 {
                     Debug.Log("AuthorityManager: calling ReturnObjectAuthority --> isGrapping = false");
-                    localActor.ReturnObjectAuthority(netID);
+                    localActor.ReturnObjectAuthorityForSharedObject(netID, onGrabbedBehaviour.GetSpeedVector(), onGrabbedBehaviour.GetSpeedFactor());
                     isHeldByLocalPlayer = false;
                 }
             }
@@ -167,12 +167,12 @@ public class AuthorityManager : NetworkBehaviour {
 
     // should only be called on server (by an Actor)
     // remove the authority over this game object from a client with NetworkConnection conn
-    public void RemoveClientAuthority(NetworkConnection conn)
+    public void RemoveClientAuthority(NetworkConnection conn, Vector3 forcevector, float throwingSpeedFactor, NetworkInstanceId netInsID)
     {
         if (this.GetComponent<NetworkIdentity>().clientAuthorityOwner == conn)
         {
             isHeld = false;
-            RpcThrowObject();
+            RpcAddForce(forcevector, throwingSpeedFactor, netInsID);
             if (this.netID.RemoveClientAuthority(conn))
             {
                 Debug.Log("AuthorityManager: RemoveClientAuthority...authority=" + this.GetComponent<NetworkIdentity>().hasAuthority);
@@ -198,23 +198,23 @@ public class AuthorityManager : NetworkBehaviour {
         onb.OnReleased();
     }
 
-    [ClientRpc]
-    void RpcThrowObject()
-    {
-        Debug.Log("AuthorityManager: calling onb.OnReleased");
-        onb.OnThrowObject();
-    }
+    //[ClientRpc]
+    //void RpcThrowObject()
+    //{
+    //    Debug.Log("AuthorityManager: calling onb.OnReleased");
+    //    onb.OnThrowObject();
+    //}
 
     //----------------------------------------------------------------------------
     // AddForce
 
-    [Command]
-    public void CmdAddForce(Vector3 forcevector, float throwingSpeedFactor, NetworkInstanceId netId)
-    {
-        Debug.Log("command add force at server");
-        //rigidbody.AddForce(forcevector * throwingSpeedFactor * rigidbody.mass);
-        RpcAddForce(forcevector, throwingSpeedFactor, netId);
-    }
+    //[Command]
+    //public void CmdAddForce(Vector3 forcevector, float throwingSpeedFactor, NetworkInstanceId netId)
+    //{
+    //    Debug.Log("command add force at server");
+    //    //rigidbody.AddForce(forcevector * throwingSpeedFactor * rigidbody.mass);
+    //    RpcAddForce(forcevector, throwingSpeedFactor, netId);
+    //}
 
     [ClientRpc]
     void RpcAddForce(Vector3 forcevector, float throwingSpeedFactor, NetworkInstanceId netId)
