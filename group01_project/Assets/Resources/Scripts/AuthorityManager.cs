@@ -172,11 +172,11 @@ public class AuthorityManager : NetworkBehaviour {
         if (this.GetComponent<NetworkIdentity>().clientAuthorityOwner == conn)
         {
             isHeld = false;
-            RpcLostAuthority();
             if (this.netID.RemoveClientAuthority(conn))
             {
                 Debug.Log("AuthorityManager: RemoveClientAuthority...authority=" + this.GetComponent<NetworkIdentity>().hasAuthority);
             }
+            RpcLostAuthority();
 
         }
     }
