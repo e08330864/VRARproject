@@ -272,7 +272,7 @@ public class Actor : NetworkBehaviour {
     [Command]
     void CmdRemoveObjectAuthorityFromClient(NetworkIdentity netID)
     {
-        Debug.Log("in CmdRemove");
+        Debug.Log("in CmdRemove for shared object netid=" + netID);
         //netID.GetComponent<AuthorityManager>().RemoveClientAuthority(this.connectionToClient);
 
         AuthorityManager authorityManager = netID.GetComponent<AuthorityManager>();
@@ -281,16 +281,19 @@ public class Actor : NetworkBehaviour {
 
         if (authorityManager != null)
         {
+            Debug.Log("...for shared objects");
             authorityManager.RemoveClientAuthority(this.connectionToClient);
             return;
         }
         else if (parametersAuthorityManager != null)
         {
+            Debug.Log("...for parametersAuthorityManager");
             parametersAuthorityManager.RemoveClientAuthority(this.connectionToClient);
             return;
         }
         else if (viveParamsAuthorityManager != null)
         {
+            Debug.Log("...for viveParamsAuthorityManager");
             viveParamsAuthorityManager.RemoveClientAuthority(this.connectionToClient);
         }
     }
