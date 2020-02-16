@@ -19,7 +19,6 @@ public class TorusController : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("StationController: in collider");
         if (other.gameObject.tag == "TowerElement")
         {
             Debug.Log("StationController: is TowerElement");

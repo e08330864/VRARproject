@@ -57,8 +57,10 @@ public class Touching : MonoBehaviour
         }
         if (other.gameObject.tag == "Station")
         {
+            Debug.Log("in Arduino setup collider");
             if (!ardManager.getSetupModeStatus())
             {
+                Debug.Log("Arduino setup done!!!!");
                 ardManager.startSetupMode(other.gameObject.transform.parent.parent.Find("Torus").gameObject);
             }
         }
