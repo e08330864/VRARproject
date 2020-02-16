@@ -100,12 +100,12 @@ public class Actor : NetworkBehaviour {
     {
         while (true)
         {
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(2);
             if (ardManager != null && cameraVive != null)
             {
                 if (!ardManager.getSetupModeStatus())
                 {
-                    string text = cameraVive.transform.position.x.ToString() + "," + cameraVive.transform.position.z.ToString();
+                    string text = "x=" + (Mathf.Round(cameraVive.transform.position.x * 10f) / 10f).ToString() + " z=" + (Mathf.Round(cameraVive.transform.position.z * 10f) / 10f).ToString();
                     ardManager.setPositionText(text);
                 }
             }
