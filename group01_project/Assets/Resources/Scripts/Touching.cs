@@ -4,6 +4,7 @@ public class Touching : MonoBehaviour
 {
     ViveGrab viveGrab = null;
     LeapGrab leapGrab = null;
+    ArdManager ardManager = null;
 
     void Start()
     {
@@ -15,6 +16,11 @@ public class Touching : MonoBehaviour
         if (GameObject.Find("VIVE") != null)
         {
             viveGrab = FindObjectOfType<ViveGrab>();
+        }
+
+        if (GameObject.Find("ArdManager") != null)
+        {
+            ardManager = FindObjectOfType<ArdManager>();
         }
     }
 
@@ -47,6 +53,13 @@ public class Touching : MonoBehaviour
                     Debug.Log("Touching: Vive right touch START");
                     viveGrab.rightTouchOtherCollider = other;
                 }
+            }
+        }
+        if (other.gameObject.tag == "Station")
+        {
+            if (!ardManager.getSetupModeStatus())
+            {
+                ardManager.startSetupMode(other.gameObject.transform.parent.parent.Find("Torus").gameObject);
             }
         }
     }
