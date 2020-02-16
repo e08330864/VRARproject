@@ -94,18 +94,6 @@ public class Actor : NetworkBehaviour {
         }
     }
 
-    private void Update()
-    {
-        if (ardManager != null)
-        {
-            if (!ardManager.getSetupModeStatus())
-            {
-                string text = transform.position.x.ToString() + "," + transform.position.z.ToString();
-                ardManager.setPositionText(text);
-            }
-        }
-    }
-
     private IEnumerator SendPositionToArduino()
     {
         while (true)
