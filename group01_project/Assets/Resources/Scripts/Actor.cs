@@ -8,6 +8,7 @@ public class Actor : NetworkBehaviour {
     public FootCharacter footCharacter;
     public new Transform transform;
     private GameObject createdObject = null;
+    private ArdManager ardManager = null;
 
     List<NetworkIdentity> sharedObjects = new List<NetworkIdentity>(); // shared objects on the server or localActor
 
@@ -37,6 +38,10 @@ public class Actor : NetworkBehaviour {
                 LocalPlayerController.Singleton.SetActor(this);
                 CmdInitialize(prefabNameHand);
                 CmdInitialize(prefabNameFoot);
+                if (GameObject.Find("ArdManager") != null)
+                {
+                    ardManager = FindObjectOfType<ArdManager>();
+                }
             }
 
 
@@ -79,6 +84,17 @@ public class Actor : NetworkBehaviour {
             // Initialize on startup
             InitializeHands(prefabNameHand);
             InitializeFoot(prefabNameFoot);
+        }
+    }
+
+    private void Update()
+    {
+        if (ardManager != null)
+        {
+            if (!ardManager.getSetupModeStatus())
+            {
+                ardManager.setPositionText(transform.position.ToString());
+            }
         }
     }
 

@@ -13,6 +13,7 @@ public class ArdManager : MonoBehaviour
     private Color heightSetUpColor = new Color(0, 255, 0);
     private Color oldColor = new Color();
     private Renderer renderer = null;
+    private string position = null;
 
     // Start is called before the first frame update
     void Start()
@@ -64,17 +65,22 @@ public class ArdManager : MonoBehaviour
     {
         if (!heightSetupMode)
         {
-            heightSetupMode = true;
             renderer = go.transform.Find("default").gameObject.GetComponent<Renderer>();
             oldColor = renderer.material.GetColor("_Color");
             renderer.material.SetColor("_Color", heightSetUpColor);
             serial.sendString("&");
             goToSetHeight = go;
+            heightSetupMode = true;
         }
     }
 
     public bool getSetupModeStatus()
     {
         return heightSetupMode;
+    }
+
+    public void setPositionText(string pos)
+    {
+        serial.sendString(pos);
     }
 }
