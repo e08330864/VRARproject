@@ -103,7 +103,7 @@ public class Actor : NetworkBehaviour {
             {
                 if (!ardManager.getSetupModeStatus())
                 {
-                    string text = transform.position.x.ToString() + "," + transform.position.z.ToString();
+                    string text = character.transform.position.x.ToString() + "," + character.transform.position.z.ToString();
                     ardManager.setPositionText(text);
                 }
             }
