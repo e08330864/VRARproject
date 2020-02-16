@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections.Generic;
+using System.Collections;
 
 public class Actor : NetworkBehaviour {
 
@@ -9,6 +10,7 @@ public class Actor : NetworkBehaviour {
     public new Transform transform;
     private GameObject createdObject = null;
     private ArdManager ardManager = null;
+    private IEnumerator coroutine;
 
     List<NetworkIdentity> sharedObjects = new List<NetworkIdentity>(); // shared objects on the server or localActor
 
@@ -41,6 +43,11 @@ public class Actor : NetworkBehaviour {
                 if (GameObject.Find("ArdManager") != null)
                 {
                     ardManager = FindObjectOfType<ArdManager>();
+                    if (ardManager != null)
+                    {
+                        coroutine = SendPositionToArduino();
+                        StartCoroutine(coroutine);
+                    }
                 }
             }
 
@@ -93,7 +100,24 @@ public class Actor : NetworkBehaviour {
         {
             if (!ardManager.getSetupModeStatus())
             {
-                ardManager.setPositionText(transform.position.ToString());
+                string text = transform.position.x.ToString() + "," + transform.position.z.ToString();
+                ardManager.setPositionText(text);
+            }
+        }
+    }
+
+    private IEnumerator SendPositionToArduino()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1);
+            if (ardManager != null)
+            {
+                if (!ardManager.getSetupModeStatus())
+                {
+                    string text = transform.position.x.ToString() + "," + transform.position.z.ToString();
+                    ardManager.setPositionText(text);
+                }
             }
         }
     }
