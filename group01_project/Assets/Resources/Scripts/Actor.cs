@@ -10,6 +10,7 @@ public class Actor : NetworkBehaviour {
     public new Transform transform;
     private GameObject createdObject = null;
     private ArdManager ardManager = null;
+    private GameObject cameraVive = null;
     private IEnumerator coroutine;
 
     List<NetworkIdentity> sharedObjects = new List<NetworkIdentity>(); // shared objects on the server or localActor
@@ -46,6 +47,7 @@ public class Actor : NetworkBehaviour {
                     if (ardManager != null)
                     {
                         coroutine = SendPositionToArduino();
+                        cameraVive = GameObject.FindGameObjectWithTag("cameraVive");
                         StartCoroutine(coroutine);
                     }
                 }
@@ -99,11 +101,11 @@ public class Actor : NetworkBehaviour {
         while (true)
         {
             yield return new WaitForSeconds(1);
-            if (ardManager != null)
+            if (ardManager != null && cameraVive != null)
             {
                 if (!ardManager.getSetupModeStatus())
                 {
-                    string text = character.transform.position.x.ToString() + "," + character.transform.position.z.ToString();
+                    string text = cameraVive.transform.position.x.ToString() + "," + cameraVive.transform.position.z.ToString();
                     ardManager.setPositionText(text);
                 }
             }
